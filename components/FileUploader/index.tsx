@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import styles from "./FileUploader.module.css";
+import styles from "./FileUploader.module.scss";
 
 const FileUploader = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -26,26 +26,32 @@ const FileUploader = () => {
     };
 
     return (
-        <div>
-            {selectedFile && (
-                <div>
-                    <h2>File Details:</h2>
-                    <p>File Name: {selectedFile.name}</p>
-                    <p>File Type: {selectedFile.type}</p>
-                </div>
-            )}
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Choose a file:
+        <form className={styles.container} onSubmit={handleSubmit}>
+            <div className={styles.input_container}>
+                <label htmlFor="file-input">
+                    Upload a video file:
                     <input
                         type="file"
                         accept="video/*"
                         onChange={onFileChange}
                     />
                 </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+            </div>
+            {selectedFile && (
+                <div className={styles.video_container}>
+                    <div>
+                        <h2>File Details:</h2>
+                        <p>File Name: {selectedFile.name}</p>
+                        <p>File Type: {selectedFile.type}</p>
+                    </div>
+                    <video
+                        src={selectedFile && URL.createObjectURL(selectedFile)}
+                        controls
+                    />
+                </div>
+            )}
+            {selectedFile && <button type="submit">Submit</button>}
+        </form>
     );
 };
 

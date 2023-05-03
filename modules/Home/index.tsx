@@ -1,12 +1,10 @@
 import React from "react";
 import FileUploader from "@/components/FileUploader";
+import styles from "./Home.module.scss";
 
-const HomeModule = () => {
-    return (
-        <div>
-            <FileUploader />
-        </div>
-    );
-};
-
+const HomeModule = () => (
+    <div className={styles.container}>
+        <FileUploader />
+    </div>
+);
 export default HomeModule;
