@@ -1,8 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import Loading from "@/components/Loading";
+import VideoContainer from "./VideoContainer";
 import styles from "./FileUploader.module.scss";
 
 const FileUploader = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [error, setError] = useState<Error | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event?.target?.files?.[0];
@@ -11,17 +15,30 @@ const FileUploader = () => {
         }
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (selectedFile) {
+            setError(null);
+            setLoading(true);
+
             const formData = new FormData();
             formData.append("videoFile", selectedFile);
 
-            // fetch("", {
-            //     method: "POST",
-            //     body: formData,
-            // });
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:5000/process_video",
+                    {
+                        method: "POST",
+                        body: formData,
+                    }
+                );
+            } catch (e: any) {
+                console.log(e);
+                setError(e);
+            }
+
+            setLoading(false);
         }
     };
 
@@ -37,22 +54,18 @@ const FileUploader = () => {
                     />
                 </label>
             </div>
-            {selectedFile && (
-                <div className={styles.video_container}>
-                    <div>
-                        <h2>File Details:</h2>
-                        <p>File Name: {selectedFile.name}</p>
-                        <p>File Type: {selectedFile.type}</p>
-                    </div>
-                    <video
-                        src={selectedFile && URL.createObjectURL(selectedFile)}
-                        controls
-                    />
-                </div>
-            )}
-            {selectedFile && <button type="submit">Submit</button>}
+            {selectedFile && <VideoContainer selectedFile={selectedFile} />}
+            {error && <div>{error?.message || "An error has occured"}</div>}
+            {selectedFile &&
+                (loading ? (
+                    <Loading />
+                ) : (
+                    <button type="submit" disabled={loading}>
+                        Submit
+                    </button>
+                ))}
         </form>
     );
 };
 
-export default FileUploader;
+export default React.memo(FileUploader);

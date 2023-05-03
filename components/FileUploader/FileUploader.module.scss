@@ -10,6 +10,7 @@
 .container {
     display: flex;
     flex-direction: column;
+    position: relative;
 
     button[type="submit"] {
         max-width: max-content;
