@@ -3,10 +3,13 @@ import Loading from "@/components/Loading";
 import VideoContainer from "./VideoContainer";
 import styles from "./FileUploader.module.scss";
 
-const FileUploader = () => {
+type Props = {
+    onFileUpload: (formData: FormData) => void;
+    loading: boolean;
+};
+
+const FileUploader = ({ onFileUpload, loading }: Props) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
 
     const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event?.target?.files?.[0];
@@ -19,26 +22,9 @@ const FileUploader = () => {
         event.preventDefault();
 
         if (selectedFile) {
-            setError(null);
-            setLoading(true);
-
             const formData = new FormData();
             formData.append("videoFile", selectedFile);
-
-            try {
-                const response = await fetch(
-                    "http://127.0.0.1:5000/process_video",
-                    {
-                        method: "POST",
-                        body: formData,
-                    }
-                );
-            } catch (e: any) {
-                console.log(e);
-                setError(e);
-            }
-
-            setLoading(false);
+            onFileUpload(formData);
         }
     };
 
@@ -55,7 +41,6 @@ const FileUploader = () => {
                 </label>
             </div>
             {selectedFile && <VideoContainer selectedFile={selectedFile} />}
-            {error && <div>{error?.message || "An error has occured"}</div>}
             {selectedFile &&
                 (loading ? (
                     <Loading />
