@@ -9,8 +9,8 @@ const VideoList = ({ clips }: Props) => (
     <div className={styles.container}>
         <h2>Generated Clips</h2>
         <div className={styles.video_grid}>
-            {clips.map((clip) => (
-                <video src={clip} controls />
+            {clips.map((clip, idx) => (
+                <video src={clip} key={`clip-${idx}`} controls />
             ))}
         </div>
     </div>
