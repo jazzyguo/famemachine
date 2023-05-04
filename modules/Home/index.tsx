@@ -35,7 +35,7 @@ const HomeModule = () => {
         <div className={styles.container}>
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && <div>{error?.message || "An error has occured"}</div>}
-            {!loading && <VideoList clips={clips} />}
+            {!loading && !!clips.length && <VideoList clips={clips} />}
         </div>
     );
 };

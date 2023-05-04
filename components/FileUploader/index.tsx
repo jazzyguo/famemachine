@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import Loading from "@/components/Loading";
-import VideoContainer from "./VideoContainer";
+import VideoContainer from "@/components/VideoContainer";
 import styles from "./FileUploader.module.scss";
 
 type Props = {
@@ -30,25 +30,12 @@ const FileUploader = ({ onFileUpload, loading }: Props) => {
 
     return (
         <form className={styles.container} onSubmit={handleSubmit}>
-            <div className={styles.input_container}>
-                <label htmlFor="file-input">
-                    Upload a video file:
-                    <input
-                        type="file"
-                        accept="video/*"
-                        onChange={onFileChange}
-                    />
-                </label>
-            </div>
-            {selectedFile && <VideoContainer selectedFile={selectedFile} />}
-            {selectedFile &&
-                (loading ? (
-                    <Loading />
-                ) : (
-                    <button type="submit" disabled={loading}>
-                        Submit
-                    </button>
-                ))}
+            <VideoContainer
+                selectedFile={selectedFile}
+                disabled={loading}
+                onFileChange={onFileChange}
+            />
+            {loading && <Loading />}
         </form>
     );
 };

@@ -1,39 +1,5 @@
-.video_container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-
-    video {
-        width: 50%;
-    }
-}
-
 .container {
     display: flex;
     flex-direction: column;
     position: relative;
-
-    button[type="submit"] {
-        max-width: max-content;
-        font-size: 1rem;
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        margin: 0 auto 2rem;
-
-        &:hover {
-            opacity: 0.5;
-        }
-    }
-}
-
-.input_container {
-    margin: 0 auto 2rem;
-
-    input {
-        margin-left: 0.5rem;
-        max-width: 90px;
-        overflow: hidden;
-    }
 }

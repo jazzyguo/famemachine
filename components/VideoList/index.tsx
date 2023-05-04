@@ -7,9 +7,12 @@ type Props = {
 
 const VideoList = ({ clips }: Props) => (
     <div className={styles.container}>
-        {clips.map((clip) => (
-            <video src={clip} controls />
-        ))}
+        <h2>Generated Clips</h2>
+        <div className={styles.video_grid}>
+            {clips.map((clip) => (
+                <video src={clip} controls />
+            ))}
+        </div>
     </div>
 );
 
