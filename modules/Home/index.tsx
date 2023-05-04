@@ -10,6 +10,7 @@ const HomeModule = () => {
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
+        setError(null)
 
         try {
             const response = await fetch(
@@ -34,8 +35,14 @@ const HomeModule = () => {
     return (
         <div className={styles.container}>
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
-            {error && <div>{error?.message || "An error has occured"}</div>}
-            {!loading && !!clips.length && <VideoList clips={clips} />}
+            {error && !loading && (
+                <div className={styles.error}>
+                    {error?.message || "An error has occured"}
+                </div>
+            )}
+            {!loading && !!clips.length && !error && (
+                <VideoList clips={clips} />
+            )}
         </div>
     );
 };
