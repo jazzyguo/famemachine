@@ -25,9 +25,11 @@ type TwitchData = {
  */
 const TwitchConnectModule = () => {
     const router = useRouter();
-    const { code } = router.query;
+    const { code, error } = router.query;
 
-    const { user, getAccessTokenSilently } = useAuth0();
+    const { user, getAccessTokenSilently, getAccessTokenWithPopup } =
+        useAuth0();
+
     const { sub, email_verified } = user || {};
 
     const fetchTwitchProfile = useCallback(
@@ -59,16 +61,24 @@ const TwitchConnectModule = () => {
     // once we have the access token
     // we call the user management api from auth0 to link the current logged in account with twitch
     const linkTwitchAccount = useCallback(
-        async (twitchData: TwitchData) => {
+        async (twitchData: TwitchData, twitchAccessToken: string) => {
             const { id: twitchId, display_name: twitchChannel } =
                 twitchData.data[0];
 
             // get the Auth0 Management API token
             const managementApiToken = await getAccessTokenSilently({
                 authorizationParams: {
-                    scope: "update:users update:current_user_identities",
+                    scope: "update:current_user_identities",
                 },
             });
+            
+            console.log({ managementApiToken });
+
+            if (!managementApiToken) {
+                throw new Error(
+                    "Failed to retrieve auth0 managemnet api token"
+                );
+            }
 
             // call Auth0 Management API to link the Twitch account to the current user
             const auth0Response = await fetch(
@@ -76,16 +86,11 @@ const TwitchConnectModule = () => {
                 {
                     method: "POST",
                     headers: {
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${managementApiToken}`,
                     },
                     body: JSON.stringify({
-                        provider: "twitch",
-                        user_id: twitchId,
-                        connection_id: "con_S7o1XPhi2EbNSsBt",
-                        isSocial: true,
-                        profileData: {
-                            channel: twitchChannel,
-                        },
+                        link_with: twitchAccessToken,
                     }),
                 }
             );
@@ -127,13 +132,19 @@ const TwitchConnectModule = () => {
 
             const twitchData = await fetchTwitchProfile(data.access_token);
 
-            await linkTwitchAccount(twitchData);
+            await linkTwitchAccount(twitchData, data.access_token);
         } catch (e) {
             console.log("Twitch link error", e);
         }
 
         router.push("/");
     }, [code, linkTwitchAccount, router, fetchTwitchProfile]);
+
+    useEffect(() => {
+        if (error) {
+            router.push("/");
+        }
+    }, [error, router]);
 
     useEffect(() => {
         if (code && email_verified) {
