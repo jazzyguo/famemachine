@@ -7,6 +7,7 @@ type Props = {
     onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
+// eslint-disable-next-line react/display-name
 const VideoMemo = React.memo(
     ({ selectedFile }: { selectedFile: File | null }) =>
         selectedFile ? (

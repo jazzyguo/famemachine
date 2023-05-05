@@ -1,6 +1,11 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from "next/app";
+import Auth0Provider from "@/components/Auth0/Provider";
+import "@/styles/globals.css";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+const App = ({ Component, pageProps }: AppProps) => (
+    <Auth0Provider>
+        <Component {...pageProps} />
+    </Auth0Provider>
+);
+
+export default App;
