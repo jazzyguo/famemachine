@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 
-import { useAuth0 } from "@auth0/auth0-react";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
@@ -27,10 +26,6 @@ const TwitchConnectModule = () => {
     const router = useRouter();
     const { code, error } = router.query;
 
-    const { user, getAccessTokenSilently, getAccessTokenWithPopup } =
-        useAuth0();
-
-    const { sub, email_verified } = user || {};
 
     const fetchTwitchProfile = useCallback(
         async (twitchAccessToken: string) => {
@@ -57,51 +52,8 @@ const TwitchConnectModule = () => {
         },
         []
     );
-
-    // once we have the access token
-    // we call the user management api from auth0 to link the current logged in account with twitch
     const linkTwitchAccount = useCallback(
         async (twitchData: TwitchData, twitchAccessToken: string) => {
-            const { id: twitchId, display_name: twitchChannel } =
-                twitchData.data[0];
-
-            // get the Auth0 Management API token
-            const managementApiToken = await getAccessTokenSilently({
-                authorizationParams: {
-                    scope: "update:current_user_identities",
-                },
-            });
-
-            if (!managementApiToken) {
-                throw new Error(
-                    "Failed to retrieve auth0 managemnet api token"
-                );
-            }
-
-            // call Auth0 Management API to link the Twitch account to the current user
-            const auth0Response = await fetch(
-                `https://${publicRuntimeConfig.AUTH0_DOMAIN}/api/v2/users/${sub}/identities`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${managementApiToken}`,
-                    },
-                    body: JSON.stringify({
-                        provider: "oauth2",
-                        user_id: `twitch|${twitchId}`,
-                        connection_id: "con_S7o1XPhi2EbNSsBt",
-                    }),
-                }
-            );
-
-            if (auth0Response.status !== 200) {
-                throw new Error("Failed to communicate with auth0 api");
-            }
-
-            const auth0Data = await auth0Response.json();
-
-            console.log("Twitch account linked", auth0Data);
         },
         [sub, getAccessTokenSilently]
     );
@@ -120,7 +72,7 @@ const TwitchConnectModule = () => {
                     client_id: publicRuntimeConfig.TWITCH_CLIENT_ID,
                     client_secret: publicRuntimeConfig.TWITCH_CLIENT_SECRET,
                     code,
-                    redirect_uri: `${publicRuntimeConfig.AUTH0_REDIRECT}/connect/twitch`,
+                    redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/connect/twitch`,
                 }),
             });
 
@@ -146,11 +98,11 @@ const TwitchConnectModule = () => {
         // }
     }, [error, router]);
 
-    useEffect(() => {
-        if (code && email_verified) {
-            getAccessToken();
-        }
-    }, [code, getAccessToken, email_verified, router]);
+    // useEffect(() => {
+    //     if (code && email_verified) {
+    //         getAccessToken();
+    //     }
+    // }, [code, getAccessToken, email_verified, router]);
 
     return (
         <div className={styles.container}>

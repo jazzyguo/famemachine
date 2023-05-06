@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import FileUploader from "@/components/FileUploader";
 import VideoList from "@/components/VideoList";
-import LoginButton from "@/components/Auth0/LoginButton";
-import LogoutButton from "@/components/Auth0/LogoutButton";
+import LoginButton from "@/components/Auth/LoginButton";
+import LogoutButton from "@/components/Auth/LogoutButton";
 import TwitchConnectButton from "@/components/Auth0/TwitchConnectButton";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 import styles from "./Home.module.scss";
 
@@ -13,9 +13,7 @@ const HomeModule = () => {
     const [clips, setClips] = useState<string[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { isAuthenticated } = useAuth0();
-
-    console.log(useAuth0());
+    const { user } = useAuthContext();
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
@@ -43,8 +41,7 @@ const HomeModule = () => {
 
     return (
         <div className={styles.container}>
-            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-            <TwitchConnectButton />
+            {user ? <LogoutButton /> : <LoginButton />}
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && !loading && (
                 <div className={styles.error}>

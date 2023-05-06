@@ -2,13 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
-    AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
-    AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
-    AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-    AUTH0_REDIRECT: process.env.AUTH0_REDIRECT,
-
     TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
     TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
+
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_ID: process.env.FIREBASE_MESSAGING_ID,
+    FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
   },
 }
 
