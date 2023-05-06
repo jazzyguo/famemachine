@@ -6,4 +6,4 @@ const LoginButton = () => {
     return <button onClick={() => router.push("/signin")}>Sign In</button>;
 };
 
-export default LoginButton;
+export default React.memo(LoginButton);
