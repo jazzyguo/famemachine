@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
+import addData from "@/firebase/firestore/addData";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -23,9 +25,9 @@ type TwitchData = {
  * And then proceed to link the twitch account with the logged in user
  */
 const TwitchConnectModule = () => {
+    const { user } = useAuthContext();
     const router = useRouter();
     const { code, error } = router.query;
-
 
     const fetchTwitchProfile = useCallback(
         async (twitchAccessToken: string) => {
@@ -52,10 +54,26 @@ const TwitchConnectModule = () => {
         },
         []
     );
+
+    /**
+     * Save twitch access token and twitch user id to user in firestore
+     */
     const linkTwitchAccount = useCallback(
         async (twitchData: TwitchData, twitchAccessToken: string) => {
+            if (twitchAccessToken && twitchData.data?.length) {
+                const twitchUserId = twitchData.data[0].id;
+                const { error } = await addData("users", user.uid, {
+                    email: user.email,
+                    twitch_access_token: twitchAccessToken,
+                    twitch_user_id: twitchUserId,
+                });
+
+                if (error) {
+                    throw new Error("Error setting twitch link");
+                }
+            }
         },
-        [sub, getAccessTokenSilently]
+        [user.uid, user.email]
     );
 
     // on redirect from twitch auth window, we parse the code in query
@@ -93,16 +111,16 @@ const TwitchConnectModule = () => {
     }, [code, linkTwitchAccount, router, fetchTwitchProfile]);
 
     useEffect(() => {
-        // if (error) {
-        //     router.push("/");
-        // }
-    }, [error, router]);
+        if (error || !user) {
+            router.push("/");
+        }
+    }, [error, router, user]);
 
-    // useEffect(() => {
-    //     if (code && email_verified) {
-    //         getAccessToken();
-    //     }
-    // }, [code, getAccessToken, email_verified, router]);
+    useEffect(() => {
+        if (code) {
+            getAccessToken();
+        }
+    }, [code, getAccessToken, router]);
 
     return (
         <div className={styles.container}>

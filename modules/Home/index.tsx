@@ -4,7 +4,7 @@ import FileUploader from "@/components/FileUploader";
 import VideoList from "@/components/VideoList";
 import LoginButton from "@/components/Auth/LoginButton";
 import LogoutButton from "@/components/Auth/LogoutButton";
-import TwitchConnectButton from "@/components/Auth0/TwitchConnectButton";
+import TwitchConnectButton from "@/components/Auth/TwitchConnectButton";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 import styles from "./Home.module.scss";
@@ -41,6 +41,7 @@ const HomeModule = () => {
 
     return (
         <div className={styles.container}>
+            {user && <TwitchConnectButton />}
             {user ? <LogoutButton /> : <LoginButton />}
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && !loading && (
