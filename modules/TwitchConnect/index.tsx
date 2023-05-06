@@ -71,8 +71,6 @@ const TwitchConnectModule = () => {
                     scope: "update:current_user_identities",
                 },
             });
-            
-            console.log({ managementApiToken });
 
             if (!managementApiToken) {
                 throw new Error(
@@ -90,7 +88,9 @@ const TwitchConnectModule = () => {
                         Authorization: `Bearer ${managementApiToken}`,
                     },
                     body: JSON.stringify({
-                        link_with: twitchAccessToken,
+                        provider: "oauth2",
+                        user_id: `twitch|${twitchId}`,
+                        connection_id: "con_S7o1XPhi2EbNSsBt",
                     }),
                 }
             );
@@ -141,9 +141,9 @@ const TwitchConnectModule = () => {
     }, [code, linkTwitchAccount, router, fetchTwitchProfile]);
 
     useEffect(() => {
-        if (error) {
-            router.push("/");
-        }
+        // if (error) {
+        //     router.push("/");
+        // }
     }, [error, router]);
 
     useEffect(() => {
