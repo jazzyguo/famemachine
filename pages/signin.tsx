@@ -1,5 +1,5 @@
 import AppLayout from "@/layouts/app";
-import SigninModule from "@/modules/Signin";
+import SigninModule from "@/modules/Auth/Signin";
 
 const SigninPage = () => (
     <AppLayout>

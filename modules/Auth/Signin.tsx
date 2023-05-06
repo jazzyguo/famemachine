@@ -1,14 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import signUp from "@/firebase/auth/signup";
+import signIn from "@/firebase/auth/signin";
 import { useRouter } from "next/navigation";
-import addData from "@/firebase/firestore/addData";
 
 import LoginForm from "@/components/Auth/LoginForm";
 
-import styles from "./Signup.module.scss";
+import styles from "./Signin.module.scss";
 
-const SignupPage = () => {
+const SigninPage = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const router = useRouter();
@@ -16,35 +15,26 @@ const SignupPage = () => {
     const onSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
 
-        const { result, error } = await signUp(email, password);
+        const { error } = await signIn(email, password);
 
         if (error) {
-            return console.log(error);
+            console.log(error);
         }
-
-        const { user } = result;
-
-        await addData("users", user.uid, {
-            email: user.email,
-        });
 
         return router.push("/");
     };
 
     return (
-        <div className="wrapper">
-            <h1>Sign Up</h1>
+        <div className={styles.container}>
             <LoginForm
                 onSubmit={onSubmit}
                 setEmail={setEmail}
                 setPassword={setPassword}
             />
-            <p>
-                {`Already have an account? `}
-                <Link href="/signin">Log in</Link>
-            </p>
+            <p>{`Don't have an account?`}</p>
+            <Link href="/signup">Sign up</Link>
         </div>
     );
 };
 
-export default React.memo(SignupPage);
+export default React.memo(SigninPage);
