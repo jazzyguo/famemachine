@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import signIn from "@/firebase/auth/signin";
 import { useRouter } from "next/navigation";
 
@@ -31,6 +32,10 @@ const SigninPage = () => {
                 setEmail={setEmail}
                 setPassword={setPassword}
             />
+            <p>
+                {`Don't have an account? `}
+                <Link href="/signup">Sign up</Link>
+            </p>
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import signUp from "@/firebase/auth/signup";
 import { useRouter } from "next/navigation";
 import addData from "@/firebase/firestore/addData";
@@ -38,6 +39,10 @@ const SignupPage = () => {
                 setEmail={setEmail}
                 setPassword={setPassword}
             />
+            <p>
+                {`Already have an account? `}
+                <Link href="/signin">Log in</Link>
+            </p>
         </div>
     );
 };

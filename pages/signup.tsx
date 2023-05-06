@@ -1,15 +1,10 @@
-import React from "react";
+import AppLayout from "@/layouts/app";
 import SignupModule from "@/modules/Signup";
-import { Inter } from "next/font/google";
-
-import styles from "@/styles/Index.module.scss";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const SignupPage = () => (
-    <main className={`${styles.main} ${inter.className}`}>
+    <AppLayout>
         <SignupModule />
-    </main>
+    </AppLayout>
 );
 
 export default SignupPage;
