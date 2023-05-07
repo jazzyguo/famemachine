@@ -23,10 +23,8 @@ const ConnectionsModule = () => {
                 ConnectButton={TwitchConnectButton}
                 DisconnectButton={TwitchDisconnectButton}
                 text="By connecting your account with your Twitch account, you
-                acknowledge and agree that information you choose to share will
-                be uploaded to Twitch and may be viewed by Twitch and other
-                Twitch users. Also, your Twitch account information may be used
-                by Twitch. Famemachine.ai will not publicly display your Twitch
+                acknowledge and agree that your Twitch account information may be used
+                by Famemachine.ai. Famemachine.ai will not publicly display your Twitch
                 account information. If you no longer want to share this
                 information, please disconnect your Twitch account."
             />
