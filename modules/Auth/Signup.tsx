@@ -4,7 +4,7 @@ import signUp from "@/firebase/auth/signup";
 import { useRouter } from "next/navigation";
 import addData from "@/firebase/firestore/addData";
 
-import { LoginForm } from "@/components/Auth";
+import LoginForm from "./components/LoginForm";
 
 import styles from "./Signin.module.scss";
 
@@ -56,4 +56,4 @@ const SignupPage = () => {
     );
 };
 
-export default React.memo(SignupPage);
+export default SignupPage;

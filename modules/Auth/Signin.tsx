@@ -3,7 +3,7 @@ import Link from "next/link";
 import signIn from "@/firebase/auth/signin";
 import { useRouter } from "next/navigation";
 
-import { LoginForm } from "@/components/Auth";
+import LoginForm from "./components/LoginForm";
 
 import styles from "./Signin.module.scss";
 
@@ -41,4 +41,4 @@ const SigninPage = () => {
     );
 };
 
-export default React.memo(SigninPage);
+export default SigninPage;

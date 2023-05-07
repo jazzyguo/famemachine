@@ -67,4 +67,4 @@ const TwitchDisconnectButton = () => {
     );
 };
 
-export default React.memo(TwitchDisconnectButton);
+export default TwitchDisconnectButton;

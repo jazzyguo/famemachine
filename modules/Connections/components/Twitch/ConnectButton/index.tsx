@@ -19,4 +19,4 @@ const TwitchConnectButton = () => {
     return <button onClick={openTwitchAuth}>Connect Twitch Account</button>;
 };
 
-export default React.memo(TwitchConnectButton);
+export default TwitchConnectButton;
