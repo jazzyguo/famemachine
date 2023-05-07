@@ -2,8 +2,6 @@ import React, { useState } from "react";
 
 import FileUploader from "@/components/FileUploader";
 import GeneratedClipsList from "@/components/GeneratedClipsList";
-import { LoginButton, LogoutButton } from "@/components/Auth";
-import { useAuthContext } from "@/contexts/AuthContext";
 
 import styles from "./Home.module.scss";
 
@@ -11,8 +9,6 @@ const HomeModule = () => {
     const [clips, setClips] = useState<string[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-
-    const { user } = useAuthContext();
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
@@ -40,7 +36,6 @@ const HomeModule = () => {
 
     return (
         <div className={styles.container}>
-            {user ? <LogoutButton /> : <LoginButton />}
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && !loading && (
                 <div className={styles.error}>

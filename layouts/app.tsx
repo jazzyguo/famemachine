@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Head from "next/head";
+import TopNav from "./components/TopNav";
 import { Inter } from "next/font/google";
 import styles from "@/styles/App.module.scss";
 
@@ -16,7 +17,10 @@ const AppLayout = ({ children }: { children: ReactNode }) => (
             />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className={`${styles.main} ${inter.className}`}>{children}</main>
+        <main className={`${styles.main} ${inter.className}`}>
+            <TopNav />
+            <div className={styles.main_content}>{children}</div>
+        </main>
     </>
 );
 
