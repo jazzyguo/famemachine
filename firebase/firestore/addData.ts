@@ -1,7 +1,5 @@
-import app from "../config";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-
-const db = getFirestore(app);
+import { db } from "../config";
+import { doc, setDoc } from "firebase/firestore";
 
 const addData = async (collection: string, id: string, data: any) => {
     let result = null;
@@ -12,7 +10,7 @@ const addData = async (collection: string, id: string, data: any) => {
             merge: true,
         });
     } catch (e) {
-        console.log(e)
+        console.log(e);
         error = e;
     }
 

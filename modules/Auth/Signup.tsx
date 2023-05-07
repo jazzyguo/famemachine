@@ -4,7 +4,7 @@ import signUp from "@/firebase/auth/signup";
 import { useRouter } from "next/navigation";
 import addData from "@/firebase/firestore/addData";
 
-import LoginForm from "@/components/Auth/LoginForm";
+import { LoginForm } from "@/components/Auth";
 
 import styles from "./Signin.module.scss";
 
