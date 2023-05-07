@@ -56,4 +56,4 @@ const HomeModule = () => {
     );
 };
 
-export default HomeModule;
+export default React.memo(HomeModule);

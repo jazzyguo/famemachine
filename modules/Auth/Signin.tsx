@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import signIn from "@/firebase/auth/signin";
 import { useRouter } from "next/navigation";
@@ -8,8 +8,10 @@ import LoginForm from "@/components/Auth/LoginForm";
 import styles from "./Signin.module.scss";
 
 const SigninPage = () => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState<string | null>(null);
+
     const router = useRouter();
 
     const onSubmit = async (event: React.SyntheticEvent) => {
@@ -19,14 +21,16 @@ const SigninPage = () => {
 
         if (error) {
             console.log(error);
+            setLoginError("Account not found");
+        } else {
+            return router.push("/");
         }
-
-        return router.push("/");
     };
 
     return (
         <div className={styles.container}>
             <LoginForm
+                error={loginError}
                 onSubmit={onSubmit}
                 setEmail={setEmail}
                 setPassword={setPassword}

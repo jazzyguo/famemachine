@@ -7,6 +7,7 @@ type Props = {
     setEmail: (email: string) => void;
     onSubmit: (event: React.SyntheticEvent) => void;
     type?: "signup" | "signin";
+    error?: null | string;
 };
 
 const LoginForm = ({
@@ -14,6 +15,7 @@ const LoginForm = ({
     setPassword,
     setEmail,
     onSubmit,
+    error,
 }: Props) => {
     const text = type === "signin" ? "Sign in" : "Sign up";
     return (
@@ -41,6 +43,7 @@ const LoginForm = ({
                     placeholder="password"
                 />
             </label>
+            {error && <div className={styles.error}>{error}</div>}
             <button type="submit">{text}</button>
         </form>
     );
