@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
-import TwitchConnectModule from "@/modules/TwitchConnect";
 import { useRouter } from "next/router";
 import fetch from "isomorphic-unfetch";
 import { GetServerSidePropsContext } from "next";
+
+import { TWITCH_API_URL } from "@/utils/consts/api";
+import TwitchConnectModule from "@/modules/Twitch/Connect";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { query } = context;
     const code = query.code;
 
     try {
-        const response = await fetch("https://id.twitch.tv/oauth2/token", {
+        const response = await fetch(`${TWITCH_API_URL}/token`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,27 +27,47 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
         const data = await response.json();
 
-        if (response.status !== 200 || !data?.access_token) {
+        if (
+            response.status !== 200 ||
+            !data?.access_token ||
+            !data?.refresh_token
+        ) {
             throw new Error("Invalid authorization");
         }
 
-        return { props: { accessToken: data.access_token } };
+        return {
+            props: {
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token,
+            },
+        };
     } catch (e) {
         console.log("Error generating access code", e);
         return { props: {} };
     }
 }
 
-const TwitchConnectPage = ({ accessToken }: { accessToken: string }) => {
+const TwitchConnectPage = ({
+    accessToken,
+    refreshToken,
+}: {
+    accessToken: string;
+    refreshToken: string;
+}) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (!accessToken) {
+        if (!accessToken || !refreshToken) {
             router.push("/");
         }
-    }, [accessToken, router]);
+    }, [accessToken, refreshToken, router]);
 
-    return <TwitchConnectModule accessToken={accessToken} />;
+    return (
+        <TwitchConnectModule
+            accessToken={accessToken}
+            refreshToken={refreshToken}
+        />
+    );
 };
 
 export default TwitchConnectPage;

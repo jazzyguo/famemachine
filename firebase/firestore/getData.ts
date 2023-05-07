@@ -1,7 +1,5 @@
-import app from "../config";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-
-const db = getFirestore(app);
+import { db } from "../config";
+import { doc, getDoc } from "firebase/firestore";
 
 const getData = async (collection: string, id: string) => {
     let docRef = doc(db, collection, id);

@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: publicRuntimeConfig.FIREBASE_API_KEY,
@@ -13,5 +14,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+
+export const db = getFirestore(app);
 
 export default app;

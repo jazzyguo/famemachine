@@ -2,10 +2,13 @@ import React, { useState } from "react";
 
 import FileUploader from "@/components/FileUploader";
 import VideoList from "@/components/VideoList";
-import LoginButton from "@/components/Auth/LoginButton";
-import LogoutButton from "@/components/Auth/LogoutButton";
-import TwitchConnectButton from "@/components/Auth/TwitchConnectButton";
+import { LoginButton, LogoutButton } from "@/components/Auth";
+import {
+    TwitchDisconnectButton,
+    TwitchConnectButton,
+} from "@/components/Connections";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { useConnectionsContext } from "@/contexts/ConnectionsContext";
 
 import styles from "./Home.module.scss";
 
@@ -13,7 +16,9 @@ const HomeModule = () => {
     const [clips, setClips] = useState<string[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
     const { user } = useAuthContext();
+    const { twitch } = useConnectionsContext();
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
@@ -41,7 +46,8 @@ const HomeModule = () => {
 
     return (
         <div className={styles.container}>
-            {user && <TwitchConnectButton />}
+            {!twitch && <TwitchConnectButton />}
+            {twitch && <TwitchDisconnectButton />}
             {user ? <LogoutButton /> : <LoginButton />}
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && !loading && (

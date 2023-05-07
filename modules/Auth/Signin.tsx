@@ -3,7 +3,7 @@ import Link from "next/link";
 import signIn from "@/firebase/auth/signin";
 import { useRouter } from "next/navigation";
 
-import LoginForm from "@/components/Auth/LoginForm";
+import { LoginForm } from "@/components/Auth";
 
 import styles from "./Signin.module.scss";
 
