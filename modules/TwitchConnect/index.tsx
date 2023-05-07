@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { useAuthContext } from "@/contexts/AuthContext";
-import { useIntegrationsAPIContext } from "@/contexts/IntegrationsContext";
+import { useConnectionsAPIContext } from "@/contexts/ConnectionsContext";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
@@ -35,7 +35,7 @@ type TwitchData = {
  */
 const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
     const { user } = useAuthContext();
-    const addIntegration = useIntegrationsAPIContext();
+    const addConnection = useConnectionsAPIContext();
 
     const router = useRouter();
 
@@ -65,7 +65,7 @@ const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
 
         const twitchUserQuery = query(
             collectionGroup(db, "users"),
-            where("integrations.twitch.user_id", "==", userId)
+            where("connections.twitch.user_id", "==", userId)
         );
 
         const snapshot = await getDocs(twitchUserQuery);
@@ -85,25 +85,25 @@ const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
 
                 await getIsTwitchAccountLinked(twitchUserId);
 
-                const twitchIntegration = {
+                const twitchConnection = {
                     access_token: accessToken,
                     user_id: twitchUserId,
                 };
 
                 const { error } = await addData("users", user.uid, {
-                    integrations: {
-                        twitch: twitchIntegration,
+                    connections: {
+                        twitch: twitchConnection,
                     },
                 });
 
                 if (error) {
                     throw new Error("Error setting twitch link");
                 } else {
-                    addIntegration("twitch", twitchIntegration);
+                    addConnection("twitch", twitchConnection);
                 }
             }
         },
-        [user.uid, accessToken, addIntegration]
+        [user.uid, accessToken, addConnection]
     );
 
     useEffect(() => {

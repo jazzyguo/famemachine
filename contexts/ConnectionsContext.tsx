@@ -15,45 +15,44 @@ import Loading from "@/components/Loading";
 import getData from "@/firebase/firestore/getData";
 import { useAuthContext } from "@/contexts/AuthContext";
 
-type Integration = {
+type Connection = {
     [key: string]: string;
 };
 
-type Integrations = {
-    [key: string]: Integration;
+type Connections = {
+    [key: string]: Connection;
 };
 
-export const IntegrationsContext = createContext<Integrations>({});
-export const IntegrationsAPIContext = createContext<
-    (name: string, newIntegration: Integration) => void
+export const ConnectionsContext = createContext<Connections>({});
+export const ConnectionsAPIContext = createContext<
+    (name: string, newConnection: Connection) => void
 >(() => undefined);
 
-export const useIntegrationsContext = () => useContext(IntegrationsContext);
-export const useIntegrationsAPIContext = () =>
-    useContext(IntegrationsAPIContext);
+export const useConnectionsContext = () => useContext(ConnectionsContext);
+export const useConnectionsAPIContext = () => useContext(ConnectionsAPIContext);
 
-export const IntegrationsContextProvider = ({
+export const ConnectionsContextProvider = ({
     children,
 }: {
     children: ReactNode;
 }) => {
     const { user } = useAuthContext();
-    const [integrations, setIntegrations] = useState<Integrations>({});
+    const [connections, setConnections] = useState<Connections>({});
 
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // fetch integrations from firestore
+        // fetch Connections from firestore
         const fetchUser = async () => {
             if (user) {
                 const { error, result } = await getData("users", user.uid);
 
                 if (error) {
-                    throw new Error("Error fetching integrations");
+                    throw new Error("Error fetching Connections");
                 }
 
-                if (result?.integrations) {
-                    setIntegrations(result.integrations);
+                if (result?.connections) {
+                    setConnections(result.connections);
                 }
 
                 setLoading(false);
@@ -68,20 +67,20 @@ export const IntegrationsContextProvider = ({
         }
     }, [user]);
 
-    const addIntegration = useCallback(
-        (name: string, newIntegration: Integration) =>
-            setIntegrations((prevState) => ({
+    const addConnection = useCallback(
+        (name: string, newConnection: Connection) =>
+            setConnections((prevState) => ({
                 ...prevState,
-                [name]: newIntegration,
+                [name]: newConnection,
             })),
         []
     );
 
-    console.log("current integrations", integrations);
+    console.log("current Connections", connections);
 
     return (
-        <IntegrationsContext.Provider value={integrations}>
-            <IntegrationsAPIContext.Provider value={addIntegration}>
+        <ConnectionsContext.Provider value={connections}>
+            <ConnectionsAPIContext.Provider value={addConnection}>
                 {loading ? (
                     <div style={{ padding: "6rem" }}>
                         <Loading />
@@ -89,7 +88,7 @@ export const IntegrationsContextProvider = ({
                 ) : (
                     children
                 )}
-            </IntegrationsAPIContext.Provider>
-        </IntegrationsContext.Provider>
+            </ConnectionsAPIContext.Provider>
+        </ConnectionsContext.Provider>
     );
 };
