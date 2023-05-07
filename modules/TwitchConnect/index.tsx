@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { useAuthContext } from "@/contexts/AuthContext";
+import { useIntegrationsAPIContext } from "@/contexts/IntegrationsContext";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
@@ -34,6 +35,8 @@ type TwitchData = {
  */
 const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
     const { user } = useAuthContext();
+    const addIntegration = useIntegrationsAPIContext();
+
     const router = useRouter();
 
     const fetchTwitchProfile = useCallback(async () => {
@@ -54,8 +57,6 @@ const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
 
         const twitchData: TwitchData = await twitchResponse.json();
 
-        console.log("twitch profile", twitchData);
-
         return twitchData;
     }, [accessToken]);
 
@@ -68,7 +69,7 @@ const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
         );
 
         const snapshot = await getDocs(twitchUserQuery);
-        console.log({ snapshot });
+
         if (!!snapshot?.docs?.length) {
             throw new Error("Twitch account already linked");
         }
@@ -84,21 +85,25 @@ const TwitchConnectModule = ({ accessToken }: { accessToken: string }) => {
 
                 await getIsTwitchAccountLinked(twitchUserId);
 
+                const twitchIntegration = {
+                    access_token: accessToken,
+                    user_id: twitchUserId,
+                };
+
                 const { error } = await addData("users", user.uid, {
                     integrations: {
-                        twitch: {
-                            access_token: accessToken,
-                            user_id: twitchUserId,
-                        },
+                        twitch: twitchIntegration,
                     },
                 });
 
                 if (error) {
                     throw new Error("Error setting twitch link");
+                } else {
+                    addIntegration("twitch", twitchIntegration);
                 }
             }
         },
-        [user.uid, accessToken]
+        [user.uid, accessToken, addIntegration]
     );
 
     useEffect(() => {

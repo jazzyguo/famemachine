@@ -1,10 +1,11 @@
+import { ReactNode } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/App.module.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const AppLayout = ({ children }: { children: React.ReactNode }) => (
+const AppLayout = ({ children }: { children: ReactNode }) => (
     <>
         <Head>
             <title>Famemachine.ai</title>

@@ -11,8 +11,12 @@ const getData = async (collection: string, id: string) => {
 
     try {
         result = await getDoc(docRef);
+
+        if (result.exists()) {
+            result = result.data();
+        }
     } catch (e) {
-        console.log(e)
+        console.log(e);
         error = e;
     }
 
