@@ -1,6 +1,7 @@
 import React from "react";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "@/firebase/config";
+import cx from "classnames";
 
 import { useAuthContext } from "@/contexts/AuthContext";
 import {
@@ -11,6 +12,8 @@ import { TWITCH_API_URL } from "@/utils/consts/api";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
+
+import styles from "../../../Connections.module.scss";
 
 const TwitchDisconnectButton = () => {
     const { user } = useAuthContext();
@@ -61,8 +64,11 @@ const TwitchDisconnectButton = () => {
     };
 
     return (
-        <button onClick={() => removeTwitchConnection()}>
-            Disconnect Twitch Account
+        <button
+            className={cx(styles.button, styles["button--disconnect"])}
+            onClick={() => removeTwitchConnection()}
+        >
+            Disconnect
         </button>
     );
 };

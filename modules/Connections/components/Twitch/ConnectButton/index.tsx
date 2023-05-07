@@ -1,13 +1,16 @@
 import React from "react";
+import cx from "classnames";
 import { useRouter } from "next/router";
 import { TWITCH_API_URL } from "@/utils/consts/api";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
+import styles from "../../../Connections.module.scss";
+
 const TwitchConnectButton = () => {
     const router = useRouter();
-    
+
     const openTwitchAuth = () => {
         const redirect = `${process.env.NEXT_PUBLIC_BASE_URL}/connect/twitch`;
 
@@ -16,7 +19,14 @@ const TwitchConnectButton = () => {
         router.push(twitchAuthUrl);
     };
 
-    return <button onClick={openTwitchAuth}>Connect Twitch Account</button>;
+    return (
+        <button
+            onClick={openTwitchAuth}
+            className={cx(styles.button, styles["button--connect"])}
+        >
+            Connect
+        </button>
+    );
 };
 
 export default TwitchConnectButton;
