@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+
 import styles from "./SignupButton.module.scss";
 
 const SignupButton = () => {
@@ -7,4 +8,4 @@ const SignupButton = () => {
     return <button onClick={() => router.push("/signup")}>Sign up</button>;
 };
 
-export default React.memo(SignupButton);
+export default SignupButton;

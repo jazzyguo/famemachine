@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 
 import FileUploader from "@/components/FileUploader";
-import VideoList from "@/components/VideoList";
+import GeneratedClipsList from "@/components/GeneratedClipsList";
 import { LoginButton, LogoutButton } from "@/components/Auth";
-import {
-    TwitchDisconnectButton,
-    TwitchConnectButton,
-} from "@/components/Connections";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { useConnectionsContext } from "@/contexts/ConnectionsContext";
 
 import styles from "./Home.module.scss";
 
@@ -18,7 +13,6 @@ const HomeModule = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const { user } = useAuthContext();
-    const { twitch } = useConnectionsContext();
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
@@ -46,8 +40,6 @@ const HomeModule = () => {
 
     return (
         <div className={styles.container}>
-            {!twitch && <TwitchConnectButton />}
-            {twitch && <TwitchDisconnectButton />}
             {user ? <LogoutButton /> : <LoginButton />}
             <FileUploader onFileUpload={onFileUpload} loading={loading} />
             {error && !loading && (
@@ -56,10 +48,10 @@ const HomeModule = () => {
                 </div>
             )}
             {!loading && !!clips.length && !error && (
-                <VideoList clips={clips} />
+                <GeneratedClipsList clips={clips} />
             )}
         </div>
     );
 };
 
-export default React.memo(HomeModule);
+export default HomeModule;

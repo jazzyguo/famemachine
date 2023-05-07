@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from "next";
 
 import { TWITCH_API_URL } from "@/utils/consts/api";
 import TwitchConnectModule from "@/modules/Twitch/Connect";
+import withAuth from "@/components/hoc/withAuth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { query } = context;
@@ -70,4 +71,4 @@ const TwitchConnectPage = ({
     );
 };
 
-export default TwitchConnectPage;
+export default withAuth(TwitchConnectPage);

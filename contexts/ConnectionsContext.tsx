@@ -39,8 +39,6 @@ export const ConnectionsContextProvider = ({
     const { user } = useAuthContext();
     const [connections, setConnections] = useState<Connections>({});
 
-    const [loading, setLoading] = useState<boolean>(true);
-
     useEffect(() => {
         // fetch Connections from firestore
         const fetchUser = async () => {
@@ -54,8 +52,6 @@ export const ConnectionsContextProvider = ({
                 if (result?.connections) {
                     setConnections(result.connections);
                 }
-
-                setLoading(false);
             }
         };
 
@@ -63,7 +59,6 @@ export const ConnectionsContextProvider = ({
             fetchUser();
         } catch (e) {
             console.log(e);
-            setLoading(false);
         }
     }, [user]);
 
@@ -81,13 +76,7 @@ export const ConnectionsContextProvider = ({
     return (
         <ConnectionsContext.Provider value={connections}>
             <ConnectionsAPIContext.Provider value={addConnection}>
-                {loading ? (
-                    <div style={{ padding: "6rem" }}>
-                        <Loading />
-                    </div>
-                ) : (
-                    children
-                )}
+                {children}
             </ConnectionsAPIContext.Provider>
         </ConnectionsContext.Provider>
     );

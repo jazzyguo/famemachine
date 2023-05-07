@@ -21,4 +21,4 @@ const LogoutButton = () => {
     return <button onClick={() => handleLogout()}>Log out</button>;
 };
 
-export default React.memo(LogoutButton);
+export default LogoutButton;

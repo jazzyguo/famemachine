@@ -110,7 +110,7 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
             } catch (e) {
                 console.log(e);
             }
-            router.push("/");
+            router.push("/connections");
         };
 
         if (accessToken) {

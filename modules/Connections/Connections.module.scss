@@ -1,0 +1,21 @@
+.button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+
+    &:hover {
+        opacity: 0.75;
+    }
+
+    &--connect {
+        background: purple;
+    }
+
+    &--disconnect {
+        background: grey;
+    }
+}
+
+.container {
+    border-radius: 0.25rem;
+    border: 1px solid grey;
+}
