@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { useAuthContext } from "@/contexts/AuthContext";
 import { LoginButton, SignupButton } from "@/components/Auth";
-import UserMenuList from "../UserMenu";
+import UserMenuList from "../UserMenuList";
 
 import styles from "./TopNav.module.scss";
 

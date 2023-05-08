@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import LinkIcon from "@mui/icons-material/Link";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 
 import { LogoutButton } from "@/components/Auth";
 
@@ -57,6 +58,16 @@ const UserMenuList = ({ user }: Props) => {
                     horizontal: "right",
                 }}
             >
+                <MenuItem
+                    onClick={() => {
+                        router.push("/videos");
+                        handleClose();
+                    }}
+                    disableRipple
+                >
+                    <VideoLibraryIcon />
+                    Video Library
+                </MenuItem>
                 <MenuItem
                     onClick={() => {
                         router.push("/connections");
