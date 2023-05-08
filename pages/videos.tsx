@@ -1,5 +1,11 @@
 import VideosModule from "@/modules/Videos";
 
-const VideosPage = () => <VideosModule />;
+import { VideosContextProvider } from "@/contexts/VideosContext";
+
+const VideosPage = () => (
+    <VideosContextProvider>
+        <VideosModule />
+    </VideosContextProvider>
+);
 
 export default VideosPage;

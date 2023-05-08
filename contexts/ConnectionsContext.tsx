@@ -11,7 +11,6 @@ import {
     ReactNode,
     useCallback,
 } from "react";
-import Loading from "@/components/Loading";
 import getData from "@/firebase/firestore/getData";
 import { useAuthContext } from "@/contexts/AuthContext";
 
