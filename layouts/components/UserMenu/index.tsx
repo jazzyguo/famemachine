@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -58,7 +58,10 @@ const UserMenuList = ({ user }: Props) => {
                 }}
             >
                 <MenuItem
-                    onClick={() => router.push("/connections")}
+                    onClick={() => {
+                        router.push("/connections");
+                        handleClose();
+                    }}
                     disableRipple
                 >
                     <LinkIcon />

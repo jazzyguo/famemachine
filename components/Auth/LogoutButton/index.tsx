@@ -13,7 +13,6 @@ const LogoutButton = () => {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            console.log("Signed out successfully");
             router.push("/");
         } catch (e) {
             console.log(e);
