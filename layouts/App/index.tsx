@@ -1,9 +1,15 @@
 import { ReactNode } from "react";
 import Head from "next/head";
-import { Inter } from "next/font/google";
-import styles from "@/styles/App.module.scss";
+import TopNav from "../components/TopNav";
+import { Roboto } from "next/font/google";
+import styles from "./App.module.scss";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+    weight: ["300", "400", "500", "700"],
+    style: ["normal", "italic"],
+    subsets: ["latin"],
+    display: "swap",
+});
 
 const AppLayout = ({ children }: { children: ReactNode }) => (
     <>
@@ -16,7 +22,10 @@ const AppLayout = ({ children }: { children: ReactNode }) => (
             />
             <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className={`${styles.main} ${inter.className}`}>{children}</main>
+        <main className={`${styles.main} ${roboto.className}`}>
+            <TopNav />
+            <div className={styles.main_content}>{children}</div>
+        </main>
     </>
 );
 

@@ -1,10 +1,5 @@
-import AppLayout from "@/layouts/app";
 import HomeModule from "@/modules/Home";
 
-const IndexPage = () => (
-    <AppLayout>
-        <HomeModule />
-    </AppLayout>
-);
+const IndexPage = () => <HomeModule />;
 
 export default IndexPage;
