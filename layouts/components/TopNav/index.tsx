@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { useAuthContext } from "@/contexts/AuthContext";
 import { LoginButton, SignupButton } from "@/components/Auth";
-import UserMenu from "../UserMenu";
+import UserMenuList from "../UserMenu";
 
 import styles from "./TopNav.module.scss";
 
@@ -25,7 +25,7 @@ const TopNav = () => {
                     </div>
                 )
             ) : (
-                <UserMenu user={user} />
+                <UserMenuList user={user} />
             )}
         </div>
     );
