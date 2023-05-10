@@ -1,8 +1,3 @@
-/**
- *  curl -X GET 'https://api.twitch.tv/helix/videos?user_id=51496027' \
--H 'Authorization: Bearer jh0kdxp0glxwsj4f2me774tnmnrt70' \
--H 'Client-Id: l0122tzvf1hjb89yjoogivk0frglsp'
- */
 import {
     useState,
     useEffect,
@@ -11,9 +6,8 @@ import {
     ReactNode,
     useCallback,
 } from "react";
-import Loading from "@/components/Loading";
 import getData from "@/firebase/firestore/getData";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Connection = {
     [key: string]: string;
@@ -24,22 +18,20 @@ type Connections = {
 };
 
 export const ConnectionsContext = createContext<Connections>({});
-export const ConnectionsAPIContext = createContext<
-    (name: string, newConnection: Connection | null) => void
->(() => undefined);
+export const ConnectionsAPIContext = createContext<{
+    addConnection: (name: string, newConnection: Connection | null) => void;
+}>({ addConnection: () => undefined });
 
-export const useConnectionsContext = () => useContext(ConnectionsContext);
-export const useConnectionsAPIContext = () => useContext(ConnectionsAPIContext);
+export const useConnections = () => useContext(ConnectionsContext);
+export const useConnectionsAPI = () => useContext(ConnectionsAPIContext);
 
 export const ConnectionsContextProvider = ({
     children,
 }: {
     children: ReactNode;
 }) => {
-    const { user } = useAuthContext();
+    const { user } = useAuth();
     const [connections, setConnections] = useState<Connections>({});
-
-    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         // fetch Connections from firestore
@@ -54,8 +46,6 @@ export const ConnectionsContextProvider = ({
                 if (result?.connections) {
                     setConnections(result.connections);
                 }
-
-                setLoading(false);
             }
         };
 
@@ -63,7 +53,6 @@ export const ConnectionsContextProvider = ({
             fetchUser();
         } catch (e) {
             console.log(e);
-            setLoading(false);
         }
     }, [user]);
 
@@ -80,14 +69,8 @@ export const ConnectionsContextProvider = ({
 
     return (
         <ConnectionsContext.Provider value={connections}>
-            <ConnectionsAPIContext.Provider value={addConnection}>
-                {loading ? (
-                    <div style={{ padding: "6rem" }}>
-                        <Loading />
-                    </div>
-                ) : (
-                    children
-                )}
+            <ConnectionsAPIContext.Provider value={{ addConnection }}>
+                {children}
             </ConnectionsAPIContext.Provider>
         </ConnectionsContext.Provider>
     );

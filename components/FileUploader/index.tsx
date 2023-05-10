@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import Loading from "@/components/Loading";
-import VideoContainer from "@/components/VideoContainer";
+import VideoContainer from "./VideoContainer";
 import styles from "./FileUploader.module.scss";
 
 type Props = {

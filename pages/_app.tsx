@@ -1,15 +1,12 @@
-import type { AppProps } from "next/app";
-import { AuthContextProvider } from "@/contexts/AuthContext";
-import { ConnectionsContextProvider } from "@/contexts/ConnectionsContext";
+import AppModule from "@/modules/App";
+import { AppProps } from "next/app";
 
 import "@/styles/globals.css";
 
 const App = ({ Component, pageProps }: AppProps) => (
-    <AuthContextProvider>
-        <ConnectionsContextProvider>
-            <Component {...pageProps} />
-        </ConnectionsContextProvider>
-    </AuthContextProvider>
+    <AppModule>
+        <Component {...pageProps} />
+    </AppModule>
 );
 
 export default App;

@@ -1,10 +1,5 @@
-import AppLayout from "@/layouts/app";
 import SigninModule from "@/modules/Auth/Signin";
 
-const SigninPage = () => (
-    <AppLayout>
-        <SigninModule />
-    </AppLayout>
-);
+const SigninPage = () => <SigninModule />;
 
 export default SigninPage;

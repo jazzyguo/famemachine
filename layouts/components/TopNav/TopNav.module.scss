@@ -1,0 +1,25 @@
+.container {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: rem;
+    background-color: black;
+    padding: 1rem 2rem;
+
+    h1 {
+        cursor: pointer;
+    }
+}
+
+.loginButtons {
+    button {
+        &:hover {
+            opacity: 0.75;
+        }
+        &:last-child {
+            margin-left: 1rem;
+            color: cyan;
+        }
+    }
+}
