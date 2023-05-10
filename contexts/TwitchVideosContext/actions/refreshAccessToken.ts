@@ -6,14 +6,12 @@ import addData from "@/firebase/firestore/addData";
 
 type Props = {
     userId: string;
-    twitchUserId: string;
     refreshToken: string;
     addConnection: (connection: string, obj: { [key: string]: string }) => void;
 };
 
 const refreshAccessToken = async ({
     userId,
-    twitchUserId,
     refreshToken,
     addConnection,
 }: Props): Promise<{
@@ -45,7 +43,6 @@ const refreshAccessToken = async ({
             const twitchConnection = {
                 access_token: data.access_token,
                 refresh_token: data.refresh_token,
-                user_id: twitchUserId,
             };
 
             const { error } = await addData("users", userId, {

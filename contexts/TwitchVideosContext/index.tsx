@@ -15,11 +15,11 @@ import fetchTwitchVideos from "./actions/fetchTwitchVideos";
 import refreshAccessToken from "./actions/refreshAccessToken";
 
 import { State } from "./types";
-import reducer, { initialState } from "./reducer";
+import reducer, { initialState, localStorageKey } from "./reducer";
 
 export const TwitchVideosContext = createContext<State>(initialState);
 export const TwitchVideosAPIContext = createContext<{
-    [key: string]: (any: any) => void;
+    [key: string]: (any?: any) => void;
 }>({});
 
 export const useTwitchVideos = () => useContext(TwitchVideosContext);
@@ -32,15 +32,26 @@ export const useTwitchVideosAPI = () => useContext(TwitchVideosAPIContext);
  * Used in modules/Videos/index.tsx
  */
 export const TwitchVideosContextProvider = ({
+    prevPath = "",
     children,
 }: {
+    prevPath: string;
     children: ReactNode;
 }) => {
     const { twitch } = useConnections();
     const { addConnection } = useConnectionsAPI();
     const { user } = useAuth();
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const previousPathContainedVideo = prevPath.includes("/video");
+
+    // maintain local storage state if coming from video id page
+    const [state, dispatch] = useReducer(
+        reducer,
+        previousPathContainedVideo
+            ? JSON.parse(localStorage.getItem(localStorageKey) || "null") ||
+                  initialState
+            : initialState
+    );
 
     const {
         access_token: accessToken,
@@ -52,8 +63,7 @@ export const TwitchVideosContextProvider = ({
     // to create refresh logic in the case of expired access tokens
     const _refreshAccessToken = useCallback(async () => {
         const { access_token, refresh_token } = await refreshAccessToken({
-            userId: user.uid,
-            twitchUserId: userId,
+            userId: user?.uid,
             refreshToken,
             addConnection,
         });
@@ -62,7 +72,7 @@ export const TwitchVideosContextProvider = ({
             access_token,
             refresh_token,
         };
-    }, [userId, refreshToken, user.uid, addConnection]);
+    }, [refreshToken, user?.uid, addConnection]);
 
     const _fetchTwitchVideos = useCallback(
         async (paginateTo: "before" | "after" | undefined) => {

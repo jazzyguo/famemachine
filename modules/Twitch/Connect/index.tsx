@@ -76,7 +76,9 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     const linkTwitchAccount = useCallback(
         async (twitchData: TwitchData) => {
             if (accessToken && twitchData.data?.length) {
+                console.log({ twitchData });
                 const twitchUserId = twitchData.data[0].id;
+                const channel = twitchData.data[0].display_name;
 
                 await getIsTwitchAccountLinked(twitchUserId);
 
@@ -84,6 +86,7 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
                     access_token: accessToken,
                     refresh_token: refreshToken,
                     user_id: twitchUserId,
+                    channel,
                 };
 
                 const { error } = await addData("users", user.uid, {

@@ -1,6 +1,8 @@
 import { State, Action } from "./types";
 import { isEmpty } from "lodash";
 
+export const localStorageKey = "famemachine_twitchVideosState";
+
 export const initialState: State = {
     videos: [],
     loading: false,
@@ -20,7 +22,7 @@ const reducer = (state: State, action: Action): State => {
                 error: null,
             };
         case "FETCH_VIDEOS_SUCCESS":
-            return {
+            const newState = {
                 ...state,
                 loading: false,
                 videos: action.payload.videos,
@@ -30,6 +32,8 @@ const reducer = (state: State, action: Action): State => {
                     isLastPage: isEmpty(action.payload.pagination),
                 },
             };
+            localStorage.setItem(localStorageKey, JSON.stringify(newState));
+            return newState;
         case "FETCH_VIDEOS_FAILURE":
             return {
                 ...state,

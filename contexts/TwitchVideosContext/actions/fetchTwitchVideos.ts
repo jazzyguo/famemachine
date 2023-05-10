@@ -31,7 +31,7 @@ const fetchVideos = async ({
     cursor: Props["cursor"];
     paginateTo: Props["paginateTo"];
 }) => {
-    let url = `${TWITCH_API_URL}/videos?user_id=51496027&first=10`; //`${TWITCH_API_URL}/videos?user_id=${userId}`,
+    let url = `${TWITCH_API_URL}/videos?user_id=51496027&first=20`; //`${TWITCH_API_URL}/videos?user_id=${userId}`,
 
     if (cursor && paginateTo) {
         url += `&${paginateTo}=${cursor}`;

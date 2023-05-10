@@ -3,10 +3,10 @@ import React from "react";
 import TwitchVideoLibrary from "@/modules/Twitch/VideoLibrary";
 import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
 
-const VideosModule = () => {
+const VideosModule = ({ prevPath }: { prevPath: string }) => {
     return (
-        <div>
-            <TwitchVideosContextProvider>
+        <div style={{ width: "100%" }}>
+            <TwitchVideosContextProvider prevPath={prevPath}>
                 <TwitchVideoLibrary />
             </TwitchVideosContextProvider>
         </div>
