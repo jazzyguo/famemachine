@@ -7,12 +7,12 @@ import {
     TwitchLogo,
 } from "./components/Twitch";
 
-import { useConnectionsContext } from "@/contexts/ConnectionsContext";
+import { useConnections } from "@/contexts/ConnectionsContext";
 
 import styles from "./Connections.module.scss";
 
 const ConnectionsModule = () => {
-    const { twitch } = useConnectionsContext();
+    const { twitch } = useConnections();
 
     return (
         <div className={styles.container}>

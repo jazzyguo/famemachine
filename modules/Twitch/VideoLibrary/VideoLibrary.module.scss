@@ -1,0 +1,57 @@
+.noConnection {
+    a {
+        color: cyan;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.videosContainer {
+    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    column-gap: 2rem;
+    row-gap: 2rem;
+    width: 100%;
+    padding-bottom: 1rem;
+}
+
+.videoItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max-content;
+    margin: auto;
+    cursor: pointer;
+
+    &:hover {
+        img {
+            opacity: 0.75;
+        }
+    }
+
+    > span {
+        width: 400px;
+        margin-bottom: 1rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    [title] {
+        position: relative;
+    }
+
+    [title]:hover:after {
+        content: attr(title);
+        padding: 5px;
+        color: #fff;
+        background-color: #000;
+        position: absolute;
+        z-index: 1;
+    }
+}

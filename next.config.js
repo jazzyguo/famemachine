@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ['vod-secure.twitch.tv', 'static-cdn.jtvnw.net', 'dummyimage.com'],
+  },
   publicRuntimeConfig: {
     TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
     TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -6,6 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import LinkIcon from "@mui/icons-material/Link";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 import { LogoutButton } from "@/components/Auth";
 
@@ -57,8 +59,31 @@ const UserMenuList = ({ user }: Props) => {
                     horizontal: "right",
                 }}
             >
+                  <MenuItem
+                    onClick={() => {
+                        router.push("/file-processor");
+                        handleClose();
+                    }}
+                    disableRipple
+                >
+                    <FileUploadIcon />
+                    File Processor
+                </MenuItem>
                 <MenuItem
-                    onClick={() => router.push("/connections")}
+                    onClick={() => {
+                        router.push("/videos");
+                        handleClose();
+                    }}
+                    disableRipple
+                >
+                    <VideoLibraryIcon />
+                    Video Library
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        router.push("/connections");
+                        handleClose();
+                    }}
                     disableRipple
                 >
                     <LinkIcon />

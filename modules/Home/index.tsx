@@ -1,50 +1,29 @@
-import React, { useState } from "react";
-
-import FileUploader from "@/components/FileUploader";
-import GeneratedClipsList from "@/components/GeneratedClipsList";
+import React from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
 
 import styles from "./Home.module.scss";
 
 const HomeModule = () => {
-    const [clips, setClips] = useState<string[]>([]);
-    const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const router = useRouter();
+    const { user } = useAuth();
 
-    const onFileUpload = async (formData: FormData) => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await fetch(
-                "http://127.0.0.1:5000/process_video",
-                {
-                    method: "POST",
-                    body: formData,
-                }
-            );
-
-            const clips: { urls: string[] } = await response.json();
-
-            setClips(clips?.urls || []);
-        } catch (e: any) {
-            console.log(e);
-            setError(e);
-        }
-
-        setLoading(false);
-    };
+    if (user) {
+        router.push("/videos");
+        return null;
+    }
 
     return (
         <div className={styles.container}>
-            <FileUploader onFileUpload={onFileUpload} loading={loading} />
-            {error && !loading && (
-                <div className={styles.error}>
-                    {error?.message || "An error has occured"}
-                </div>
-            )}
-            {!loading && !!clips.length && !error && (
-                <GeneratedClipsList clips={clips} />
-            )}
+            <p>Sign up to get started!</p>
+            <p>
+                You can then upload a video to process, or link your twitch
+                account to retrieve videos!
+            </p>
+            <p>
+                To publish a video, you must connect one of the following social
+                media accounts: Twitter
+            </p>
         </div>
     );
 };

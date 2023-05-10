@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import fetch from "isomorphic-unfetch";
 import { GetServerSidePropsContext } from "next";
 
-import { TWITCH_API_URL } from "@/utils/consts/api";
+import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
 import TwitchConnectModule from "@/modules/Twitch/Connect";
 import withAuth from "@/components/hoc/withAuth";
 
@@ -12,7 +12,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const code = query.code;
 
     try {
-        const response = await fetch(`${TWITCH_API_URL}/token`, {
+        const response = await fetch(`${TWITCH_API_AUTH_URL}/token`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
