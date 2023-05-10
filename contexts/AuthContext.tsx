@@ -13,7 +13,7 @@ const auth = getAuth(app);
 
 export const AuthContext = createContext({});
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);

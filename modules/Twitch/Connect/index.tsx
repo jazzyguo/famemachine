@@ -4,8 +4,8 @@ import addData from "@/firebase/firestore/addData";
 import { db } from "@/firebase/config";
 import { collectionGroup, where, query, getDocs } from "firebase/firestore";
 
-import { useAuthContext } from "@/contexts/AuthContext";
-import { useConnectionsAPIContext } from "@/contexts/ConnectionsContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useConnectionsAPI } from "@/contexts/ConnectionsContext";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
@@ -31,8 +31,8 @@ type Props = {
  * And then proceed to link the twitch account with the logged in user
  */
 const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
-    const { user } = useAuthContext();
-    const addConnection = useConnectionsAPIContext();
+    const { user } = useAuth();
+    const addConnection = useConnectionsAPI();
 
     const router = useRouter();
 

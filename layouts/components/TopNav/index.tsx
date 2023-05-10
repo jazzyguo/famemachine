@@ -1,14 +1,14 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { LoginButton, SignupButton } from "@/components/Auth";
 import UserMenuList from "../UserMenuList";
 
 import styles from "./TopNav.module.scss";
 
 const TopNav = () => {
-    const { user } = useAuthContext();
+    const { user } = useAuth();
     const router = useRouter();
 
     // don't show redundant signin/signup buttons on these pages

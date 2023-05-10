@@ -1,12 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 import styles from "./Home.module.scss";
 
 const HomeModule = () => {
     const router = useRouter();
-    const { user } = useAuthContext();
+    const { user } = useAuth();
 
     if (user) {
         router.push("/videos");

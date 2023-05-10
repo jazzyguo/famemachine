@@ -3,12 +3,12 @@ import { doc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import cx from "classnames";
 
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
-    useConnectionsAPIContext,
-    useConnectionsContext,
+    useConnectionsAPI,
+    useConnections,
 } from "@/contexts/ConnectionsContext";
-import { TWITCH_API_URL } from "@/utils/consts/api";
+import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -16,15 +16,15 @@ const { publicRuntimeConfig } = getConfig();
 import styles from "../../../Connections.module.scss";
 
 const TwitchDisconnectButton = () => {
-    const { user } = useAuthContext();
-    const connections = useConnectionsContext();
-    const addConnection = useConnectionsAPIContext();
+    const { user } = useAuth();
+    const connections = useConnections();
+    const { addConnection } = useConnectionsAPI();
 
     const { access_token: accessToken } = connections.twitch;
 
     const revokeAccessToken = async () => {
         try {
-            const response = await fetch(`${TWITCH_API_URL}/revoke`, {
+            const response = await fetch(`${TWITCH_API_AUTH_URL}/revoke`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",

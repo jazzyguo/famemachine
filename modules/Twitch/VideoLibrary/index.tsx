@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useConnectionsContext } from "@/contexts/ConnectionsContext";
-import { useTwitchVideosContext } from "@/contexts/TwitchVideosContext";
+import { useConnections } from "@/contexts/ConnectionsContext";
+import { useTwitchVideosAPI, useTwitchVideos } from "@/contexts/TwitchVideosContext";
 
 import styles from "./VideoLibrary.module.scss";
 
 const VideoLibrary = () => {
-    const { twitch } = useConnectionsContext();
-    const twitchVideosContext = useTwitchVideosContext();
+    const { twitch } = useConnections();
+    const twitchVideosContext = useTwitchVideosAPI();
 
     if (!twitch) {
         return (
