@@ -12,6 +12,7 @@ export type State = {
     error: string | null;
     pagination: {
         cursor: string | null;
+        isLastPage: boolean;
     };
 };
 

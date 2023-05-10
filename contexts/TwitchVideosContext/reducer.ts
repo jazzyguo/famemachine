@@ -1,4 +1,5 @@
 import { State, Action } from "./types";
+import { isEmpty } from "lodash";
 
 export const initialState: State = {
     videos: [],
@@ -6,6 +7,7 @@ export const initialState: State = {
     error: null,
     pagination: {
         cursor: null,
+        isLastPage: false,
     },
 };
 
@@ -25,6 +27,7 @@ const reducer = (state: State, action: Action): State => {
                 pagination: {
                     ...state.pagination,
                     cursor: action.payload.pagination.cursor,
+                    isLastPage: isEmpty(action.payload.pagination),
                 },
             };
         case "FETCH_VIDEOS_FAILURE":

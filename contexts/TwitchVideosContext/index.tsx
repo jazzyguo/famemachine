@@ -19,7 +19,7 @@ import reducer, { initialState } from "./reducer";
 
 export const TwitchVideosContext = createContext<State>(initialState);
 export const TwitchVideosAPIContext = createContext<{
-    [key: string]: () => void;
+    [key: string]: (any: any) => void;
 }>({});
 
 export const useTwitchVideos = () => useContext(TwitchVideosContext);
@@ -64,14 +64,25 @@ export const TwitchVideosContextProvider = ({
         };
     }, [userId, refreshToken, user.uid, addConnection]);
 
-    const _fetchTwitchVideos = useCallback(async () => {
-        await fetchTwitchVideos({
+    const _fetchTwitchVideos = useCallback(
+        async (paginateTo: "before" | "after" | undefined) => {
+            await fetchTwitchVideos({
+                cursor: state.pagination.cursor,
+                accessToken,
+                userId,
+                refreshAccessToken: _refreshAccessToken,
+                dispatch,
+                paginateTo,
+            });
+        },
+        [
             accessToken,
             userId,
-            refreshAccessToken: _refreshAccessToken,
+            _refreshAccessToken,
             dispatch,
-        });
-    }, [accessToken, userId, _refreshAccessToken, dispatch]);
+            state.pagination.cursor,
+        ]
+    );
 
     const stateValue = useMemo(() => state, [state]);
 

@@ -7,6 +7,7 @@ import { TWITCH_API_URL } from "@/utils/consts/api";
 import { Action } from "../types";
 
 type Props = {
+    cursor: string | null;
     accessToken: string;
     userId: string;
     refreshAccessToken: () => Promise<{
@@ -14,18 +15,27 @@ type Props = {
         refresh_token?: string;
     }>;
     dispatch: Dispatch<Action>;
+    paginateTo?: "before" | "after";
 };
 
 const fetchVideos = async ({
     accessToken,
     userId,
     refreshAccessToken,
+    cursor,
+    paginateTo,
 }: {
     accessToken: Props["accessToken"];
     userId: Props["userId"];
     refreshAccessToken: Props["refreshAccessToken"];
+    cursor: Props["cursor"];
+    paginateTo: Props["paginateTo"];
 }) => {
-    const url = `${TWITCH_API_URL}/videos?user_id=51496027`; //`${TWITCH_API_URL}/videos?user_id=${userId}`,
+    let url = `${TWITCH_API_URL}/videos?user_id=51496027&first=10`; //`${TWITCH_API_URL}/videos?user_id=${userId}`,
+
+    if (cursor && paginateTo) {
+        url += `&${paginateTo}=${cursor}`;
+    }
 
     const response = await fetch(url, {
         headers: {
@@ -48,6 +58,8 @@ const fetchVideos = async ({
             });
 
             return refreshedResponse.json();
+        } else {
+            throw new Error("Error refreshing access token on fetchVideos");
         }
     } else {
         return response.json();
@@ -55,10 +67,12 @@ const fetchVideos = async ({
 };
 
 const fetchTwitchVideos = async ({
+    cursor,
     accessToken,
     userId,
     refreshAccessToken,
     dispatch,
+    paginateTo,
 }: Props) => {
     if (accessToken) {
         dispatch({ type: "FETCH_VIDEOS_REQUEST" });
@@ -68,6 +82,8 @@ const fetchTwitchVideos = async ({
                 accessToken,
                 userId,
                 refreshAccessToken,
+                cursor,
+                paginateTo,
             });
 
             const videos = data.map((item: any) => ({

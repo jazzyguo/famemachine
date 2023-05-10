@@ -12,6 +12,8 @@ const VideoLibrary = () => {
     const { twitch } = useConnections();
     const { fetchTwitchVideos } = useTwitchVideosAPI();
 
+    const { videos } = useTwitchVideos();
+
     useEffect(() => {
         fetchTwitchVideos();
     }, [fetchTwitchVideos]);
