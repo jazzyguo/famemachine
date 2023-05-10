@@ -32,7 +32,7 @@ type Props = {
  */
 const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     const { user } = useAuth();
-    const addConnection = useConnectionsAPI();
+    const { addConnection } = useConnectionsAPI();
 
     const router = useRouter();
 
