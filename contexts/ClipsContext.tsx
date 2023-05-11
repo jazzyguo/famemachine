@@ -7,17 +7,15 @@ import React, {
     useMemo,
 } from "react";
 
-export const VideosContext = createContext({});
+export const ClipsContext = createContext({});
 
-export const useVideosContext = () => useContext(VideosContext);
+export const useClipsContext = () => useContext(ClipsContext);
 
 /**
  * provides state of a selected video that is selected for processing
  * As well as clips generated
- *
- * Used in pages/videos.tsx
  */
-export const VideosContextProvider = ({
+export const ClipsContextProvider = ({
     children,
 }: {
     children: ReactNode;
@@ -25,8 +23,8 @@ export const VideosContextProvider = ({
     const memoValue = useMemo(() => ({}), []);
 
     return (
-        <VideosContext.Provider value={memoValue}>
+        <ClipsContext.Provider value={memoValue}>
             {children}
-        </VideosContext.Provider>
+        </ClipsContext.Provider>
     );
 };

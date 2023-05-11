@@ -1,8 +1,7 @@
 import { Dispatch } from "react";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
 import { TWITCH_API_URL } from "@/utils/consts/api";
+import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
 
 import { Action } from "../types";
 
@@ -40,7 +39,7 @@ const fetchVideos = async ({
     const response = await fetch(url, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            "Client-Id": publicRuntimeConfig.TWITCH_CLIENT_ID,
+            "Client-Id": TWITCH_CLIENT_ID,
         },
     });
 
@@ -53,7 +52,7 @@ const fetchVideos = async ({
             const refreshedResponse = await fetch(url, {
                 headers: {
                     Authorization: `Bearer ${refreshedAccessToken}`,
-                    "Client-Id": publicRuntimeConfig.TWITCH_CLIENT_ID,
+                    "Client-Id": TWITCH_CLIENT_ID,
                 },
             });
 
