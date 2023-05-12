@@ -42,7 +42,11 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
 
                         let newData: TwitchVideo[] = [];
 
-                        let url = `${TWITCH_API_URL}/videos?user_id=51496027&first=20`; //`${TWITCH_API_URL}/videos?user_id=${twitchUserId}`,
+                        let url = `${TWITCH_API_URL}/videos?user_id=${
+                            userId === "QnvqvScscUScEL38dpibUoAIjS03"
+                                ? "51496027" // dev test
+                                : twitchUserId
+                        }`;
 
                         if (cursor && paginateTo) {
                             url += `&${paginateTo}=${cursor}`;
