@@ -39,7 +39,6 @@ const UserMenuList = ({ user }: Props) => {
         <div>
             <Button
                 variant="contained"
-                disableElevation
                 onClick={handleClick}
                 endIcon={<KeyboardArrowDownIcon />}
                 className={styles.menuButton}
@@ -51,6 +50,7 @@ const UserMenuList = ({ user }: Props) => {
                 open={open}
                 onClose={handleClose}
                 className={styles.menu}
+                disableScrollLock
                 anchorOrigin={{
                     vertical: "bottom",
                     horizontal: "right",
