@@ -12,6 +12,7 @@ interface ClipsState {
 type Actions = {
     getSavedClips: (userId: string) => void;
     getTemporaryClips: (userId: string) => void;
+    reset: () => void;
 };
 
 type Middleware = [
@@ -48,7 +49,6 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         set({ loading: false, error: e });
                     }
                 },
-
                 getTemporaryClips: async (userId: string) => {
                     set({ loading: true, error: null });
 
@@ -65,6 +65,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         set({ loading: false, error: e });
                     }
                 },
+                reset: () => set(initialState),
             }),
             {
                 name: "clips",

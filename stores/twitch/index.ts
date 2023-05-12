@@ -174,6 +174,7 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                         set({ loading: false, error: e });
                     }
                 },
+                reset: () => set(initialState),
             }),
             {
                 name: "twitch-videos-store",

@@ -46,4 +46,5 @@ type Actions = {
         twitchAccessToken: string;
         videoId: string;
     }) => void;
+    reset: () => void;
 };
