@@ -1,9 +1,33 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ATHENA_API_URL } from "@/lib/consts/api";
 
-export const clipsApi = createApi({
+const clipsApi = createApi({
     reducerPath: "clipsApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:5000/",
+        baseUrl: ATHENA_API_URL,
     }),
-    endpoints: (builder) => ({}),
+    endpoints: (builder) => ({
+        getSavedClips: builder.query<string[], string>({
+            query: (user_id) => ({
+                url: "clips/saved",
+                method: "get",
+                params: {
+                    user_id,
+                },
+            }),
+        }),
+        getTemporaryClips: builder.query<string[], string>({
+            query: (user_id) => ({
+                url: "clips/temporary",
+                method: "get",
+                params: {
+                    user_id,
+                },
+            }),
+        }),
+    }),
 });
+
+export const { useGetSavedClipsQuery, useGetTemporaryClipsQuery } = clipsApi;
+
+export default clipsApi;

@@ -1,6 +1,6 @@
-import ClipsModule from "@/modules/Clips";
+import SavedClipsModule from "@/modules/Clips/saved";
 import withAuth from "@/components/hoc/withAuth";
 
-const SavedClipsPage = () => <ClipsModule />;
+const SavedClipsPage = () => <SavedClipsModule />;
 
 export default withAuth(SavedClipsPage);

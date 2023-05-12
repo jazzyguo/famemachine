@@ -1,17 +1,8 @@
-import { combineReducers } from '@reduxjs/toolkit'
-
-import {
-    clipsSliceInitialState,
-    clipsSliceReducer,
-} from '../features/clips/slice'
-
-
-export const initialAppState = {
-    ...clipsSliceInitialState,
-}
+import { combineReducers } from "@reduxjs/toolkit";
+import clipsApi from "@/api/clips";
 
 const rootReducer = combineReducers({
-    ...clipsSliceReducer,
-})
+    [clipsApi.reducerPath]: clipsApi.reducer,
+});
 
-export default rootReducer
+export default rootReducer;
