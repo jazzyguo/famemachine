@@ -1,5 +1,4 @@
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
+import { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from "@/utils/consts/config";
 import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
 
 import addData from "@/firebase/firestore/addData";
@@ -29,8 +28,8 @@ const refreshAccessToken = async ({
             },
             body: JSON.stringify({
                 grant_type: "refresh_token",
-                client_id: publicRuntimeConfig.TWITCH_CLIENT_ID,
-                client_secret: publicRuntimeConfig.TWITCH_CLIENT_SECRET,
+                client_id: TWITCH_CLIENT_ID,
+                client_secret: TWITCH_CLIENT_SECRET,
                 refresh_token: refreshToken,
             }),
         });

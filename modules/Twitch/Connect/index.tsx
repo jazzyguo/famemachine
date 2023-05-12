@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, memo } from "react";
 import { useRouter } from "next/router";
 import addData from "@/firebase/firestore/addData";
 import { db } from "@/firebase/config";
@@ -6,10 +6,9 @@ import { collectionGroup, where, query, getDocs } from "firebase/firestore";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useConnectionsAPI } from "@/contexts/ConnectionsContext";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-
 import Loading from "@/components/Loading";
+
+import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
 
 type TwitchData = {
     data: {
@@ -43,7 +42,7 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
-                    "Client-Id": publicRuntimeConfig.TWITCH_CLIENT_ID,
+                    "Client-Id": TWITCH_CLIENT_ID,
                 },
             }
         );
@@ -128,4 +127,4 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     );
 };
 
-export default React.memo(TwitchConnectModule);
+export default memo(TwitchConnectModule);

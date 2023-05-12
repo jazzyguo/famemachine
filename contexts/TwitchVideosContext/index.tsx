@@ -17,9 +17,11 @@ import refreshAccessToken from "./actions/refreshAccessToken";
 import { State } from "./types";
 import reducer, { initialState, localStorageKey } from "./reducer";
 
+export { selectVideoById } from "./selectors";
+
 export const TwitchVideosContext = createContext<State>(initialState);
 export const TwitchVideosAPIContext = createContext<{
-    [key: string]: (any?: any) => void;
+    [key: string]: (any?: any) => any;
 }>({});
 
 export const useTwitchVideos = () => useContext(TwitchVideosContext);
@@ -35,7 +37,7 @@ export const TwitchVideosContextProvider = ({
     prevPath = "",
     children,
 }: {
-    prevPath: string;
+    prevPath?: string;
     children: ReactNode;
 }) => {
     const { twitch } = useConnections();
@@ -99,7 +101,10 @@ export const TwitchVideosContextProvider = ({
     return (
         <TwitchVideosContext.Provider value={stateValue}>
             <TwitchVideosAPIContext.Provider
-                value={{ fetchTwitchVideos: _fetchTwitchVideos }}
+                value={{
+                    fetchTwitchVideos: _fetchTwitchVideos,
+                    refreshAccessToken: _refreshAccessToken,
+                }}
             >
                 {children}
             </TwitchVideosAPIContext.Provider>

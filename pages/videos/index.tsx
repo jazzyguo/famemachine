@@ -1,7 +1,6 @@
-import VideosModule from "@/modules/Videos";
 import { GetServerSidePropsContext } from "next";
-
-import { VideosContextProvider } from "@/contexts/VideosContext";
+import VideosModule from "@/modules/Videos";
+import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
@@ -12,9 +11,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 const VideosPage = ({ prevPath }: { prevPath: string }) => (
-    <VideosContextProvider>
-        <VideosModule prevPath={prevPath} />
-    </VideosContextProvider>
+    <TwitchVideosContextProvider prevPath={prevPath}>
+        <VideosModule />
+    </TwitchVideosContextProvider>
 );
 
 export default VideosPage;

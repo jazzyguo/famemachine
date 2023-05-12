@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, memo } from "react";
 
 import styles from "./ConnectionCard.module.scss";
 
@@ -34,4 +34,4 @@ const ConnectionCard = ({
     </div>
 );
 
-export default React.memo(ConnectionCard);
+export default memo(ConnectionCard);
