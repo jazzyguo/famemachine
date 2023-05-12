@@ -24,3 +24,15 @@
     color: black;
     font-weight: bold;
 }
+
+.timestamp {
+    margin-bottom: 2rem;
+
+    span {
+        background: white;
+        margin: 0 .5rem;
+        color: black;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+    }
+}
