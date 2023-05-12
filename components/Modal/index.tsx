@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, memo } from 'react'
 
 import CloseIcon from 'assets/svg/CloseIcon'
 
@@ -74,4 +74,4 @@ const Modal = ({
     )
 }
 
-export default React.memo(Modal)
+export default memo(Modal)

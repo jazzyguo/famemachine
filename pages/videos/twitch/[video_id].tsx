@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
+import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
+import VideoIDModule from "@/modules/Twitch/VideoID";
 
-const TwitchVideoPage = () => {
-    const router = useRouter();
-    const { video_id } = router.query;
-
-    return <div>{video_id}</div>;
-};
+const TwitchVideoPage = ({ prevPath }: { prevPath: string }) => (
+    <TwitchVideosContextProvider>
+        <VideoIDModule />
+    </TwitchVideosContextProvider>
+);
 
 export default TwitchVideoPage;

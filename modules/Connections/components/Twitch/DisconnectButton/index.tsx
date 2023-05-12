@@ -9,9 +9,7 @@ import {
     useConnections,
 } from "@/contexts/ConnectionsContext";
 import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
-
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
+import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
 
 import styles from "../../../Connections.module.scss";
 
@@ -29,7 +27,7 @@ const TwitchDisconnectButton = () => {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: `client_id=${publicRuntimeConfig.TWITCH_CLIENT_ID}&token=${accessToken}`,
+                body: `client_id=${TWITCH_CLIENT_ID}&token=${accessToken}`,
             });
 
             if (response.status === 200) {

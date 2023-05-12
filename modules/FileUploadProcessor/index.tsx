@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import FileUploader from "@/components/FileUploader";
 import GeneratedClipsList from "@/components/GeneratedClipsList";
+import { useAuth } from "@/contexts/AuthContext";
+
+import { ATHENA_API_URL } from "@/utils/consts/api";
 
 import styles from "./FileUploadProcessor.module.scss";
 
@@ -9,19 +12,19 @@ const FileUploadProcessorModule = () => {
     const [clips, setClips] = useState<string[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const { user } = useAuth();
 
     const onFileUpload = async (formData: FormData) => {
         setLoading(true);
         setError(null);
 
+        formData.append("user_id", user.uid);
+
         try {
-            const response = await fetch(
-                "http://127.0.0.1:5000/process_video",
-                {
-                    method: "POST",
-                    body: formData,
-                }
-            );
+            const response = await fetch(`${ATHENA_API_URL}/process_file`, {
+                method: "POST",
+                body: formData,
+            });
 
             const clips: { urls: string[] } = await response.json();
 

@@ -4,6 +4,8 @@ const nextConfig = {
     domains: ['vod-secure.twitch.tv', 'static-cdn.jtvnw.net', 'dummyimage.com'],
   },
   publicRuntimeConfig: {
+    ATHENA_API_URL: process.env.ATHENA_API_URL,
+
     TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
     TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
 

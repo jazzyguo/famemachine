@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, memo } from "react";
 import styles from "./VideoContainer.module.scss";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 // eslint-disable-next-line react/display-name
-const VideoMemo = React.memo(
+const VideoMemo = memo(
     ({ selectedFile }: { selectedFile: File | null }) =>
         selectedFile ? (
             <video src={URL.createObjectURL(selectedFile)} controls />
@@ -41,4 +41,4 @@ const VideoContainer = ({ selectedFile, disabled, onFileChange }: Props) => (
     </div>
 );
 
-export default React.memo(VideoContainer);
+export default memo(VideoContainer);

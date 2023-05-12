@@ -1,15 +1,20 @@
 import { initializeApp, getApps } from "firebase/app";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
 import { getFirestore } from "firebase/firestore";
+import {
+    FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN,
+    FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_ID,
+    FIREBASE_APP_ID,
+} from "@/utils/consts/config";
 
 const firebaseConfig = {
-    apiKey: publicRuntimeConfig.FIREBASE_API_KEY,
-    authDomain: publicRuntimeConfig.FIREBASE_AUTH_DOMAIN,
+    apiKey: FIREBASE_API_KEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-    storageBucket: publicRuntimeConfig.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: publicRuntimeConfig.FIREBASE_MESSAGING_ID,
-    appId: publicRuntimeConfig.FIREBASE_APP_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: FIREBASE_MESSAGING_ID,
+    appId: FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
