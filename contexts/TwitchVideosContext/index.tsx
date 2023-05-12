@@ -17,8 +17,6 @@ import refreshAccessToken from "./actions/refreshAccessToken";
 import { State } from "./types";
 import reducer, { initialState, localStorageKey } from "./reducer";
 
-export { selectVideoById } from "./selectors";
-
 export const TwitchVideosContext = createContext<State>(initialState);
 export const TwitchVideosAPIContext = createContext<{
     [key: string]: (any?: any) => any;
