@@ -5,13 +5,48 @@ import React, {
     createContext,
     useContext,
 } from "react";
-import { User, onAuthStateChanged, getAuth } from "firebase/auth";
+import {
+    User,
+    onAuthStateChanged,
+    getAuth,
+    IdTokenResult,
+} from "firebase/auth";
 import app from "@/firebase/config";
 import Loading from "@/components/Loading";
 
 const auth = getAuth(app);
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext<User>({
+    emailVerified: false,
+    isAnonymous: false,
+    metadata: {},
+    providerData: [],
+    refreshToken: "",
+    tenantId: null,
+    delete: function (): Promise<void> {
+        throw new Error("Function not implemented.");
+    },
+    getIdToken: function (forceRefresh?: boolean | undefined): Promise<string> {
+        throw new Error("Function not implemented.");
+    },
+    getIdTokenResult: function (
+        forceRefresh?: boolean | undefined
+    ): Promise<IdTokenResult> {
+        throw new Error("Function not implemented.");
+    },
+    reload: function (): Promise<void> {
+        throw new Error("Function not implemented.");
+    },
+    toJSON: function (): object {
+        throw new Error("Function not implemented.");
+    },
+    displayName: null,
+    email: null,
+    phoneNumber: null,
+    photoURL: null,
+    providerId: "",
+    uid: "",
+});
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -37,7 +72,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     return (
         <AuthContext.Provider value={{ user }}>
             {loading ? (
-                <div style={{ padding: "6rem" }}>
+                <div style={{ padding: "8rem" }}>
                     <Loading />
                 </div>
             ) : (

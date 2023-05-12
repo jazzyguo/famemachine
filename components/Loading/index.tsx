@@ -1,8 +1,9 @@
 import React from "react";
+import cx from "classnames";
 import styles from "./Loading.module.scss";
 
-const Loading = () => (
-    <div className={styles.spinner}>
+const Loading = ({ className }: { className?: string }) => (
+    <div className={cx(className, styles.spinner)}>
         <div></div>
         <div></div>
         <div></div>

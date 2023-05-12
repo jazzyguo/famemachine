@@ -121,7 +121,7 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     }, [accessToken, fetchTwitchProfile, linkTwitchAccount, router]);
 
     return (
-        <div style={{ padding: "6rem" }}>
+        <div style={{ padding: "8rem" }}>
             <Loading />
         </div>
     );

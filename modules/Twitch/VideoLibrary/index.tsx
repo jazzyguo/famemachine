@@ -1,27 +1,64 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useConnections } from "@/contexts/ConnectionsContext";
-import {
-    useTwitchVideosAPI,
-    useTwitchVideos,
-} from "@/contexts/TwitchVideosContext";
-
-import styles from "./VideoLibrary.module.scss";
 import { useRouter } from "next/router";
 
+import {
+    useConnections,
+    useConnectionsAPI,
+} from "@/contexts/ConnectionsContext";
+import useTwitchStore from "@/stores/twitch";
+import { useAuth } from "@/contexts/AuthContext";
+
+import styles from "./VideoLibrary.module.scss";
+
 const VideoLibrary = () => {
-    const { twitch } = useConnections();
-    const { fetchTwitchVideos } = useTwitchVideosAPI();
+    const { twitch = {} } = useConnections();
+    const { addConnection } = useConnectionsAPI();
+
+    const { user } = useAuth();
     const router = useRouter();
 
-    const { pagination, videos, error, loading } = useTwitchVideos();
+    const videos = useTwitchStore((state) => state.videos);
+    const pagination = useTwitchStore((state) => state.pagination);
+    const error = useTwitchStore((state) => state.error);
+
+    const fetchTwitchVideos = useTwitchStore(
+        (state) => state.fetchTwitchVideos
+    );
+
+    const handleFetchTwitchVideos = useCallback(
+        async (paginateTo?: "before" | "after" | undefined) => {
+            await fetchTwitchVideos({
+                paginateTo,
+                twitchUserId: twitch.user_id,
+                twitchAccessToken: twitch.access_token,
+                addConnection,
+                userId: user.uid,
+                refreshToken: twitch.refresh_token,
+            });
+        },
+        [
+            addConnection,
+            fetchTwitchVideos,
+            twitch.access_token,
+            twitch.refresh_token,
+            twitch.user_id,
+            user.uid,
+        ]
+    );
 
     useEffect(() => {
-        if (!videos.length) {
-            fetchTwitchVideos();
+        if (!videos.length && twitch.user_id && user.uid) {
+            handleFetchTwitchVideos();
         }
-    }, [fetchTwitchVideos, videos]);
+    }, [
+        twitch.user_id,
+        fetchTwitchVideos,
+        handleFetchTwitchVideos,
+        user.uid,
+        videos,
+    ]);
 
     if (!twitch) {
         return (
@@ -37,18 +74,20 @@ const VideoLibrary = () => {
     return (
         <div className={styles.container}>
             <h2>Twitch Videos</h2>
-            {error && <div>{error}</div>}
+            {error && <div>{error.message}</div>}
             <div className={styles.videosContainer}>
                 {!!videos.length &&
                     videos.map((video, idx) => {
+                        if (!video.id) return null;
+                        
                         const width = "400";
                         const height = "225";
-                        const newUrl = (video?.thumbnail || "")
+                        const newUrl = (video?.thumbnail_url || "")
                             .replace(/%{width}/g, width)
                             .replace(/%{height}/g, height);
 
                         const is404 =
-                            video.thumbnail ===
+                            video.thumbnail_url ===
                             "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png";
 
                         const placeholder = `https://dummyimage.com/${width}x${height}/000000/ffffff.png`;

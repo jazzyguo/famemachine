@@ -3,17 +3,11 @@ import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
 
 import addData from "@/firebase/firestore/addData";
 
-type Props = {
-    userId: string;
-    refreshToken: string;
-    addConnection: (connection: string, obj: { [key: string]: string }) => void;
-};
-
 const refreshAccessToken = async ({
     userId,
     refreshToken,
     addConnection,
-}: Props): Promise<{
+}: RefreshTokenActionProps): Promise<{
     access_token?: string;
     refresh_token?: string;
     user_id?: string;
@@ -51,6 +45,7 @@ const refreshAccessToken = async ({
             });
 
             if (error) {
+                console.log(error);
                 throw new Error("Error setting twitch link");
             } else {
                 addConnection("twitch", twitchConnection);
