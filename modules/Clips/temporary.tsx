@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import useClipsStore from "@/stores/clips";
 
 import Loading from "@/components/Loading";
+import ClipsList from "@/components/Clips/List";
 
 import styles from "./Clips.module.scss";
 
@@ -15,12 +16,21 @@ const TemporaryClipsModule = () => {
     const loading = useClipsStore((state) => state.loading);
 
     useEffect(() => {
-        getTemporaryClips(user.uid);
-    }, [getTemporaryClips, user.uid]);
+        if (!clips.length) {
+            getTemporaryClips(user.uid);
+        }
+    }, [clips, getTemporaryClips, user.uid]);
 
-    console.log({ clips });
-
-    return <div className={styles.container}>{loading && <Loading />}</div>;
+    return (
+        <>
+            {loading && <Loading />}
+            <h3 className={styles.title}>
+                These clips will expire after 24 hours if not saved or
+                published.
+            </h3>
+            <ClipsList clips={clips} header={false} />
+        </>
+    );
 };
 
 export default TemporaryClipsModule;

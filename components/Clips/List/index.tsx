@@ -1,30 +1,32 @@
 import React from "react";
 import Link from "next/link";
+import VideoContainer from "@/components/Clips/VideoContainer";
 
-import styles from "./GeneratedClipsList.module.scss";
+import styles from "./ClipsList.module.scss";
 
 type Props = {
     clips: string[];
     header?: boolean;
 };
 
-const GeneratedClipsList = ({ clips, header = true }: Props) => (
+const ClipsList = ({ clips, header = true }: Props) => (
     <div className={styles.container}>
         {header && (
             <>
                 <h2>Generated Clips</h2>
                 <p>
                     These generated clips are also available in your{" "}
-                    <Link href="/clips">Clips Library</Link> for 24 hours unless you save them
+                    <Link href="/clips">Clips Library</Link> for 24 hours unless
+                    you save them
                 </p>
             </>
         )}
         <div className={styles.video_grid}>
             {clips.map((clip, idx) => (
-                <video src={clip} key={`clip-${idx}`} controls />
+                <VideoContainer key={`${clip}-${idx}`} url={clip} />
             ))}
         </div>
     </div>
 );
 
-export default GeneratedClipsList;
+export default ClipsList;

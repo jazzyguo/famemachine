@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import FileUploader from "@/components/FileUploader";
-import GeneratedClipsList from "@/components/GeneratedClipsList";
+import ClipsList from "@/components/Clips/List";
 import { useAuth } from "@/contexts/AuthContext";
 
 import { ATHENA_API_URL } from "@/lib/consts/api";
@@ -46,7 +46,7 @@ const FileUploadProcessorModule = () => {
                 </div>
             )}
             {!loading && !!clips.length && !error && (
-                <GeneratedClipsList clips={clips} />
+                <ClipsList clips={clips} />
             )}
         </div>
     );

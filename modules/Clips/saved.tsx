@@ -15,12 +15,14 @@ const SavedClipsModule = () => {
     const loading = useClipsStore((state) => state.loading);
 
     useEffect(() => {
-        getSavedClips(user.uid);
-    }, [getSavedClips, user.uid]);
+        if (!clips.length) {
+            getSavedClips(user.uid);
+        }
+    }, [clips, getSavedClips, user.uid]);
 
     console.log({ clips });
 
-    return <div className={styles.container}>{loading && <Loading />}</div>;
+    return <>{loading && <Loading />}</>;
 };
 
 export default SavedClipsModule;

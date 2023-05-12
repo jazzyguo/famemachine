@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import { TwitchPlayer } from "react-twitch-embed";
 
-import GeneratedClipsList from "@/components/GeneratedClipsList";
+import ClipsList from "@/components/Clips/List";
 import VideoSlicerForm from "@/components/VideoSlicerForm";
 
 import {
@@ -115,7 +115,7 @@ const VideoIDModule = () => {
                     </div>
                     {!loading && !!clips.length && !error && (
                         <div className={styles.clips}>
-                            <GeneratedClipsList clips={clips} />
+                            <ClipsList clips={clips} />
                         </div>
                     )}
                 </>
