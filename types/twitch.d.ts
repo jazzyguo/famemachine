@@ -8,7 +8,7 @@ type TwitchVideo = {
 };
 
 interface TwitchState {
-    videos: TwitchVideo[];
+    videos: TwitchVideo[] | null;
     loading: boolean;
     error: any;
     pagination: {

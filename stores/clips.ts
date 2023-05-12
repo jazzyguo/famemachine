@@ -3,8 +3,8 @@ import { persist, devtools } from "zustand/middleware";
 import { ATHENA_API_URL } from "@/lib/consts/api";
 
 interface ClipsState {
-    savedClips: string[];
-    temporaryClips: string[];
+    savedClips: string[] | null;
+    temporaryClips: string[] | null;
     loading: boolean;
     error: any;
 }
@@ -21,8 +21,8 @@ type Middleware = [
 ];
 
 const initialState: ClipsState = {
-    savedClips: [],
-    temporaryClips: [],
+    savedClips: null,
+    temporaryClips: null,
     loading: false,
     error: null,
 };

@@ -9,6 +9,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import useTwitchStore from "@/stores/twitch";
 import { useAuth } from "@/contexts/AuthContext";
+import Loading from "@/components/Loading";
 
 import styles from "./VideoLibrary.module.scss";
 
@@ -22,6 +23,7 @@ const VideoLibrary = () => {
     const videos = useTwitchStore((state) => state.videos);
     const pagination = useTwitchStore((state) => state.pagination);
     const error = useTwitchStore((state) => state.error);
+    const loading = useTwitchStore((state) => state.loading);
 
     const fetchTwitchVideos = useTwitchStore(
         (state) => state.fetchTwitchVideos
@@ -49,7 +51,7 @@ const VideoLibrary = () => {
     );
 
     useEffect(() => {
-        if (!videos.length && twitch.user_id && user.uid) {
+        if (!videos && twitch.user_id && user.uid) {
             handleFetchTwitchVideos();
         }
     }, [
@@ -76,10 +78,11 @@ const VideoLibrary = () => {
             <h2>Twitch Videos</h2>
             {error && <div>{error.message}</div>}
             <div className={styles.videosContainer}>
-                {!!videos.length &&
+                {videos &&
+                    !!videos.length &&
                     videos.map((video, idx) => {
                         if (!video.id) return null;
-                        
+
                         const width = "400";
                         const height = "225";
                         const newUrl = (video?.thumbnail_url || "")
@@ -112,6 +115,7 @@ const VideoLibrary = () => {
                         );
                     })}
             </div>
+            {loading && <Loading className={styles.loading} />}
         </div>
     );
 };

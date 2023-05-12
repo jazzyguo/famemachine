@@ -6,7 +6,7 @@ import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 import refreshAccessToken from "./actions/refreshAccessToken";
 
 const initialState: TwitchState = {
-    videos: [],
+    videos: null,
     loading: false,
     error: null,
     pagination: {
@@ -93,13 +93,16 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                                     // in the case we go to a video id page,
                                     // and append a video object to the main array from fetchTwitchVideo
                                     // we potentially have dupes, so remove incoming dupes
-                                    ...state.videos.filter(
-                                        (video) =>
-                                            !newData.find(
-                                                (newVideo) =>
-                                                    newVideo.id === video.id
-                                            )
-                                    ),
+                                    ...(state.videos
+                                        ? state.videos.filter(
+                                              (video) =>
+                                                  !newData.find(
+                                                      (newVideo) =>
+                                                          newVideo.id ===
+                                                          video.id
+                                                  )
+                                          )
+                                        : []),
                                     ...newData,
                                 ],
                                 pagination: {
@@ -155,16 +158,21 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
 
                             // replace the current state index with the new video if exists
                             set((state) => {
-                                const existingIndex = state.videos.findIndex(
-                                    ({ id }) => id === video.id
-                                );
+                                let updatedVideos = [video];
 
-                                let updatedVideos = [...state.videos];
+                                if (state.videos) {
+                                    const existingIndex =
+                                        state.videos.findIndex(
+                                            ({ id }) => id === video.id
+                                        );
 
-                                if (existingIndex !== -1) {
-                                    updatedVideos[existingIndex] = video;
-                                } else {
-                                    updatedVideos.push(video);
+                                    updatedVideos = [...state.videos];
+
+                                    if (existingIndex !== -1) {
+                                        updatedVideos[existingIndex] = video;
+                                    } else {
+                                        updatedVideos.push(video);
+                                    }
                                 }
 
                                 return {

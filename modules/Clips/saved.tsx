@@ -1,13 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, SyntheticEvent } from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { useRouter } from "next/router";
+
 import { useAuth } from "@/contexts/AuthContext";
 import useClipsStore from "@/stores/clips";
 
 import Loading from "@/components/Loading";
+import ClipsList from "@/components/Clips/List";
 
 import styles from "./Clips.module.scss";
 
 const SavedClipsModule = () => {
     const { user } = useAuth();
+    const router = useRouter();
 
     const getSavedClips = useClipsStore((state) => state.getSavedClips);
 
@@ -15,14 +21,38 @@ const SavedClipsModule = () => {
     const loading = useClipsStore((state) => state.loading);
 
     useEffect(() => {
-        if (!clips.length) {
+        if (!clips) {
             getSavedClips(user.uid);
         }
     }, [clips, getSavedClips, user.uid]);
 
     console.log({ clips });
 
-    return <>{loading && <Loading />}</>;
+    const handleTabSwitch = (event: SyntheticEvent, tab: number) => {
+        if (tab === 0) {
+            router.push("/clips/temporary");
+        }
+    };
+
+    if (loading) {
+        return <Loading />;
+    }
+
+    return (
+        <>
+            <div className={styles.tabs}>
+                <Tabs
+                    value={1}
+                    onChange={handleTabSwitch}
+                    aria-label="disabled tabs example"
+                >
+                    <Tab label="Temporary" />
+                    <Tab label="Saved" />
+                </Tabs>
+            </div>
+            <ClipsList clips={clips} header={false} />
+        </>
+    );
 };
 
 export default SavedClipsModule;
