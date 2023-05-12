@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import styles from "./LoginForm.module.scss";
 
@@ -49,4 +49,4 @@ const LoginForm = ({
     );
 };
 
-export default React.memo(LoginForm);
+export default memo(LoginForm);

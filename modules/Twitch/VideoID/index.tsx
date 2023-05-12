@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWRImmutable from 'swr/immutable'
 import { TwitchPlayer } from "react-twitch-embed";
+import VodProcessor from "@/modules/Twitch/components/VodProcessor";
 
 import { useConnections } from "@/contexts/ConnectionsContext";
 import { useTwitchVideosAPI } from "@/contexts/TwitchVideosContext";
@@ -51,7 +52,7 @@ const VideoIDModule = () => {
 
     const { refreshAccessToken } = useTwitchVideosAPI();
 
-    const { data: { data } = {}, error } = useSWR(
+    const { data: { data } = {}, error } = useSWRImmutable(
         accessToken
             ? [
                   `${TWITCH_API_URL}/videos/?id=${videoId}`,
@@ -65,16 +66,19 @@ const VideoIDModule = () => {
 
     const video = data && data[0];
 
-    console.log({ video });
-
     return (
         <div className={styles.videoContainer}>
-            {error && <div>{error}</div>}
-            {/* <TwitchPlayerNonInteractive
-                                video={video.id}
-                                muted
-                                autoplay={false}
-                            /> */}
+            {error && <div className={styles.error}>{error}</div>}
+            {video && (
+                <>
+                    <TwitchPlayer video={video.id} autoplay={false} />
+                    <VodProcessor
+                        videoId={video.id}
+                        accessToken={accessToken}
+                        duration={video.duration}
+                    />
+                </>
+            )}
         </div>
     );
 };

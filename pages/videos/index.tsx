@@ -1,5 +1,5 @@
-import VideosModule from "@/modules/Videos";
 import { GetServerSidePropsContext } from "next";
+import VideosModule from "@/modules/Videos";
 import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

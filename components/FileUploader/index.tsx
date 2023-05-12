@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, memo } from "react";
 import Loading from "@/components/Loading";
 import VideoContainer from "./VideoContainer";
 import styles from "./FileUploader.module.scss";
@@ -40,4 +40,4 @@ const FileUploader = ({ onFileUpload, loading }: Props) => {
     );
 };
 
-export default React.memo(FileUploader);
+export default memo(FileUploader);

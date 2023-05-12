@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, memo } from "react";
 import { useRouter } from "next/router";
 import addData from "@/firebase/firestore/addData";
 import { db } from "@/firebase/config";
@@ -127,4 +127,4 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     );
 };
 
-export default React.memo(TwitchConnectModule);
+export default memo(TwitchConnectModule);
