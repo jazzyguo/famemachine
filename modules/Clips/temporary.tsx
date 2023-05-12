@@ -1,4 +1,4 @@
-import React, { useEffect, SyntheticEvent } from "react";
+import React, { useEffect, SyntheticEvent, useMemo } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useRouter } from "next/router";
@@ -16,9 +16,11 @@ const TemporaryClipsModule = () => {
     const router = useRouter();
 
     const getTemporaryClips = useClipsStore((state) => state.getTemporaryClips);
+    const getSavedClips = useClipsStore((state) => state.getSavedClips);
 
     const clips = useClipsStore((state) => state.temporaryClips);
     const loading = useClipsStore((state) => state.loading);
+    const savedClips = useClipsStore((state) => state.savedClips);
 
     useEffect(() => {
         if (!clips) {
@@ -26,11 +28,21 @@ const TemporaryClipsModule = () => {
         }
     }, [clips, getTemporaryClips, user.uid]);
 
+    // we fetch saved clips as well when on the temporary clips module so we can
+    // see on this page which ones we saved / published
+    useEffect(() => {
+        if (!savedClips) {
+            getSavedClips(user.uid);
+        }
+    }, [getSavedClips, savedClips, user.uid]);
+
     const handleTabSwitch = (event: SyntheticEvent, tab: number) => {
         if (tab === 1) {
             router.push("/clips/saved");
         }
     };
+    console.log({ clips });
+    const urls = useMemo(() => clips?.map(({ url }) => url), [clips]);
 
     if (loading) {
         return <Loading />;
@@ -52,7 +64,7 @@ const TemporaryClipsModule = () => {
                 These clips will expire after 24 hours if not saved or
                 published.
             </h3>
-            <ClipsList clips={clips} header={false} />
+            <ClipsList clips={urls} header={false} />
         </>
     );
 };

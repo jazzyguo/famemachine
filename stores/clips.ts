@@ -3,8 +3,8 @@ import { persist, devtools } from "zustand/middleware";
 import { ATHENA_API_URL } from "@/lib/consts/api";
 
 interface ClipsState {
-    savedClips: string[] | null;
-    temporaryClips: string[] | null;
+    savedClips: SavedClip[] | null;
+    temporaryClips: TempClip[] | null;
     loading: boolean;
     error: any;
 }

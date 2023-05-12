@@ -5,7 +5,7 @@ import VideoContainer from "@/components/Clips/VideoContainer";
 import styles from "./ClipsList.module.scss";
 
 type Props = {
-    clips: string[];
+    clips: string[] | null;
     header?: boolean;
 };
 
@@ -22,9 +22,11 @@ const ClipsList = ({ clips, header = true }: Props) => (
             </>
         )}
         <div className={styles.video_grid}>
-            {clips.map((clip, idx) => (
-                <VideoContainer key={`${clip}-${idx}`} url={clip} />
-            ))}
+            {clips &&
+                !!clips.length &&
+                clips.map((clip, idx) => (
+                    <VideoContainer key={`${clip}-${idx}`} url={clip} />
+                ))}
         </div>
     </div>
 );
