@@ -6,7 +6,7 @@ import {
     FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_ID,
     FIREBASE_APP_ID,
-} from "@/utils/consts/config";
+} from "@/lib/consts/config";
 
 const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,

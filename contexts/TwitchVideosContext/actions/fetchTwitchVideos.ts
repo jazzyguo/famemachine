@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 
-import { TWITCH_API_URL } from "@/utils/consts/api";
-import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
+import { TWITCH_API_URL } from "@/lib/consts/api";
+import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 
 import { Action } from "../types";
 

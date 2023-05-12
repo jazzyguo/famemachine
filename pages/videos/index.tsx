@@ -1,6 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import VideosModule from "@/modules/Videos";
 import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
+import withAuth from "@/components/hoc/withAuth";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
@@ -16,4 +17,4 @@ const VideosPage = ({ prevPath }: { prevPath: string }) => (
     </TwitchVideosContextProvider>
 );
 
-export default VideosPage;
+export default withAuth(VideosPage);

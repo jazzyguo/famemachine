@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useConnectionsAPI } from "@/contexts/ConnectionsContext";
 import Loading from "@/components/Loading";
 
-import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
+import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 
 type TwitchData = {
     data: {

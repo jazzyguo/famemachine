@@ -4,7 +4,7 @@ import FileUploader from "@/components/FileUploader";
 import GeneratedClipsList from "@/components/GeneratedClipsList";
 import { useAuth } from "@/contexts/AuthContext";
 
-import { ATHENA_API_URL } from "@/utils/consts/api";
+import { ATHENA_API_URL } from "@/lib/consts/api";
 
 import styles from "./FileUploadProcessor.module.scss";
 

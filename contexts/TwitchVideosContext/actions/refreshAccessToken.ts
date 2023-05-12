@@ -1,5 +1,5 @@
-import { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from "@/utils/consts/config";
-import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
+import { TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from "@/lib/consts/config";
+import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
 
 import addData from "@/firebase/firestore/addData";
 
