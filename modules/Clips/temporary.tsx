@@ -1,15 +1,20 @@
-import React from "react";
-import { useGetTemporaryClipsQuery } from "@/api/clips";
+import React, { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import useClipsStore from "@/stores/clips";
 
 const TemporaryClipsModule = () => {
     const { user } = useAuth();
 
-    const { data, error, isLoading, isSuccess } = useGetTemporaryClipsQuery(
-        user.uid
-    );
+    const getTemporaryClips = useClipsStore((state) => state.getTemporaryClips);
 
-    console.log({ data, error, isLoading, isSuccess });
+    const clips = useClipsStore((state) => state.temporaryClips);
+
+    useEffect(() => {
+        getTemporaryClips(user.uid);
+    }, [getTemporaryClips, user.uid]);
+
+    console.log({ clips });
+
     return <div>clips</div>;
 };
 

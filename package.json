@@ -12,7 +12,6 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.3",
-    "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "18.16.3",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
@@ -27,13 +26,11 @@
     "nouislider-react": "^3.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-redux": "^8.0.5",
     "react-twitch-embed": "^3.0.1",
-    "redux-persist": "^6.0.0",
-    "reselect": "^4.1.8",
     "sass": "^1.62.1",
     "swr": "^2.1.5",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.194"

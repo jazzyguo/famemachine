@@ -1,15 +1,20 @@
-import React from "react";
-import { useGetSavedClipsQuery } from "@/api/clips";
+import React, { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import useClipsStore from "@/stores/clips";
 
 const SavedClipsModule = () => {
     const { user } = useAuth();
 
-    const { data, error, isLoading, isSuccess } = useGetSavedClipsQuery(
-        user.uid
-    );
+    const getSavedClips = useClipsStore((state) => state.getSavedClips);
 
-    console.log({ data, error, isLoading, isSuccess });
+    const clips = useClipsStore((state) => state.savedClips);
+
+    useEffect(() => {
+        getSavedClips(user.uid);
+    }, [getSavedClips, user.uid]);
+
+    console.log({ clips });
+
     return <div>clips</div>;
 };
 
