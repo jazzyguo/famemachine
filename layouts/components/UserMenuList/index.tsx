@@ -8,6 +8,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import MovieIcon from '@mui/icons-material/Movie';
 
 import { LogoutButton } from "@/components/Auth";
 
@@ -69,6 +70,16 @@ const UserMenuList = ({ user }: Props) => {
                     <FileUploadIcon />
                     File Processor
                 </MenuItem> */}
+                <MenuItem
+                    onClick={() => {
+                        router.push("/clips/temporary");
+                        handleClose();
+                    }}
+                    disableRipple
+                >
+                    <MovieIcon />
+                    Clips Library
+                </MenuItem>
                 <MenuItem
                     onClick={() => {
                         router.push("/videos");
