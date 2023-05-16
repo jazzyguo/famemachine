@@ -85,8 +85,10 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
 
                 const data = await response.json();
 
-                console.log({ data });
-                //set({ savedClips: data, loading: false });
+                set((state) => ({
+                    savedClips: [...(state.savedClips || []), data],
+                    loading: false,
+                }));
             } catch (e: any) {
                 console.error(e);
             }
