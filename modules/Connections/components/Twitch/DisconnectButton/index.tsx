@@ -8,8 +8,8 @@ import {
     useConnectionsAPI,
     useConnections,
 } from "@/contexts/ConnectionsContext";
-import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
-import { TWITCH_CLIENT_ID } from "@/utils/consts/config";
+import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
+import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 
 import styles from "../../../Connections.module.scss";
 

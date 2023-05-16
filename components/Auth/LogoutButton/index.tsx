@@ -4,15 +4,22 @@ import { signOut, getAuth } from "firebase/auth";
 import app from "@/firebase/config";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuItem from "@mui/material/MenuItem";
+import useTwitchStore from "@/stores/twitch";
+import useClipsStore from "@/stores/clips";
 
 const auth = getAuth(app);
 
 const LogoutButton = () => {
     const router = useRouter();
 
+    const twitchReset = useTwitchStore((state) => state.reset);
+    const clipsReset = useClipsStore((state) => state.reset);
+
     const handleLogout = async () => {
         try {
             await signOut(auth);
+            twitchReset();
+            clipsReset();
             router.push("/");
         } catch (e) {
             console.log(e);

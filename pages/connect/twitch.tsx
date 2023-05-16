@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import fetch from "isomorphic-unfetch";
 import { GetServerSidePropsContext } from "next";
 
-import { TWITCH_API_AUTH_URL } from "@/utils/consts/api";
+import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
 import TwitchConnectModule from "@/modules/Twitch/Connect";
 import withAuth from "@/components/hoc/withAuth";
 

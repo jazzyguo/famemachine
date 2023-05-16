@@ -41,11 +41,14 @@ const VideoSlicerForm = ({
         onSubmit(timestamp);
     };
 
-    const onChangeSlide = (ts: [number, number]) => {
-        setTimestamp(ts);
+    const onChangeSlide = (ts: [string, string]) => {
+        const [s, e] = ts;
+        setTimestamp([parseInt(s), parseInt(e)]);
     };
 
     const debouncedChangeSlide = debounce(onChangeSlide, 300);
+
+    const [start, end] = timestamp;
 
     return (
         <div className={styles.container}>
@@ -69,6 +72,11 @@ const VideoSlicerForm = ({
                     onSlide={debouncedChangeSlide}
                 />
             </div>
+            <div className={styles.timestamp}>
+                <span>{secondsToStringFormat(start)}</span>-
+                <span>{secondsToStringFormat(end)}</span>
+            </div>
+
             {loading ? (
                 <div className={styles.loading}>
                     <p>Analyzing vod and generating clips, please wait...</p>

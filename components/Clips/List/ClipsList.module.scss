@@ -1,0 +1,28 @@
+@import "@/styles/styles.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    h2 {
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin-bottom: 1rem;
+    }
+
+    a {
+        color: cyan;
+    }
+}
+
+.video_grid {
+    width: 100%;
+    display: grid;
+    grid-gap: 1rem;
+    row-gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}

@@ -1,10 +1,6 @@
-import { TwitchVideosContextProvider } from "@/contexts/TwitchVideosContext";
 import VideoIDModule from "@/modules/Twitch/VideoID";
+import withAuth from "@/components/hoc/withAuth";
 
-const TwitchVideoPage = ({ prevPath }: { prevPath: string }) => (
-    <TwitchVideosContextProvider>
-        <VideoIDModule />
-    </TwitchVideosContextProvider>
-);
+const TwitchVideoPage = () => <VideoIDModule />;
 
-export default TwitchVideoPage;
+export default withAuth(TwitchVideoPage);
