@@ -5,9 +5,10 @@ import styles from "./VideoContainer.module.scss";
 
 type Props = {
     url: string;
+    fileKey: string;
 };
 
-const VideoContainer = ({ url }: Props) => {
+const VideoContainer = ({ url, fileKey }: Props) => {
     const [loaded, setLoaded] = useState(false);
     const { ref, inView } = useInView({
         threshold: 0.5,

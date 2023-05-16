@@ -41,8 +41,6 @@ const TemporaryClipsModule = () => {
             router.push("/clips/saved");
         }
     };
-    console.log({ clips });
-    const urls = useMemo(() => clips?.map(({ url }) => url), [clips]);
 
     if (loading) {
         return <Loading />;
@@ -64,7 +62,7 @@ const TemporaryClipsModule = () => {
                 These clips will expire after 24 hours if not saved or
                 published.
             </h3>
-            <ClipsList clips={urls} header={false} />
+            <ClipsList clips={clips} header={false} />
         </>
     );
 };

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist, devtools } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import { ATHENA_API_URL } from "@/lib/consts/api";
 
 interface ClipsState {
@@ -28,50 +28,43 @@ const initialState: ClipsState = {
 };
 
 const useClipsStore = create<ClipsState & Actions, Middleware>(
-    devtools(
-        persist(
-            (set) => ({
-                ...initialState,
+    devtools((set) => ({
+        ...initialState,
 
-                getSavedClips: async (userId: string) => {
-                    set({ loading: true, error: null });
+        getSavedClips: async (userId: string) => {
+            set({ loading: true, error: null });
 
-                    try {
-                        const response = await fetch(
-                            `${ATHENA_API_URL}/clips/saved?user_id=${userId}`
-                        );
+            try {
+                const response = await fetch(
+                    `${ATHENA_API_URL}/clips/saved?user_id=${userId}`
+                );
 
-                        const data = await response.json();
+                const data = await response.json();
 
-                        set({ savedClips: data, loading: false });
-                    } catch (e: any) {
-                        console.error(e);
-                        set({ loading: false, error: e });
-                    }
-                },
-                getTemporaryClips: async (userId: string) => {
-                    set({ loading: true, error: null });
-
-                    try {
-                        const response = await fetch(
-                            `${ATHENA_API_URL}/clips/temporary?user_id=${userId}`
-                        );
-
-                        const data = await response.json();
-
-                        set({ temporaryClips: data, loading: false });
-                    } catch (e) {
-                        console.error(e);
-                        set({ loading: false, error: e });
-                    }
-                },
-                reset: () => set(initialState),
-            }),
-            {
-                name: "clips",
+                set({ savedClips: data, loading: false });
+            } catch (e: any) {
+                console.error(e);
+                set({ loading: false, error: e });
             }
-        )
-    )
+        },
+        getTemporaryClips: async (userId: string) => {
+            set({ loading: true, error: null });
+
+            try {
+                const response = await fetch(
+                    `${ATHENA_API_URL}/clips/temporary?user_id=${userId}`
+                );
+
+                const data = await response.json();
+
+                set({ temporaryClips: data, loading: false });
+            } catch (e) {
+                console.error(e);
+                set({ loading: false, error: e });
+            }
+        },
+        reset: () => set(initialState),
+    }))
 );
 
 export default useClipsStore;
