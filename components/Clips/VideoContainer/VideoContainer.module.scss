@@ -25,12 +25,22 @@
     }
 
     .saved {
+        color: green;
+        display: flex;
+        align-items: center;
+
+        svg {
+            margin-right: 0.25rem;
+        }
+
         &:hover {
+            svg,
             span {
                 display: none;
             }
             &:before {
                 content: "Unsave?";
+                color: red;
             }
         }
     }

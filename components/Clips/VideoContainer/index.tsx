@@ -2,6 +2,7 @@ import React, { memo, useState, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/router";
 
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import useClipsStore from "@/stores/clips";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -73,9 +74,10 @@ const VideoContainer = ({ url, fileKey }: Props) => {
                     {saveLoading ? (
                         <Loading className={styles.loading} />
                     ) : isSaved ? (
-                        <span className={styles.saved} onClick={handleUnsave}>
+                        <div className={styles.saved} onClick={handleUnsave}>
+                            <CheckBoxIcon />
                             <span>Saved</span>
-                        </span>
+                        </div>
                     ) : (
                         <span onClick={handleSave}>Save</span>
                     )}
