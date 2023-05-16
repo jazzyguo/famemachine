@@ -12,6 +12,7 @@ interface ClipsState {
 type Actions = {
     getSavedClips: (userId: string) => void;
     getTemporaryClips: (userId: string) => void;
+    saveClip: ({ userId, s3Key }: { userId: string; s3Key: string }) => void;
     reset: () => void;
 };
 
@@ -61,6 +62,33 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
             } catch (e) {
                 console.error(e);
                 set({ loading: false, error: e });
+            }
+        },
+        saveClip: async ({
+            userId,
+            s3Key,
+        }: {
+            userId: string;
+            s3Key: string;
+        }) => {
+            try {
+                const response = await fetch(`${ATHENA_API_URL}/clips/save`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        s3_key: s3Key,
+                        user_id: userId,
+                    }),
+                });
+
+                const data = await response.json();
+
+                console.log({ data });
+                //set({ savedClips: data, loading: false });
+            } catch (e: any) {
+                console.error(e);
             }
         },
         reset: () => set(initialState),

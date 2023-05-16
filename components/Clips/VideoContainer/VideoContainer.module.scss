@@ -6,3 +6,20 @@
         width: 100%;
     }
 }
+
+.videoMenu {
+    display: flex;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: rgb(144, 202, 249);
+    color: black;
+    font-weight: 500;
+
+    .save {
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.5;
+        }
+    }
+}
