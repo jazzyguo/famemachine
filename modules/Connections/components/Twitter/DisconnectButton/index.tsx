@@ -1,74 +1,52 @@
-import React from "react";
-import { doc, updateDoc, deleteField } from "firebase/firestore";
-import { db } from "@/firebase/config";
+import React, { useState } from "react";
 import cx from "classnames";
 
 import { useAuth } from "@/contexts/AuthContext";
 import {
     useConnectionsAPI,
-    useConnections,
 } from "@/contexts/ConnectionsContext";
-import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
-import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
+import { ATHENA_API_URL } from "@/lib/consts/api";
 
 import styles from "../../../Connections.module.scss";
 
-const TwitchDisconnectButton = () => {
+const TwitterDisconnectButton = () => {
+    const [error, setError] = useState<string>('')
     const { user } = useAuth();
-    const connections = useConnections();
     const { addConnection } = useConnectionsAPI();
 
-    const { access_token: accessToken } = connections.twitch;
-
-    const revokeAccessToken = async () => {
-        try {
-            const response = await fetch(`${TWITCH_API_AUTH_URL}/revoke`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: `client_id=${TWITCH_CLIENT_ID}&token=${accessToken}`,
-            });
-
-            if (response.status === 200) {
-                console.log("Revoked twitch access token");
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
-    // revoke twitch access token
-    // update firestore
-    // refresh current connections
-    const removeTwitchConnection = async () => {
+    const removeTwitterConnection = async () => {
         if (user) {
-            const userRef = doc(db, "users", user.uid);
-
             try {
-                await updateDoc(userRef, {
-                    "connections.twitch": deleteField(),
-                });
+                setError('')
+                
+                const response = await fetch(`${ATHENA_API_URL}connect/twitter/auth?user_id=${user.uid}`
+                    , {
+                        method: "DELETE",
+                    });
 
-                await revokeAccessToken();
-
-                addConnection("twitch", null);
-
-                console.log("Twitch connection removed successfully.");
-            } catch (e) {
-                console.error("Error removing Twitch connection:", e);
+                if (response.status === 200) {
+                    console.log("Twitter connection removed successfully.");
+                    addConnection("twitter", null);
+                }
+            } catch (e: any) {
+                const error = "Error removing Twitter connection, please try again"
+                console.error(e);
+                setError(error)
             }
         }
     };
 
     return (
-        <button
-            className={cx(styles.button, styles["button--disconnect"])}
-            onClick={() => removeTwitchConnection()}
-        >
-            Disconnect
-        </button>
+        <>
+            <button
+                className={cx(styles.button, styles["button--disconnect"])}
+                onClick={() => removeTwitterConnection()}
+            >
+                Disconnect
+            </button>
+            {error && <span className={styles.button_error}>{error}</span>}
+        </>
     );
 };
 
-export default TwitchDisconnectButton;
+export default TwitterDisconnectButton;

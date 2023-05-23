@@ -37,7 +37,7 @@ const ConnectionsModule = () => {
             <ConnectionCard
                 Logo={TwitterLogo}
                 title="Twitter"
-                identifier={twitter?.user_id}
+                identifier={twitter?.screen_name}
                 ConnectButton={TwitterConnectButton}
                 DisconnectButton={TwitterDisconnectButton}
                 text="By connecting your account with your Twitter account, you acknowledge and agree that information you choose to share will be uploaded to Twitter and may be viewed by Twitter and other Twitter users. Also, your Twitter account information may be used by Twitch. Twitch will not publicly display your Twitter account information. If you no longer want to share this information, please disconnect your Twitter account.
