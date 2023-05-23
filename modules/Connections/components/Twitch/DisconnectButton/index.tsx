@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import cx from "classnames";
@@ -14,6 +14,8 @@ import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 import styles from "../../../Connections.module.scss";
 
 const TwitchDisconnectButton = () => {
+    const [error, setError] = useState<string>('')
+
     const { user } = useAuth();
     const connections = useConnections();
     const { addConnection } = useConnectionsAPI();
@@ -22,6 +24,8 @@ const TwitchDisconnectButton = () => {
 
     const revokeAccessToken = async () => {
         try {
+            setError('')
+            
             const response = await fetch(`${TWITCH_API_AUTH_URL}/revoke`, {
                 method: "POST",
                 headers: {
@@ -33,8 +37,9 @@ const TwitchDisconnectButton = () => {
             if (response.status === 200) {
                 console.log("Revoked twitch access token");
             }
-        } catch (e) {
+        } catch (e: any) {
             console.log(e);
+            setError(e.message)
         }
     };
 
@@ -62,12 +67,15 @@ const TwitchDisconnectButton = () => {
     };
 
     return (
-        <button
-            className={cx(styles.button, styles["button--disconnect"])}
-            onClick={() => removeTwitchConnection()}
-        >
-            Disconnect
-        </button>
+        <>
+            <button
+                className={cx(styles.button, styles["button--disconnect"])}
+                onClick={() => removeTwitchConnection()}
+            >
+                Disconnect
+            </button>
+            {error && <span className={styles.button_error}>{error}</span>}
+        </>
     );
 };
 
