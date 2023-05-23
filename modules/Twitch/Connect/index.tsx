@@ -75,7 +75,6 @@ const TwitchConnectModule = ({ accessToken, refreshToken }: Props) => {
     const linkTwitchAccount = useCallback(
         async (twitchData: TwitchData) => {
             if (accessToken && twitchData.data?.length) {
-                console.log({ twitchData });
                 const twitchUserId = twitchData.data[0].id;
                 const channel = twitchData.data[0].display_name;
 
