@@ -26,8 +26,6 @@ const SavedClipsModule = () => {
         }
     }, [clips, getSavedClips, user.uid]);
 
-    console.log({ clips });
-
     const handleTabSwitch = (event: SyntheticEvent, tab: number) => {
         if (tab === 0) {
             router.push("/clips/temporary");
@@ -44,7 +42,6 @@ const SavedClipsModule = () => {
                 <Tabs
                     value={1}
                     onChange={handleTabSwitch}
-                    aria-label="disabled tabs example"
                 >
                     <Tab label="Temporary" />
                     <Tab label="Saved" />

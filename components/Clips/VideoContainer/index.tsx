@@ -65,7 +65,9 @@ const VideoContainer = ({ url, fileKey }: Props) => {
         setSaveLoading(false);
     };
 
-    const handlePublish = () => {};
+    const handlePublish = () => {
+        
+    };
 
     return (
         <div className={styles.container} ref={ref}>
