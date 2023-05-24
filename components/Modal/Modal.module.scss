@@ -1,4 +1,4 @@
-@import "lib/styles/styles.scss";
+@import "@/styles/styles.scss";
 
 $width: 100vw;
 $height: 100vh;
@@ -25,8 +25,8 @@ $max-height: 600px;
         height: max-content;
         max-width: $max-width;
         max-height: $max-height;
-        background-color: #fff;
         padding: 1rem;
+        background:$bg-color;
         box-sizing: border-box;
 
         @include breakpoint-min(calc($max-width + 1px)) {
@@ -37,7 +37,7 @@ $max-height: 600px;
 
 .close {
     position: absolute;
-    top: 22px;
+    top: 1rem;
     right: 1rem;
     cursor: pointer;
 

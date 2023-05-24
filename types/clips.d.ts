@@ -3,9 +3,7 @@ type SavedClip = {
     key: string;
 };
 
-type TempClip = {
-    url: string;
-    key: string;
+type TempClip = SavedClip & {
     created_at: string;
 };
 v

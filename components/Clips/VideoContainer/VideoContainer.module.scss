@@ -16,7 +16,9 @@
     color: black;
     font-weight: 500;
     height: 40px;
+    justify-content: space-between;
 
+    .publish,
     .save {
         cursor: pointer;
 

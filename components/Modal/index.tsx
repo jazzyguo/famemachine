@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useCallback, memo } from 'react'
 
-import CloseIcon from 'assets/svg/CloseIcon'
+import CloseIcon from '@mui/icons-material/Close';
 
 import styles from './Modal.module.scss'
 
 type Props = {
     children?: React.ReactNode
     isOpen: boolean
-    setIsOpen: (isOpen: boolean) => void
+    closeModal: () => void
 }
 
 /**
@@ -17,45 +17,31 @@ type Props = {
 const Modal = ({
     children = null,
     isOpen = false,
-    setIsOpen = () => {},
+    closeModal = () => { },
 }: Props) => {
     const contentRef = useRef<HTMLDivElement>(null)
-
-    const handleOutsideClick = useCallback(
-        (e: MouseEvent) => {
-            if (
-                contentRef.current &&
-                !contentRef.current.contains(e.target as Node)
-            ) {
-                setIsOpen(false)
-            }
-        },
-        [setIsOpen]
-    )
 
     const handleEscape = useCallback(
         (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                setIsOpen(false)
+                closeModal()
             }
         },
-        [setIsOpen]
+        [closeModal]
     )
 
     const onCloseButtonClick = () => {
-        setIsOpen(false)
+        closeModal()
     }
 
     // attach listeners for outside click and keyboard escape press
     useEffect(() => {
         document.addEventListener('keydown', handleEscape)
-        document.addEventListener('mousedown', handleOutsideClick)
 
         return () => {
             document.removeEventListener('keydown', handleEscape)
-            document.removeEventListener('mousedown', handleOutsideClick)
         }
-    }, [setIsOpen, handleEscape, handleOutsideClick])
+    }, [handleEscape])
 
     if (!isOpen) {
         return null
