@@ -13,12 +13,19 @@
 }
 
 .publish {
+    display: flex;
+    flex-direction: column;
     padding: 2rem 0;
 
     &_desc {
         font-weight: bold;
         font-size: 1.25rem;
         text-align: center;
+    }
+
+    video {
+        width: 100%;
+        margin: 0 auto 2rem;
     }
 }
 
@@ -55,4 +62,15 @@
         }
     }
 
+}
+
+.back {
+    cursor: pointer;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+
+    &:hover {
+        opacity: .75;
+    }
 }

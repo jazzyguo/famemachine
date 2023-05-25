@@ -40,7 +40,6 @@ const PublishModal = () => {
 
     useEffect(() => {
         router.events.on('routeChangeComplete', closePublishModal);
-
         return () => {
             router.events.off('routeChangeComplete', closePublishModal);
         };
@@ -53,11 +52,20 @@ const PublishModal = () => {
     return (
         <Modal isOpen={isOpen} closeModal={closePublishModal}>
             {PublishComponent
-                ? <PublishComponent />
+                ?
+                <>
+                    <div onClick={() => setCurrent(null)} className={styles.back}>
+                        Back to socials
+                    </div>
+                    <div className={styles.publish}>
+                        <PublishComponent />
+                    </div>
+                </>
                 : (!canPublish
                     ? <NoConnections />
                     : (
                         <div className={styles.publish}>
+                            <video src={selectedClip?.url} controls />
                             <p className={styles.publish_desc}>
                                 Choose one of the following socials to publish to:
                             </p>
