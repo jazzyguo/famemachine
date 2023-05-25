@@ -2,14 +2,11 @@ import React, { useEffect, useMemo } from "react";
 
 import Modal from "@/components/Modal";
 import NoConnections from "./NoConnections";
-import Card from "@/components/Card";
 
 import usePublishStore from "@/stores/publish";
 import { useConnections } from "@/contexts/ConnectionsContext";
 
 import { PUBLISH_CONNECTIONS } from "@/lib/consts/publish";
-
-import TwitterLogo from "@/assets/svg/TwitterLogo";
 
 import styles from "./PublishModal.module.scss";
 
@@ -43,9 +40,7 @@ const PublishModal = () => {
                             Choose one of the following socials to publish to:
                         </p>
                         <div className={styles.publish_list}>
-                            <Card className={styles.publish_list_item}>
-                                <TwitterLogo /> Twitter
-                            </Card>
+
                         </div>
                     </div>
                 )

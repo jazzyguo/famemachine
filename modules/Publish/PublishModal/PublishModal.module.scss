@@ -1,3 +1,5 @@
+@import "@/styles/styles.scss";
+
 .noConnections {
     padding: 5rem;
 
@@ -8,4 +10,39 @@
     a {
         color: cyan;
     }
+}
+
+.publish {
+    padding: 2rem 0;
+
+    &_desc {
+        font-weight: bold;
+        font-size: 1.25rem;
+        text-align: center;
+    }
+}
+
+.publish_list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 2rem;
+
+    &_item {
+        display: flex;
+        align-items: center;
+        font-size: 1.25rem;
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+            opacity: .75;
+        }
+
+        svg {
+            width: 60px;
+            margin-right: 1rem;
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { ATHENA_API_URL } from "@/lib/consts/api";
 
 interface PublishState {
@@ -28,17 +28,21 @@ const initialState: PublishState = {
 };
 
 const usePublishStore = create<PublishState & Actions, Middleware>(
-    devtools((set) => ({
-        ...initialState,
+    devtools(
+        persist((set) => ({
+            ...initialState,
 
-        openPublishModalWithClip: (clip: SavedClip | TempClip | null) => {
-            set({ isOpen: true, selectedClip: clip })
-        },
-        closePublishModal: () => {
-            set({ isOpen: false, selectedClip: null })
-        },
-        reset: () => set(initialState),
-    }))
+            openPublishModalWithClip: (clip: SavedClip | TempClip | null) => {
+                set({ isOpen: true, selectedClip: clip })
+            },
+            closePublishModal: () => {
+                set({ isOpen: false, selectedClip: null })
+            },
+            reset: () => set(initialState),
+        }), {
+            name: "publish-store",
+        })
+    )
 );
 
 export default usePublishStore;

@@ -4,16 +4,17 @@ import ConnectionCard from "./components/ConnectionCard";
 import {
     TwitchConnectButton,
     TwitchDisconnectButton,
-    TwitchLogo,
 } from "./components/Twitch";
 
 import {
     TwitterConnectButton,
     TwitterDisconnectButton,
-    TwitterLogo,
 } from './components/Twitter'
 
 import { useConnections } from "@/contexts/ConnectionsContext";
+
+import TwitchLogo from "@/assets/svg/TwitchLogo";
+import TwitterLogo from "@/assets/svg/TwitterLogo";
 
 import styles from "./Connections.module.scss";
 
