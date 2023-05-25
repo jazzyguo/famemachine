@@ -6,13 +6,15 @@ import styles from "./Card.module.scss";
 type Props = {
     className?: string;
     children: ReactNode;
+    onClick?: (any: any) => any
 };
 
 const Card = ({
     className = '',
     children,
+    onClick,
 }: Props) => (
-    <div className={cx(styles.card, className)}>
+    <div className={cx(styles.card, className)} onClick={onClick}>
         {children}
     </div>
 );

@@ -1,11 +1,15 @@
 .card {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    max-width: 900px;
+
     p {
         width: 100%;
         margin-bottom: 1rem;
     }
 
     svg {
-        margin-right: 1rem;
+        margin: auto 1rem auto 0;
         height: 80px;
         width: 80px;
     }
@@ -17,6 +21,7 @@
     .id {
         color: green;
         font-size: 0.75rem;
+        margin-top: -1rem;
     }
 
     .desc {

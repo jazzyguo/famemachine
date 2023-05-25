@@ -16,9 +16,13 @@ import styles from "./PublishModal.module.scss";
 const PublishModal = () => {
     const connections = useConnections()
 
+    const { twitter } = connections
+
     const isOpen = usePublishStore(state => state.isOpen)
     const selectedClip = usePublishStore(state => state.selectedClip)
     const closePublishModal = usePublishStore(state => state.closePublishModal)
+    const current = usePublishStore(state => state.current)
+    const setCurrent = usePublishStore(state => state.setCurrent)
 
     const canPublish = useMemo(() =>
         Object.keys(connections)
@@ -31,7 +35,7 @@ const PublishModal = () => {
         return () => closePublishModal()
     }, [])
 
-    console.log({ isOpen, selectedClip, canPublish, connections })
+    console.log({ isOpen, selectedClip, canPublish, connections, current })
 
     return (
         <Modal isOpen={isOpen} closeModal={closePublishModal}>
@@ -43,8 +47,14 @@ const PublishModal = () => {
                             Choose one of the following socials to publish to:
                         </p>
                         <div className={styles.publish_list}>
-                            <Card className={styles.publish_list_item}>
-                                <TwitterLogo /> Twitter
+                            <Card
+                                className={styles.publish_list_item}
+                                onClick={() => setCurrent('twitter')}
+                            >
+                                <div>
+                                    <TwitterLogo /> Twitter
+                                </div>
+                                <span>@{twitter.screen_name}</span>
                             </Card>
                         </div>
                     </div>
