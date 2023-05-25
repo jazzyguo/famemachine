@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo } from "react";
+import { useRouter } from 'next/router';
 
 import Modal from "@/components/Modal";
 import NoConnections from "./NoConnections";
 import Card from "@/components/Card";
+import TwitterPublish from "./Twitter";
 
 import usePublishStore from "@/stores/publish";
 import { useConnections } from "@/contexts/ConnectionsContext";
@@ -13,7 +15,12 @@ import TwitterLogo from "@/assets/svg/TwitterLogo";
 
 import styles from "./PublishModal.module.scss";
 
+const PUBLISH_COMPONENTS = {
+    'twitter': TwitterPublish
+}
+
 const PublishModal = () => {
+    const router = useRouter();
     const connections = useConnections()
 
     const { twitter } = connections
@@ -32,32 +39,41 @@ const PublishModal = () => {
     )
 
     useEffect(() => {
-        return () => closePublishModal()
-    }, [])
+        router.events.on('routeChangeComplete', closePublishModal);
 
-    console.log({ isOpen, selectedClip, canPublish, connections, current })
+        return () => {
+            router.events.off('routeChangeComplete', closePublishModal);
+        };
+    }, []);
+
+    console.log({ selectedClip })
+
+    const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
     return (
         <Modal isOpen={isOpen} closeModal={closePublishModal}>
-            {!canPublish
-                ? <NoConnections />
-                : (
-                    <div className={styles.publish}>
-                        <p className={styles.publish_desc}>
-                            Choose one of the following socials to publish to:
-                        </p>
-                        <div className={styles.publish_list}>
-                            <Card
-                                className={styles.publish_list_item}
-                                onClick={() => setCurrent('twitter')}
-                            >
-                                <div>
-                                    <TwitterLogo /> Twitter
-                                </div>
-                                <span>@{twitter.screen_name}</span>
-                            </Card>
+            {PublishComponent
+                ? <PublishComponent />
+                : (!canPublish
+                    ? <NoConnections />
+                    : (
+                        <div className={styles.publish}>
+                            <p className={styles.publish_desc}>
+                                Choose one of the following socials to publish to:
+                            </p>
+                            <div className={styles.publish_list}>
+                                <Card
+                                    className={styles.publish_list_item}
+                                    onClick={() => setCurrent('twitter')}
+                                >
+                                    <div>
+                                        <TwitterLogo /> Twitter
+                                    </div>
+                                    <span>@{twitter.screen_name}</span>
+                                </Card>
+                            </div>
                         </div>
-                    </div>
+                    )
                 )
             }
         </Modal>

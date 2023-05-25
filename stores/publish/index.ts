@@ -41,7 +41,7 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                 set({ isOpen: true, selectedClip: clip })
             },
             closePublishModal: () => {
-                set({ isOpen: false, selectedClip: null })
+                set({ isOpen: false, selectedClip: null, current: null })
             },
             setCurrent: (setTo: Socials) => {
                 set({ current: setTo })
