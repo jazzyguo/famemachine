@@ -33,7 +33,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
     const openPublishModalWithClip = usePublishStore(state => state.openPublishModalWithClip)
 
     // check if the fileKey is also in the savedClips state, should also not calculate if already in saved url
-    const isSaved = useMemo(() => {
+    const isSaved: boolean = useMemo(() => {
         if (isSavedRoute) {
             return true;
         } else {
@@ -41,7 +41,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
                 const getFileName = (clipKey: string) => clipKey.split("/")[2];
                 return getFileName(savedClip.key) === getFileName(fileKey);
             });
-            return existsInSaved;
+            return !!existsInSaved;
         }
     }, [fileKey, isSavedRoute, savedClips]);
 
@@ -72,6 +72,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
         openPublishModalWithClip({
             url,
             key: fileKey,
+            saved: isSaved,
         })
     };
 

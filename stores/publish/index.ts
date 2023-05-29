@@ -10,12 +10,14 @@ interface PublishState {
     loading: boolean;
     isOpen: boolean;
     error: any;
+    publishedUrl: string,
 }
 
 type Actions = {
     openPublishModalWithClip: (clip: SavedClip | TempClip | null) => void;
     closePublishModal: () => void;
     setCurrent: (setTo: Socials) => void;
+    publishClipToTwitter: (formData: any) => void;
     reset: () => void;
 };
 
@@ -30,6 +32,7 @@ const initialState: PublishState = {
     loading: false,
     error: null,
     isOpen: false,
+    publishedUrl: '',
 };
 
 const usePublishStore = create<PublishState & Actions, Middleware>(
@@ -41,10 +44,34 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                 set({ isOpen: true, selectedClip: clip })
             },
             closePublishModal: () => {
-                set({ isOpen: false, selectedClip: null, current: null })
+                set(initialState)
             },
             setCurrent: (setTo: Socials) => {
-                set({ current: setTo })
+                set({ current: setTo, publishedUrl: '' })
+            },
+            publishClipToTwitter: async (formData: any) => {
+                set({ loading: true, error: null })
+
+                try {
+                    const response = await fetch(
+                        `${ATHENA_API_URL}/clips/publish/twitter`,
+                        {
+                            method: 'POST',
+                            body: formData,
+                        }
+                    );
+
+                    if (response.status !== 200) {
+                        throw new Error('Error publlishing twitter video')
+                    }
+
+                    const { tweet_url } = await response.json();
+
+                    set({ loading: false, publishedUrl: tweet_url });
+                } catch (e) {
+                    console.error(e);
+                    set({ loading: false, error: e });
+                }
             },
             reset: () => set(initialState),
         }), {

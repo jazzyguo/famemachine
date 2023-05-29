@@ -1,6 +1,7 @@
 type SavedClip = {
     url: string;
     key: string;
+    saved?: boolean;
 };
 
 type TempClip = SavedClip & {

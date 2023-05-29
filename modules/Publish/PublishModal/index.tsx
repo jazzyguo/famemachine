@@ -30,6 +30,7 @@ const PublishModal = () => {
     const closePublishModal = usePublishStore(state => state.closePublishModal)
     const current = usePublishStore(state => state.current)
     const setCurrent = usePublishStore(state => state.setCurrent)
+    const loading = usePublishStore(state => state.loading)
 
     const canPublish = useMemo(() =>
         Object.keys(connections)
@@ -45,18 +46,18 @@ const PublishModal = () => {
         };
     }, []);
 
-    console.log({ selectedClip })
-
     const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
     return (
-        <Modal isOpen={isOpen} closeModal={closePublishModal}>
+        <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
             {PublishComponent
                 ?
                 <>
-                    <div onClick={() => setCurrent(null)} className={styles.back}>
-                        Back to Socials
-                    </div>
+                    {!loading &&
+                        <div onClick={() => setCurrent(null)} className={styles.back}>
+                            Back to Socials
+                        </div>
+                    }
                     <div className={styles.main}>
                         <PublishComponent />
                     </div>
