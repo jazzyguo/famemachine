@@ -10,3 +10,5 @@ export const FIREBASE_STORAGE_BUCKET =
     publicRuntimeConfig.FIREBASE_STORAGE_BUCKET;
 export const FIREBASE_MESSAGING_ID = publicRuntimeConfig.FIREBASE_MESSAGING_ID;
 export const FIREBASE_APP_ID = publicRuntimeConfig.FIREBASE_APP_ID;
+
+export const MEDIA_URL = publicRuntimeConfig.MEDIA_URL || "https://clips-development.s3.amazonaws.com"

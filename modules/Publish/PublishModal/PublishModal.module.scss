@@ -1,0 +1,77 @@
+@import "@/styles/styles.scss";
+
+.noConnections {
+    padding: 5rem;
+
+    span:first-child {
+        margin-left: .25rem;
+    }
+
+    a {
+        color: cyan;
+    }
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 0 0;
+
+    &_desc {
+        font-weight: bold;
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    video {
+        width: 100%;
+        margin: 0 auto 2rem;
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 2rem;
+
+    &_item {
+        display: flex;
+        align-items: center;
+        font-size: 1.25rem;
+        font-weight: bold;
+        cursor: pointer;
+        justify-content: space-between;
+
+        >div {
+            display: flex;
+            align-items: center;
+        }
+
+        &:hover {
+            opacity: .75;
+        }
+
+        svg {
+            width: 60px;
+            margin-right: 1rem;
+        }
+
+        span {
+            font-size: 1rem;
+        }
+    }
+
+}
+
+.back {
+    cursor: pointer;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    font-weight: bold;
+
+    &:hover {
+        opacity: .75;
+    }
+}

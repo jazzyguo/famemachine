@@ -22,15 +22,17 @@ const ClipsList = ({ clips, header = true }: Props) => (
             </>
         )}
         <div className={styles.video_grid}>
-            {clips &&
-                !!clips.length &&
-                clips.map((clip, idx) => (
-                    <VideoContainer
-                        key={`${clip}-${idx}`}
-                        url={clip.url}
-                        fileKey={clip.key}
-                    />
-                ))}
+            {clips && (
+                !!clips.length
+                    ? clips.map((clip, idx) => (
+                        <VideoContainer
+                            key={`${clip}-${idx}`}
+                            url={clip.url}
+                            fileKey={clip.key}
+                        />
+                    ))
+                    : <div className={styles.empty}>There are no available clips</div>
+            )}
         </div>
     </div>
 );

@@ -1,10 +1,12 @@
+@import "@/styles/styles.scss";
+
 .container {
     width: 100%;
     align-items: center;
     display: flex;
     justify-content: space-between;
     margin-bottom: rem;
-    background-color: black;
+    background-color: $secondary-color;
     padding: 1rem 2rem;
 
     h1 {

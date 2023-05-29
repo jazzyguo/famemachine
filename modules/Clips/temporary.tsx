@@ -52,7 +52,6 @@ const TemporaryClipsModule = () => {
                 <Tabs
                     value={0}
                     onChange={handleTabSwitch}
-                    aria-label="disabled tabs example"
                 >
                     <Tab label="Temporary" />
                     <Tab label="Saved" />
