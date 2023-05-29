@@ -24,7 +24,7 @@ const VideoIDModule = () => {
     const { twitch = {} } = useConnections();
     const { addConnection } = useConnectionsAPI();
 
-    const [clips, setClips] = useState<TempClip[]>();
+    const [clips, setClips] = useState<TempClip[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 

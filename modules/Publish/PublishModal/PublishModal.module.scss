@@ -12,10 +12,10 @@
     }
 }
 
-.publish {
+.main {
     display: flex;
     flex-direction: column;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
 
     &_desc {
         font-weight: bold;
@@ -29,7 +29,7 @@
     }
 }
 
-.publish_list {
+.list {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -69,6 +69,7 @@
     position: absolute;
     left: 1rem;
     top: 1rem;
+    font-weight: bold;
 
     &:hover {
         opacity: .75;

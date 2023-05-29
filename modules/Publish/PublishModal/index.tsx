@@ -55,23 +55,23 @@ const PublishModal = () => {
                 ?
                 <>
                     <div onClick={() => setCurrent(null)} className={styles.back}>
-                        Back to socials
+                        Back to Socials
                     </div>
-                    <div className={styles.publish}>
+                    <div className={styles.main}>
                         <PublishComponent />
                     </div>
                 </>
                 : (!canPublish
                     ? <NoConnections />
                     : (
-                        <div className={styles.publish}>
+                        <div className={styles.main}>
                             <video src={selectedClip?.url} controls />
-                            <p className={styles.publish_desc}>
+                            <p className={styles.main_desc}>
                                 Choose one of the following socials to publish to:
                             </p>
-                            <div className={styles.publish_list}>
+                            <div className={styles.list}>
                                 <Card
-                                    className={styles.publish_list_item}
+                                    className={styles.list_item}
                                     onClick={() => setCurrent('twitter')}
                                 >
                                     <div>
