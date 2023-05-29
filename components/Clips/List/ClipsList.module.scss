@@ -26,3 +26,11 @@
     row-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
+
+.empty {
+    text-align: center;
+    width: 100%;
+    grid-column: 1/-1;
+    margin-top: 2rem;
+    font-size: 1rem;
+}

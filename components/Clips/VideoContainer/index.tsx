@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import useClipsStore from "@/stores/clips";
 import { useAuth } from "@/contexts/AuthContext";
+import usePublishStore from "@/stores/publish";
 
 import Loading from "@/components/Loading";
 
@@ -29,8 +30,10 @@ const VideoContainer = ({ url, fileKey }: Props) => {
     const saveClip = useClipsStore((state) => state.saveClip);
     const unsaveClip = useClipsStore((state) => state.unsaveClip);
 
+    const openPublishModalWithClip = usePublishStore(state => state.openPublishModalWithClip)
+
     // check if the fileKey is also in the savedClips state, should also not calculate if already in saved url
-    const isSaved = useMemo(() => {
+    const isSaved: boolean = useMemo(() => {
         if (isSavedRoute) {
             return true;
         } else {
@@ -38,7 +41,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
                 const getFileName = (clipKey: string) => clipKey.split("/")[2];
                 return getFileName(savedClip.key) === getFileName(fileKey);
             });
-            return existsInSaved;
+            return !!existsInSaved;
         }
     }, [fileKey, isSavedRoute, savedClips]);
 
@@ -65,7 +68,13 @@ const VideoContainer = ({ url, fileKey }: Props) => {
         setSaveLoading(false);
     };
 
-    const handlePublish = () => {};
+    const handlePublish = () => {
+        openPublishModalWithClip({
+            url,
+            key: fileKey,
+            saved: isSaved,
+        })
+    };
 
     return (
         <div className={styles.container} ref={ref}>
@@ -82,6 +91,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
                         <span onClick={handleSave}>Save</span>
                     )}
                 </div>
+                <div className={styles.publish} onClick={handlePublish}>Publish</div>
             </div>
             <video
                 src={loaded || !inView ? url : undefined}

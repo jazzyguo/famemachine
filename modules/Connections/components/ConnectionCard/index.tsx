@@ -1,4 +1,5 @@
 import React, { ComponentType, memo } from "react";
+import Card from "@/components/Card";
 
 import styles from "./ConnectionCard.module.scss";
 
@@ -18,7 +19,7 @@ const ConnectionCard = ({
     ConnectButton,
     DisconnectButton,
 }: Props) => (
-    <div className={styles.card}>
+    <Card className={styles.card}>
         <Logo />
         <div>
             <p className={styles.title}>{title}</p>
@@ -31,7 +32,7 @@ const ConnectionCard = ({
             {!identifier && <ConnectButton />}
             {identifier && <DisconnectButton />}
         </div>
-    </div>
+    </Card>
 );
 
 export default memo(ConnectionCard);

@@ -3,6 +3,7 @@
     height: 100%;
 
     video {
+        height: 240px;
         width: 100%;
     }
 }
@@ -15,7 +16,9 @@
     color: black;
     font-weight: 500;
     height: 40px;
+    justify-content: space-between;
 
+    .publish,
     .save {
         cursor: pointer;
 

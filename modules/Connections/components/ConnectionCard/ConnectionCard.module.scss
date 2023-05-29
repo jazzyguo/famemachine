@@ -1,20 +1,7 @@
 .card {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 1.25rem;
     display: grid;
     grid-template-columns: 100px 1fr;
     max-width: 900px;
-    background-color: #0e0e10;
-    border-radius: 0.25rem;
-    border: 1px solid grey;
-    margin-bottom: 2rem;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-
 
     p {
         width: 100%;
@@ -22,7 +9,7 @@
     }
 
     svg {
-        margin-right: 1rem;
+        margin: auto 1rem auto 0;
         height: 80px;
         width: 80px;
     }
@@ -34,6 +21,7 @@
     .id {
         color: green;
         font-size: 0.75rem;
+        margin-top: -1rem;
     }
 
     .desc {
