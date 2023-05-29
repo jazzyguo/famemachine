@@ -9,7 +9,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import useTwitchStore from "@/stores/twitch";
 import { useAuth } from "@/contexts/AuthContext";
-import Loading from "@/components/Loading";
+import InfiniteScroller from "@/components/InfiniteScroller";
 
 import styles from "./VideoLibrary.module.scss";
 
@@ -21,18 +21,17 @@ const VideoLibrary = () => {
     const router = useRouter();
 
     const videos = useTwitchStore((state) => state.videos);
-    const pagination = useTwitchStore((state) => state.pagination);
     const error = useTwitchStore((state) => state.error);
     const loading = useTwitchStore((state) => state.loading);
+    const cursor = useTwitchStore(state => state.pagination.cursor)
 
     const fetchTwitchVideos = useTwitchStore(
         (state) => state.fetchTwitchVideos
     );
 
     const handleFetchTwitchVideos = useCallback(
-        async (paginateTo?: "before" | "after" | undefined) => {
+        async () => {
             await fetchTwitchVideos({
-                paginateTo,
                 twitchUserId: twitch.user_id,
                 twitchAccessToken: twitch.access_token,
                 addConnection,
@@ -71,13 +70,16 @@ const VideoLibrary = () => {
         );
     }
 
-    const isFirstPage = !pagination.cursor;
-
     return (
         <div className={styles.container}>
             <h2>Twitch Videos</h2>
             {error && <div>{error.message}</div>}
-            <div className={styles.videosContainer}>
+            <InfiniteScroller
+                className={styles.videosContainer}
+                fetchData={handleFetchTwitchVideos}
+                loading={loading}
+                hasNext={!!cursor}
+            >
                 {videos &&
                     !!videos.length &&
                     videos.map((video, idx) => {
@@ -114,8 +116,7 @@ const VideoLibrary = () => {
                             </div>
                         );
                     })}
-            </div>
-            {loading && <Loading className={styles.loading} />}
+            </InfiniteScroller>
         </div>
     );
 };
