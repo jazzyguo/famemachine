@@ -61,7 +61,7 @@ const TemporaryClipsModule = () => {
                 These clips will expire after 24 hours if not saved.
             </h3>
             <p className={styles.text}>
-                Save a clip to publish.
+                Save a clip to publish it.
             </p>
             <ClipsList clips={clips} header={false} />
         </>
