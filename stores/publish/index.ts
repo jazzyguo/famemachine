@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { ATHENA_API_URL } from "@/lib/consts/api";
 import { immer } from 'zustand/middleware/immer'
+import { ATHENA_API_URL } from "@/lib/consts/api";
 
 type Socials = 'twitter' | 'history' | null
 
 interface PublishState {
-    selectedClip: SavedClip | TempClip | null;
+    selectedClip: SavedClip | null;
     current: Socials;
     loading: boolean;
     isOpen: boolean;
@@ -14,7 +14,7 @@ interface PublishState {
 }
 
 type Actions = {
-    openPublishModalWithClip: (clip: SavedClip | TempClip | null) => void;
+    openPublishModalWithClip: (clip: SavedClip | null) => void;
     closePublishModal: () => void;
     setCurrent: (setTo: Socials) => void;
     publishClipToTwitter: (formData: any) => void;
@@ -41,7 +41,7 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
             immer((set) => ({
                 ...initialState,
 
-                openPublishModalWithClip: (clip: SavedClip | TempClip | null) => {
+                openPublishModalWithClip: (clip: SavedClip | null) => {
                     set(state => {
                         state.isOpen = true
                         state.selectedClip = clip
@@ -56,7 +56,10 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                     })
                 },
                 publishClipToTwitter: async (formData: any) => {
-                    set({ loading: true, error: null })
+                    set(state => {
+                        state.loading = true
+                        state.error = null
+                    })
 
                     try {
                         const response = await fetch(
@@ -94,7 +97,10 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                         });
                     } catch (e) {
                         console.error(e);
-                        set({ loading: false, error: e });
+                        set(state => {
+                            state.loading = false
+                            state.error = e
+                        });
                     }
                 },
                 reset: () => set(initialState),

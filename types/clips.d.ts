@@ -9,7 +9,8 @@ type SavedClip = {
     published: Published;
 };
 
-type TempClip = SavedClip & {
-    created_at: string;
+type TempClip = {
+    created_at?: string;
+    url: string;
+    key: string;
 };
-v
