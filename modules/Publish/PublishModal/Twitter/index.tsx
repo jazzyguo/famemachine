@@ -38,22 +38,26 @@ const TwitterPublish = () => {
         }
     }
 
-    return publishedUrl
-        ? <div className={styles.published}>
-            {`Published to `}
-            <Link href={publishedUrl} target="_blank">{publishedUrl}</Link>
-        </div>
-        : (
-            <form className={styles.container} onSubmit={handleSubmit}>
-                <video src={clip?.url} controls />
-                <textarea rows={15} name="text" disabled={loading} />
-                {loading
-                    ? <Loading className={styles.loading} />
-                    : <button type="submit">Tweet</button>
-                }
-                {error && <span className={styles.error}>{error}</span>}
-            </form>
+    if (publishedUrl) {
+        return (
+            <div className={styles.published}>
+                {`Published to `}
+                <Link href={publishedUrl} target="_blank">{publishedUrl}</Link>
+            </div>
         )
+    }
+
+    return (
+        <form className={styles.container} onSubmit={handleSubmit}>
+            <video src={clip?.url} controls />
+            <textarea rows={15} name="text" disabled={loading} />
+            {loading
+                ? <Loading className={styles.loading} />
+                : <button type="submit">Tweet</button>
+            }
+            {error && <span className={styles.error}>{error}</span>}
+        </form>
+    )
 }
 
 export default TwitterPublish

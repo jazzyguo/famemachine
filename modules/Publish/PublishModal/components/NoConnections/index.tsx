@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { PUBLISH_CONNECTIONS } from "@/lib/consts/publish";
 import { firstLetterToUppercase } from "@/lib/utils/strings";
 
-import styles from "./PublishModal.module.scss";
+import styles from "./NoConnections.module.scss";
 
 const NoConnections = () =>
     <div className={styles.noConnections}>

@@ -1,21 +1,9 @@
 @import "@/styles/styles.scss";
 
-.noConnections {
-    padding: 5rem;
-
-    span:first-child {
-        margin-left: .25rem;
-    }
-
-    a {
-        color: cyan;
-    }
-}
-
 .main {
     display: flex;
     flex-direction: column;
-    padding: 2.5rem 0 0;
+    padding: 3.5rem 0 0;
 
     &_desc {
         font-weight: bold;
@@ -23,7 +11,7 @@
         text-align: center;
     }
 
-    video {
+    .video {
         width: 100%;
         margin: 0 auto 2rem;
     }
@@ -64,28 +52,16 @@
 
 }
 
+.publishHistory_button,
 .back {
     cursor: pointer;
     position: absolute;
     left: 1rem;
     top: 1rem;
     font-weight: bold;
+    color: cyan;
 
     &:hover {
         opacity: .75;
-    }
-}
-
-.publishHistory {
-    &_button {
-        cursor: pointer;
-        color: cyan;
-        font-weight: bold;
-        width: max-content;
-
-        &:hover {
-            opacity: .75;
-        }
-
     }
 }

@@ -10,6 +10,7 @@ import {
 import useTwitchStore from "@/stores/twitch";
 import { useAuth } from "@/contexts/AuthContext";
 import InfiniteScroller from "@/components/InfiniteScroller";
+import Loading from "@/components/Loading";
 
 import styles from "./VideoLibrary.module.scss";
 
@@ -74,49 +75,53 @@ const VideoLibrary = () => {
         <div className={styles.container}>
             <h2>Twitch Videos</h2>
             {error && <div>{error.message}</div>}
-            <InfiniteScroller
-                className={styles.videosContainer}
-                fetchData={handleFetchTwitchVideos}
-                loading={loading}
-                hasNext={!!cursor}
-            >
-                {videos &&
-                    !!videos.length &&
-                    videos.map((video, idx) => {
-                        if (!video.id) return null;
+            {!videos
+                ? <Loading className={styles.loading} />
+                : (
+                    <InfiniteScroller
+                        className={styles.videosContainer}
+                        fetchData={handleFetchTwitchVideos}
+                        loading={loading}
+                        hasNext={!!cursor}
+                    >
+                        {videos &&
+                            !!videos.length &&
+                            videos.map((video, idx) => {
+                                if (!video.id) return null;
 
-                        const width = "400";
-                        const height = "225";
-                        const newUrl = (video?.thumbnail_url || "")
-                            .replace(/%{width}/g, width)
-                            .replace(/%{height}/g, height);
+                                const width = "400";
+                                const height = "225";
+                                const newUrl = (video?.thumbnail_url || "")
+                                    .replace(/%{width}/g, width)
+                                    .replace(/%{height}/g, height);
 
-                        const is404 =
-                            video.thumbnail_url ===
-                            "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png";
+                                const is404 =
+                                    video.thumbnail_url ===
+                                    "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png";
 
-                        const placeholder = `https://dummyimage.com/${width}x${height}/000000/ffffff.png`;
+                                const placeholder = `https://dummyimage.com/${width}x${height}/000000/ffffff.png`;
 
-                        return (
-                            <div
-                                key={`${video.title}-${idx}`}
-                                className={styles.videoItem}
-                                title={video.title}
-                                onClick={() =>
-                                    router.push(`/videos/twitch/${video.id}`)
-                                }
-                            >
-                                <span>{video.title}</span>
-                                <Image
-                                    src={is404 ? placeholder : newUrl}
-                                    alt={video.title}
-                                    width={width}
-                                    height={height}
-                                />
-                            </div>
-                        );
-                    })}
-            </InfiniteScroller>
+                                return (
+                                    <div
+                                        key={`${video.title}-${idx}`}
+                                        className={styles.videoItem}
+                                        title={video.title}
+                                        onClick={() =>
+                                            router.push(`/videos/twitch/${video.id}`)
+                                        }
+                                    >
+                                        <span>{video.title}</span>
+                                        <Image
+                                            src={is404 ? placeholder : newUrl}
+                                            alt={video.title}
+                                            width={width}
+                                            height={height}
+                                        />
+                                    </div>
+                                );
+                            })}
+                    </InfiniteScroller>
+                )}
         </div>
     );
 };

@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from 'next/router';
 
 import Modal from "@/components/Modal";
-import NoConnections from "./NoConnections";
+import NoConnections from "./components/NoConnections";
 import Card from "@/components/Card";
 import TwitterPublish from "./Twitter";
+import PublishHistory from "./components/PublishHistory"
 
 import usePublishStore from "@/stores/publish";
 import { useConnections } from "@/contexts/ConnectionsContext";
@@ -16,12 +17,11 @@ import TwitterLogo from "@/assets/svg/TwitterLogo";
 import styles from "./PublishModal.module.scss";
 
 const PUBLISH_COMPONENTS = {
-    'twitter': TwitterPublish
+    'twitter': TwitterPublish,
+    'history': PublishHistory,
 }
 
 const PublishModal = () => {
-    const [showHistory, setShowHistory] = useState<boolean>(false)
-
     const router = useRouter();
     const connections = useConnections()
 
@@ -50,10 +50,14 @@ const PublishModal = () => {
 
     const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
-    const { url, published } = selectedClip || {}
+    const { url } = selectedClip || {}
 
     const BackButton = () => (
-        <div onClick={() => setCurrent(null)} className={styles.back}>
+        <div onClick={
+            () => {
+                setCurrent(null)
+            }
+        } className={styles.back}>
             Back to Socials
         </div>
     )
@@ -61,49 +65,44 @@ const PublishModal = () => {
     return (
         <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
             {PublishComponent
-                ?
-                <>
-                    {!loading &&
-                        <BackButton />
-                    }
+                ? (
                     <div className={styles.main}>
+                        {!loading &&
+                            <BackButton />
+                        }
                         <PublishComponent />
                     </div>
-                </>
+                )
                 : (!canPublish
                     ? <NoConnections />
-                    : showHistory
-                        ? (
-                            <div className={styles.publishHistory}>
-                                <BackButton />
+                    : (
+                        <div className={styles.main}>
+                            <div
+                                className={styles.publishHistory_button}
+                                onClick={() => setCurrent('history')}
+                            >
+                                Publish History
                             </div>
-                        ) : (
-                            <>
-                                <div className={styles.publishHistory_button}>
-                                    Publish History
-                                </div>
-                                <div className={styles.main}>
-                                    <video src={url} controls />
-                                    <p className={styles.main_desc}>
-                                        Choose one of the following socials to publish to:
-                                    </p>
-                                    <div className={styles.list}>
-                                        <Card
-                                            className={styles.list_item}
-                                            onClick={() => setCurrent('twitter')}
-                                        >
-                                            <div>
-                                                <TwitterLogo /> Twitter
-                                            </div>
-                                            <span>@{twitter.screen_name}</span>
-                                        </Card>
+                            <video src={url} controls className={styles.video} />
+                            <p className={styles.main_desc}>
+                                Choose one of the following socials to publish to:
+                            </p>
+                            <div className={styles.list}>
+                                <Card
+                                    className={styles.list_item}
+                                    onClick={() => setCurrent('twitter')}
+                                >
+                                    <div>
+                                        <TwitterLogo /> Twitter
                                     </div>
-                                </div>
-                            </>
-                        )
+                                    <span>@{twitter.screen_name}</span>
+                                </Card>
+                            </div>
+                        </div>
+                    )
                 )
             }
-        </Modal >
+        </Modal>
     );
 };
 
