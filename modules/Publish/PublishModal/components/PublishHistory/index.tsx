@@ -13,28 +13,32 @@ const PublishHistory = () => {
 
     return (
         <div className={styles.container}>
-            <h2>Published Urls</h2>
             {published
-                ? Object.keys(published).map(social => {
-                    const socialPublishInfo = published[social]
-                    return (
-                        <div className={styles.socialList} key={social}>
-                            <h3>{firstLetterToUppercase(social)}</h3>
-                            {socialPublishInfo.map(({ url, published_at }) =>
-                                <div className={styles.socialList_item}>
-                                    <span>{published_at}</span>
-                                    <Link
-                                        target="_blank"
-                                        href={url}
-                                        key={url}
-                                    >
-                                        {url}
-                                    </Link>
+                ? (
+                    <>
+                        <h2>Published Urls</h2>
+                        {Object.keys(published).map(social => {
+                            const socialPublishInfo = published[social]
+                            return (
+                                <div className={styles.socialList} key={social}>
+                                    <h3>{firstLetterToUppercase(social)}</h3>
+                                    {socialPublishInfo.map(({ url, published_at }) =>
+                                        <div className={styles.socialList_item}>
+                                            <span>{published_at}</span>
+                                            <Link
+                                                target="_blank"
+                                                href={url}
+                                                key={url}
+                                            >
+                                                {url}
+                                            </Link>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    )
-                })
+                            )
+                        })}
+                    </>
+                )
                 : (
                     <div className={styles.empty}>
                         No publications to any socials have been made.
