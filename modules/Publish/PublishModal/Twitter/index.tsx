@@ -16,7 +16,6 @@ const TwitterPublish = () => {
     const clip = usePublishStore(state => state.selectedClip)
     const publishClipToTwitter = usePublishStore(state => state.publishClipToTwitter)
     const getSavedClips = useClipsStore(state => state.getSavedClips)
-    const publishedUrl = usePublishStore(state => state.publishedUrl)
     const loading = usePublishStore(state => state.loading)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -37,19 +36,9 @@ const TwitterPublish = () => {
             }
         }
     }
-
-    if (publishedUrl) {
-        return (
-            <div className={styles.published}>
-                {`Published to `}
-                <Link href={publishedUrl} target="_blank">{publishedUrl}</Link>
-            </div>
-        )
-    }
-
+    
     return (
         <form className={styles.container} onSubmit={handleSubmit}>
-            <video src={clip?.url} controls />
             <textarea rows={15} name="text" disabled={loading} />
             {loading
                 ? <Loading className={styles.loading} />

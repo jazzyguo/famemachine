@@ -11,7 +11,6 @@ interface PublishState {
     loading: boolean;
     isOpen: boolean;
     error: any;
-    publishedUrl: string;
 }
 
 type Actions = {
@@ -34,7 +33,6 @@ const initialState: PublishState = {
     loading: false,
     error: null,
     isOpen: false,
-    publishedUrl: '',
 };
 
 const usePublishStore = create<PublishState & Actions, Middleware>(
@@ -55,7 +53,6 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                 setCurrent: (setTo: Socials) => {
                     set(state => {
                         state.current = setTo
-                        state.publishedUrl = ''
                     })
                 },
                 publishClipToTwitter: async (formData: any) => {
@@ -78,7 +75,7 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
 
                         set(state => {
                             state.loading = false
-                            state.publishedUrl = url
+                            state.current = 'history'
 
                             if (state.selectedClip) {
                                 state.selectedClip.published = state.selectedClip.published || {}

@@ -64,42 +64,44 @@ const PublishModal = () => {
 
     return (
         <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
-            {PublishComponent
-                ? (
+            {!canPublish
+                ? <NoConnections />
+                : (
                     <div className={styles.main}>
-                        {!loading &&
-                            <BackButton />
-                        }
-                        <PublishComponent />
-                    </div>
-                )
-                : (!canPublish
-                    ? <NoConnections />
-                    : (
-                        <div className={styles.main}>
-                            <div
-                                className={styles.publishHistory_button}
-                                onClick={() => setCurrent('history')}
-                            >
-                                Publish History
-                            </div>
-                            <video src={url} controls className={styles.video} />
-                            <p className={styles.main_desc}>
-                                Choose one of the following socials to publish to:
-                            </p>
-                            <div className={styles.list}>
-                                <Card
-                                    className={styles.list_item}
-                                    onClick={() => setCurrent('twitter')}
+                        {!current
+                            ? (
+                                <div
+                                    className={styles.publishHistory_button}
+                                    onClick={() => setCurrent('history')}
                                 >
-                                    <div>
-                                        <TwitterLogo /> Twitter
+                                    Publish History
+                                </div>
+                            )
+                            : <BackButton />
+                        }
+                        <video src={url} controls className={styles.video} />
+                        {PublishComponent
+                            ? <PublishComponent />
+                            : (
+                                <>
+                                    <p className={styles.main_desc}>
+                                        Choose one of the following socials to publish to:
+                                    </p>
+                                    <div className={styles.list}>
+                                        <Card
+                                            className={styles.list_item}
+                                            onClick={() => setCurrent('twitter')}
+                                        >
+                                            <div>
+                                                <TwitterLogo /> Twitter
+                                            </div>
+                                            <span>@{twitter.screen_name}</span>
+                                        </Card>
                                     </div>
-                                    <span>@{twitter.screen_name}</span>
-                                </Card>
-                            </div>
-                        </div>
-                    )
+                                </>
+                            )
+                        }
+                    </div>
                 )
             }
         </Modal>
