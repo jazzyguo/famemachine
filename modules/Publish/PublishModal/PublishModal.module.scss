@@ -75,3 +75,17 @@
         opacity: .75;
     }
 }
+
+.publishHistory {
+    &_button {
+        cursor: pointer;
+        color: cyan;
+        font-weight: bold;
+        width: max-content;
+
+        &:hover {
+            opacity: .75;
+        }
+
+    }
+}

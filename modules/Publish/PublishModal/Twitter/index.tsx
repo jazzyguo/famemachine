@@ -27,7 +27,7 @@ const TwitterPublish = () => {
                 const formData = new FormData(event.target);
 
                 formData.append("user_id", user.uid)
-                formData.append("s3_key", clip.key)
+                formData.append("clip_url", clip.url)
 
                 await publishClipToTwitter(formData)
 

@@ -17,7 +17,7 @@ const ClipsList = ({ clips, header = true }: Props) => (
                 <p>
                     These generated clips are also available in your{" "}
                     <Link href="/clips">Clips Library</Link> for 24 hours unless
-                    you save them
+                    you save them. Save a clip to be able to publish it.
                 </p>
             </>
         )}
@@ -29,6 +29,7 @@ const ClipsList = ({ clips, header = true }: Props) => (
                             key={`${clip}-${idx}`}
                             url={clip.url}
                             fileKey={clip.key}
+                            published={clip.published}
                         />
                     ))
                     : <div className={styles.empty}>There are no available clips</div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from 'next/router';
 
 import Modal from "@/components/Modal";
@@ -20,6 +20,8 @@ const PUBLISH_COMPONENTS = {
 }
 
 const PublishModal = () => {
+    const [showHistory, setShowHistory] = useState<boolean>(false)
+
     const router = useRouter();
     const connections = useConnections()
 
@@ -48,15 +50,21 @@ const PublishModal = () => {
 
     const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
+    const { url, published } = selectedClip || {}
+
+    const BackButton = () => (
+        <div onClick={() => setCurrent(null)} className={styles.back}>
+            Back to Socials
+        </div>
+    )
+
     return (
         <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
             {PublishComponent
                 ?
                 <>
                     {!loading &&
-                        <div onClick={() => setCurrent(null)} className={styles.back}>
-                            Back to Socials
-                        </div>
+                        <BackButton />
                     }
                     <div className={styles.main}>
                         <PublishComponent />
@@ -64,28 +72,38 @@ const PublishModal = () => {
                 </>
                 : (!canPublish
                     ? <NoConnections />
-                    : (
-                        <div className={styles.main}>
-                            <video src={selectedClip?.url} controls />
-                            <p className={styles.main_desc}>
-                                Choose one of the following socials to publish to:
-                            </p>
-                            <div className={styles.list}>
-                                <Card
-                                    className={styles.list_item}
-                                    onClick={() => setCurrent('twitter')}
-                                >
-                                    <div>
-                                        <TwitterLogo /> Twitter
-                                    </div>
-                                    <span>@{twitter.screen_name}</span>
-                                </Card>
+                    : showHistory
+                        ? (
+                            <div className={styles.publishHistory}>
+                                <BackButton />
                             </div>
-                        </div>
-                    )
+                        ) : (
+                            <>
+                                <div className={styles.publishHistory_button}>
+                                    Publish History
+                                </div>
+                                <div className={styles.main}>
+                                    <video src={url} controls />
+                                    <p className={styles.main_desc}>
+                                        Choose one of the following socials to publish to:
+                                    </p>
+                                    <div className={styles.list}>
+                                        <Card
+                                            className={styles.list_item}
+                                            onClick={() => setCurrent('twitter')}
+                                        >
+                                            <div>
+                                                <TwitterLogo /> Twitter
+                                            </div>
+                                            <span>@{twitter.screen_name}</span>
+                                        </Card>
+                                    </div>
+                                </div>
+                            </>
+                        )
                 )
             }
-        </Modal>
+        </Modal >
     );
 };
 

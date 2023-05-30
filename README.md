@@ -26,4 +26,4 @@ Set up public media provider for saved/published clips instead of using s3 bucke
 - optimize
 paginate clips for temporary/saved instead of pulling all at once
 
-Split vid processing logic to either use sockets or cloud functions / webhooks instead of an open HTTP request (think this is a must since http requests are taking minutes)
+Split vid processing logic to either use sockets or cloud functions / webhooks instead of an open HTTP request (think this is a must since http requests are taking minutes). 

@@ -102,7 +102,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
             s3Key: string;
         }) => {
             try {
-                await fetch(`${ATHENA_API_URL}/clips/save`, {
+                const response = await fetch(`${ATHENA_API_URL}/clips/save`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -113,12 +113,27 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                     }),
                 });
 
-                set((state) => ({
-                    savedClips: (state.savedClips || []).filter(
-                        (clip) => clip.key !== s3Key
-                    ),
-                    loading: false,
-                }));
+                if (response.status === 200) {
+                    const { key, temp_url } = await response.json()
+
+                    set((state) => {
+                        // check if the deleted clip is not already in the temp store
+                        const tempClipExists = state.temporaryClips?.find(clip => clip.key === key)
+
+                        return {
+                            savedClips: (state.savedClips || []).filter(
+                                (clip) => clip.key !== s3Key
+                            ),
+                            temporaryClips: tempClipExists
+                                ? state.temporaryClips
+                                : [...(state.temporaryClips || []), {
+                                    key,
+                                    url: temp_url,
+                                }],
+                            loading: false,
+                        }
+                    });
+                }
             } catch (e: any) {
                 console.error(e);
             }

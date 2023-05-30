@@ -14,9 +14,10 @@ import styles from "./VideoContainer.module.scss";
 type Props = {
     url: string;
     fileKey: string;
+    published: Published | undefined;
 };
 
-const VideoContainer = ({ url, fileKey }: Props) => {
+const VideoContainer = ({ url, fileKey, published }: Props) => {
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -72,7 +73,7 @@ const VideoContainer = ({ url, fileKey }: Props) => {
         openPublishModalWithClip({
             url,
             key: fileKey,
-            saved: isSaved,
+            published,
         })
     };
 
@@ -91,7 +92,10 @@ const VideoContainer = ({ url, fileKey }: Props) => {
                         <span onClick={handleSave}>Save</span>
                     )}
                 </div>
-                <div className={styles.publish} onClick={handlePublish}>Publish</div>
+                {isSavedRoute &&
+                    <div className={styles.publish} onClick={handlePublish}>Publish</div>
+
+                }
             </div>
             <video
                 src={loaded || !inView ? url : undefined}
