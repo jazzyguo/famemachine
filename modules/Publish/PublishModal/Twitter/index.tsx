@@ -1,9 +1,7 @@
 import React, { useState, FormEvent } from 'react'
-import Link from 'next/link';
 
 import usePublishStore from "@/stores/publish";
 import { useAuth } from '@/contexts/AuthContext';
-import useClipsStore from '@/stores/clips';
 
 import Loading from '@/components/Loading';
 
@@ -15,7 +13,6 @@ const TwitterPublish = () => {
 
     const clip = usePublishStore(state => state.selectedClip)
     const publishClipToTwitter = usePublishStore(state => state.publishClipToTwitter)
-    const getSavedClips = useClipsStore(state => state.getSavedClips)
     const loading = usePublishStore(state => state.loading)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -29,8 +26,6 @@ const TwitterPublish = () => {
                 formData.append("clip_url", clip.url)
 
                 await publishClipToTwitter(formData)
-
-                getSavedClips(user.uid)
             } catch (e: any) {
                 setError(e.message)
             }
