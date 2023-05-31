@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useMemo, useEffect, memo } from "react";
 import { TwitchPlayer } from "react-twitch-embed";
 
 import ClipsList from "@/components/Clips/List";
@@ -16,10 +15,11 @@ import { ATHENA_API_URL } from "@/lib/consts/api";
 
 import styles from "./VideoID.module.scss";
 
-const VideoIDModule = () => {
-    const router = useRouter();
-    const { video_id: videoId } = router.query;
+type Props = {
+    videoId: string
+}
 
+const VideoIDModule = ({ videoId }: Props) => {
     const { user } = useAuth();
     const { twitch = {} } = useConnections();
     const { addConnection } = useConnectionsAPI();
@@ -41,7 +41,7 @@ const VideoIDModule = () => {
     );
 
     useEffect(() => {
-        if (!video && twitch.access_token && user.uid) {
+        if (!video && twitch.access_token && user.uid && videoId) {
             fetchTwitchVideo({
                 twitchAccessToken: twitch.access_token,
                 videoId,
@@ -124,4 +124,4 @@ const VideoIDModule = () => {
     );
 };
 
-export default VideoIDModule;
+export default memo(VideoIDModule);

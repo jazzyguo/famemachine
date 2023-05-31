@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem 0;
+
+    h2 {
+        margin: auto;
+    }
+}
+
+.socialList {
+    @extend .container;
+    margin: 0;
+
+    h3 {
+        margin-bottom: .5rem;
+    }
+
+    &_item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: .5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        span {
+            font-size: .75rem;
+            color: gray;
+        }
+
+        a {
+            &:hover {
+                opacity: .75;
+            }
+        }
+    }
+
+}
+
+.empty {
+    font-weight: bold;
+    font-size: 1.25rem;
+    text-align: center;
+    padding-bottom: 2rem;
+}

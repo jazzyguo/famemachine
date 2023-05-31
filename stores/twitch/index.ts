@@ -28,7 +28,6 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
 
                 // both fetchTwitchVideos and fetchTwitchVideo contain token refresh logic on 401
                 fetchTwitchVideos: async ({
-                    paginateTo,
                     twitchUserId,
                     twitchAccessToken,
                     addConnection,
@@ -48,8 +47,8 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                                 : twitchUserId
                         }`;
 
-                        if (cursor && paginateTo) {
-                            url += `&${paginateTo}=${cursor}`;
+                        if (cursor) {
+                            url += `&after=${cursor}`;
                         }
 
                         const headers = {

@@ -23,10 +23,7 @@ Need to add an email verification system before a user can attach any social con
 
 Set up public media provider for saved/published clips instead of using s3 bucket (right now we move files between a temp/saved folder within s3.) this new media provider will be used to publish clips too if we choose to save a video before publishing.
 
-- features
-Need to add Infinite scrolling on the twitch videos list page
-
 - optimize
 paginate clips for temporary/saved instead of pulling all at once
 
-Split vid processing logic to either use sockets or cloud functions / webhooks instead of an open HTTP request (think this is a must since http requests are taking minutes)
+Split vid processing logic to either use sockets or cloud functions / webhooks instead of an open HTTP request (think this is a must since http requests are taking minutes). 

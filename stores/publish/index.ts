@@ -1,20 +1,20 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { immer } from 'zustand/middleware/immer'
 import { ATHENA_API_URL } from "@/lib/consts/api";
 
-type Socials = 'twitter' | null
+type Socials = 'twitter' | 'history' | null
 
 interface PublishState {
-    selectedClip: SavedClip | TempClip | null;
+    selectedClip: SavedClip | null;
     current: Socials;
     loading: boolean;
     isOpen: boolean;
     error: any;
-    publishedUrl: string,
 }
 
 type Actions = {
-    openPublishModalWithClip: (clip: SavedClip | TempClip | null) => void;
+    openPublishModalWithClip: (clip: SavedClip | null) => void;
     closePublishModal: () => void;
     setCurrent: (setTo: Socials) => void;
     publishClipToTwitter: (formData: any) => void;
@@ -23,7 +23,8 @@ type Actions = {
 
 type Middleware = [
     ["zustand/devtools", never],
-    ["zustand/persist", PublishState]
+    ["zustand/persist", PublishState],
+    ["zustand/immer", never],
 ];
 
 const initialState: PublishState = {
@@ -32,49 +33,78 @@ const initialState: PublishState = {
     loading: false,
     error: null,
     isOpen: false,
-    publishedUrl: '',
 };
 
 const usePublishStore = create<PublishState & Actions, Middleware>(
     devtools(
-        persist((set) => ({
-            ...initialState,
+        persist(
+            immer((set) => ({
+                ...initialState,
 
-            openPublishModalWithClip: (clip: SavedClip | TempClip | null) => {
-                set({ isOpen: true, selectedClip: clip })
-            },
-            closePublishModal: () => {
-                set(initialState)
-            },
-            setCurrent: (setTo: Socials) => {
-                set({ current: setTo, publishedUrl: '' })
-            },
-            publishClipToTwitter: async (formData: any) => {
-                set({ loading: true, error: null })
+                openPublishModalWithClip: (clip: SavedClip | null) => {
+                    set(state => {
+                        state.isOpen = true
+                        state.selectedClip = clip
+                    })
+                },
+                closePublishModal: () => {
+                    set(initialState)
+                },
+                setCurrent: (setTo: Socials) => {
+                    set(state => {
+                        state.current = setTo
+                    })
+                },
+                publishClipToTwitter: async (formData: any) => {
+                    set(state => {
+                        state.loading = true
+                        state.error = null
+                    })
 
-                try {
-                    const response = await fetch(
-                        `${ATHENA_API_URL}/clips/publish/twitter`,
-                        {
-                            method: 'POST',
-                            body: formData,
+                    try {
+                        const response = await fetch(
+                            `${ATHENA_API_URL}/clips/publish/twitter`,
+                            {
+                                method: 'POST',
+                                body: formData,
+                            }
+                        );
+
+                        if (response.status !== 200) {
+                            throw new Error('Error publlishing twitter video')
                         }
-                    );
 
-                    if (response.status !== 200) {
-                        throw new Error('Error publlishing twitter video')
+                        const { url, published_at } = await response.json();
+
+                        set(state => {
+                            state.loading = false
+                            state.current = 'history'
+
+                            if (state.selectedClip) {
+                                state.selectedClip.published = state.selectedClip.published || {}
+
+                                const newPublish = {
+                                    url,
+                                    published_at,
+                                }
+
+                                if (state.selectedClip.published.twitter) {
+                                    state.selectedClip.published.twitter.push(newPublish)
+                                } else {
+                                    state.selectedClip.published.twitter = [newPublish]
+                                }
+                            }
+                        });
+                    } catch (e) {
+                        console.error(e);
+                        set(state => {
+                            state.loading = false
+                            state.error = e
+                        });
                     }
-
-                    const { tweet_url } = await response.json();
-
-                    set({ loading: false, publishedUrl: tweet_url });
-                } catch (e) {
-                    console.error(e);
-                    set({ loading: false, error: e });
-                }
-            },
-            reset: () => set(initialState),
-        }), {
+                },
+                reset: () => set(initialState),
+            })), {
             name: "publish-store",
         })
     )

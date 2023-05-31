@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from 'next/router';
 
 import Modal from "@/components/Modal";
-import NoConnections from "./NoConnections";
+import NoConnections from "./components/NoConnections";
 import Card from "@/components/Card";
 import TwitterPublish from "./Twitter";
+import PublishHistory from "./components/PublishHistory"
 
 import usePublishStore from "@/stores/publish";
 import { useConnections } from "@/contexts/ConnectionsContext";
@@ -16,7 +17,8 @@ import TwitterLogo from "@/assets/svg/TwitterLogo";
 import styles from "./PublishModal.module.scss";
 
 const PUBLISH_COMPONENTS = {
-    'twitter': TwitterPublish
+    'twitter': TwitterPublish,
+    'history': PublishHistory,
 }
 
 const PublishModal = () => {
@@ -48,41 +50,58 @@ const PublishModal = () => {
 
     const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
+    const { url } = selectedClip || {}
+
+    const BackButton = () => (
+        <div onClick={
+            () => {
+                setCurrent(null)
+            }
+        } className={styles.back}>
+            Back to Socials
+        </div>
+    )
+
     return (
         <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
-            {PublishComponent
-                ?
-                <>
-                    {!loading &&
-                        <div onClick={() => setCurrent(null)} className={styles.back}>
-                            Back to Socials
-                        </div>
-                    }
+            {!canPublish
+                ? <NoConnections />
+                : (
                     <div className={styles.main}>
-                        <PublishComponent />
-                    </div>
-                </>
-                : (!canPublish
-                    ? <NoConnections />
-                    : (
-                        <div className={styles.main}>
-                            <video src={selectedClip?.url} controls />
-                            <p className={styles.main_desc}>
-                                Choose one of the following socials to publish to:
-                            </p>
-                            <div className={styles.list}>
-                                <Card
-                                    className={styles.list_item}
-                                    onClick={() => setCurrent('twitter')}
+                        {!current
+                            ? (
+                                <div
+                                    className={styles.publishHistory_button}
+                                    onClick={() => setCurrent('history')}
                                 >
-                                    <div>
-                                        <TwitterLogo /> Twitter
+                                    Publish History
+                                </div>
+                            )
+                            : <BackButton />
+                        }
+                        <video src={url} controls className={styles.video} />
+                        {PublishComponent
+                            ? <PublishComponent />
+                            : (
+                                <>
+                                    <p className={styles.main_desc}>
+                                        Choose one of the following socials to publish to:
+                                    </p>
+                                    <div className={styles.list}>
+                                        <Card
+                                            className={styles.list_item}
+                                            onClick={() => setCurrent('twitter')}
+                                        >
+                                            <div>
+                                                <TwitterLogo /> Twitter
+                                            </div>
+                                            <span>@{twitter.screen_name}</span>
+                                        </Card>
                                     </div>
-                                    <span>@{twitter.screen_name}</span>
-                                </Card>
-                            </div>
-                        </div>
-                    )
+                                </>
+                            )
+                        }
+                    </div>
                 )
             }
         </Modal>

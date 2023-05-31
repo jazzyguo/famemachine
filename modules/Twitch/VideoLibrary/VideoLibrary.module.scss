@@ -42,7 +42,7 @@
         }
     }
 
-    > span {
+    >span {
         width: 400px;
         margin-bottom: 1rem;
         text-overflow: ellipsis;
@@ -62,4 +62,9 @@
         position: absolute;
         z-index: 1;
     }
+}
+
+
+.loading {
+    top: 6rem;
 }

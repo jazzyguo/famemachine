@@ -10,10 +10,6 @@
         padding: 1rem;
     }
 
-    video {
-        margin-bottom: .5rem;
-    }
-
     button[type="submit"] {
         margin-top: 1rem;
         background: cyan;
@@ -34,13 +30,5 @@
     .error {
         color: red;
         margin-top: 1rem;
-    }
-}
-
-.published {
-    text-align: center;
-
-    a {
-        color: cyan;
     }
 }

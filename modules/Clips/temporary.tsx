@@ -58,11 +58,10 @@ const TemporaryClipsModule = () => {
                 </Tabs>
             </div>
             <h3 className={styles.title}>
-                These clips will expire after 24 hours if not saved or
-                published.
+                These clips will expire after 24 hours if not saved.
             </h3>
             <p className={styles.text}>
-                Published clips are automatically saved.
+                Save a clip to publish it.
             </p>
             <ClipsList clips={clips} header={false} />
         </>

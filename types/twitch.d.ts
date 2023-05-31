@@ -25,14 +25,12 @@ type RefreshTokenActionProps = {
 
 type Actions = {
     fetchTwitchVideos: ({
-        paginateTo,
         twitchUserId,
         twitchAccessToken,
         addConnection,
         userId,
         refreshToken,
     }: RefreshTokenActionProps & {
-        paginateTo?: "before" | "after" | undefined;
         twitchUserId: string;
         twitchAccessToken: string;
     }) => void;
