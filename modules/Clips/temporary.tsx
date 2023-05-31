@@ -1,7 +1,8 @@
-import React, { useEffect, SyntheticEvent, useMemo } from "react";
+import React, { useEffect, SyntheticEvent } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { useAuth } from "@/contexts/AuthContext";
 import useClipsStore from "@/stores/clips";
@@ -57,13 +58,24 @@ const TemporaryClipsModule = () => {
                     <Tab label="Saved" />
                 </Tabs>
             </div>
-            <h3 className={styles.title}>
-                These clips will expire after 24 hours if not saved.
-            </h3>
-            <p className={styles.text}>
-                Save a clip to publish it.
-            </p>
-            <ClipsList clips={clips} header={false} />
+            <ClipsList
+                clips={clips}
+                HeaderComponent={() => (
+                    <>
+                        <h3 className={styles.title}>
+                            These clips will expire after 24 hours if not saved.
+                        </h3>
+                        <p className={styles.text}>
+                            Save a clip to publish it.
+                        </p>
+                    </>
+                )}
+                EmptyComponent={() => (
+                    <span>
+                        Please generate some clips from your <Link href="/videos">Video Library</Link> to get started.
+                    </span>
+                )}
+            />
         </>
     );
 };

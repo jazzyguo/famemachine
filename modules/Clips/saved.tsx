@@ -47,13 +47,20 @@ const SavedClipsModule = () => {
                     <Tab label="Saved" />
                 </Tabs>
             </div>
-            <h3 className={styles.title}>
-                Unsaved clips will become temporary for another 24 hours.
-            </h3>
-            <p className={styles.text}>
-                Select a clip to publish it.
-            </p>
-            <ClipsList clips={clips} header={false} />
+
+            <ClipsList
+                clips={clips}
+                HeaderComponent={() => (
+                    <>
+                        <h3 className={styles.title}>
+                            Unsaved clips will become temporary for another 24 hours.
+                        </h3>
+                        <p className={styles.text}>
+                            Select a clip to publish it.
+                        </p>
+                    </>
+                )}
+            />
         </>
     );
 };

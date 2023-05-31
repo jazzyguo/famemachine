@@ -135,7 +135,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                     });
 
                     if (response.status === 200) {
-                        const { key, temp_url } = await response.json()
+                        const { key, temp_url, created_at } = await response.json()
 
                         set((state) => {
                             // check if the deleted clip is not already in the temp store
@@ -155,6 +155,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                                 state.temporaryClips.push({
                                     key,
                                     url: temp_url,
+                                    created_at,
                                 })
                             }
                         });
