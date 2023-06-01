@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 const getData = async (collection: string, id: string) => {
     let docRef = doc(db, collection, id);
 
-    let result = null;
+    let result: any = null;
     let error = null;
 
     try {

@@ -60,7 +60,7 @@ export const ConnectionsContextProvider = ({
 
     const addConnection = useCallback(
         (name: string, newConnection: Connection | null) =>
-            setConnections((prevState) => ({
+            newConnection && setConnections((prevState) => ({
                 ...prevState,
                 [name]: newConnection,
             })),
