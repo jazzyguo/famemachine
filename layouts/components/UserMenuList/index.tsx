@@ -17,7 +17,7 @@ import { LogoutButton } from "@/components/Auth";
 import styles from "./UserMenu.module.scss";
 
 type Props = {
-    user: User | null
+    user: User
 };
 
 const UserMenuList = ({ user }: Props) => {
