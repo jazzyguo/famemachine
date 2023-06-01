@@ -15,7 +15,7 @@ ATHENA_API_URL=http://127.0.0.1:5000/
 
 !TODO
 - security
-Need to move twitch oauth connect/disconnect logic into API endpoints
+Need to move twitch oauth connect/disconnect logic into API endpoints 
 
 Need to add bearer token logic into the API so we can pull the user_id instead of passing it in for every endpoint
 
