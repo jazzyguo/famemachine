@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import Nouislider from "nouislider-react";
 import { debounce } from "lodash";
 import Loading from "@/components/Loading";
@@ -32,8 +32,22 @@ const VideoSlicerForm = ({
 }: Props) => {
     const [timestamp, setTimestamp] = useState<[number, number]>([0, 3600]);
 
+    // duration comes in as xxhxxmxxs
+    // sometimes h or m is missing
     const timeString = duration;
-    const timeParts = timeString.split(/[hms]/).filter(Boolean);
+
+    const timeParts = useMemo(() => {
+        const result: string[] = timeString.split(/[hms]/).filter(Boolean);
+        // fill gaps in missing h or m
+        if (result.length < 3) {
+            const toFill = 3 - result.length
+            for (let i = 0; i < toFill; i++) {
+                result.unshift('0')
+            }
+        }
+        return result
+    }, [timeString])
+
     const [hours, minutes, seconds] = timeParts.map(Number);
     const totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
