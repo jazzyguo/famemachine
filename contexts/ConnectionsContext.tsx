@@ -36,7 +36,7 @@ export const ConnectionsContextProvider = ({
     useEffect(() => {
         // fetch Connections from firestore
         const fetchUser = async () => {
-            if (user) {
+            if (user.uid) {
                 const { error, result } = await getData("users", user.uid);
 
                 if (error) {

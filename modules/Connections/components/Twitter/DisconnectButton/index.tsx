@@ -15,7 +15,7 @@ const TwitterDisconnectButton = () => {
     const { addConnection } = useConnectionsAPI();
 
     const removeTwitterConnection = async () => {
-        if (user) {
+        if (user.uid) {
             try {
                 setError('')
                 
