@@ -20,7 +20,7 @@ const TwitterPublish = () => {
 
         if (clip) {
             try {
-                const formData = new FormData(event.target);
+                const formData = new FormData();
 
                 formData.append("user_id", user.uid)
                 formData.append("clip_url", clip.url)
