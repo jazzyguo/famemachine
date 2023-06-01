@@ -10,8 +10,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import useTwitchStore from "@/stores/twitch";
-
-import { ATHENA_API_URL } from "@/lib/consts/api";
+import useClipsStore from "@/stores/clips";
 
 import styles from "./VideoID.module.scss";
 
@@ -20,15 +19,14 @@ type Props = {
 }
 
 const VideoIDModule = ({ videoId }: Props) => {
+    const [clips, setClips] = useState<TempClip[]>([])
     const { user } = useAuth();
     const { twitch = {} } = useConnections();
     const { addConnection } = useConnectionsAPI();
 
-    const [clips, setClips] = useState<TempClip[]>([]);
-    const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const accessToken = twitch?.access_token;
+    const loading = useClipsStore(state => state.loading)
+    const error = useClipsStore(state => state.error)
+    const processTwitchVod = useClipsStore(state => state.processTwitchVod)
 
     const videos = useTwitchStore((state) => state.videos);
     const fetchTwitchVideo = useTwitchStore((state) => state.fetchTwitchVideo);
@@ -61,40 +59,14 @@ const VideoIDModule = ({ videoId }: Props) => {
     ]);
 
     const handleProcess = async (timestamp: [number, number]) => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await fetch(
-                `${ATHENA_API_URL}twitch/process_vod/${videoId}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: accessToken,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        user_id: user.uid,
-                        start: timestamp[0],
-                        end: timestamp[1],
-                    }),
-                }
-            );
-
-            if (response.status === 200) {
-                const data: { clips: TempClip[] } = await response.json();
-
-                setClips(data.clips || []);
-            } else {
-                throw new Error("Error fetching clips");
-            }
-        } catch (e: any) {
-            console.log(e);
-            setError(e);
-        }
-
-        setLoading(false);
-    };
+        setClips([])
+        const generatedClips = await processTwitchVod({
+            timestamp,
+            userId: user.uid,
+            videoId,
+        })
+        setClips(generatedClips)
+    }
 
     return (
         <div className={styles.container}>

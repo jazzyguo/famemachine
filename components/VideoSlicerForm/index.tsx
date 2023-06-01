@@ -78,11 +78,9 @@ const VideoSlicerForm = ({
                     step={1}
                     tooltips={[
                         {
-                            from: secondsToStringFormat,
                             to: secondsToStringFormat,
                         },
                         {
-                            from: secondsToStringFormat,
                             to: secondsToStringFormat,
                         },
                     ]}
