@@ -41,7 +41,7 @@ const VideoIDModule = ({ videoId }: Props) => {
     );
 
     useEffect(() => {
-        if (!video && twitch.access_token && user.uid && videoId) {
+        if (!video && twitch.access_token && twitch.refresh_token && user.uid && videoId) {
             fetchTwitchVideo({
                 twitchAccessToken: twitch.access_token,
                 videoId,

@@ -6,7 +6,7 @@ const withAuth = (Component: any) => {
         const router = useRouter();
         const { user } = useAuth();
 
-        if (!user) {
+        if (!user.uid) {
             router.push("/");
             return null;
         }

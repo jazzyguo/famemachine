@@ -9,21 +9,53 @@ import {
     User,
     onAuthStateChanged,
     getAuth,
+    IdTokenResult,
 } from "firebase/auth";
 import app from "@/firebase/config";
 import Loading from "@/components/Loading";
 
 const auth = getAuth(app);
 
+const initialState = {
+    user: {
+        emailVerified: false,
+        isAnonymous: false,
+        metadata: {},
+        providerData: [],
+        refreshToken: "",
+        tenantId: null,
+        delete: function (): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        getIdToken: function (forceRefresh?: boolean | undefined): Promise<string> {
+            throw new Error("Function not implemented.");
+        },
+        getIdTokenResult: function (
+            forceRefresh?: boolean | undefined
+        ): Promise<IdTokenResult> {
+            throw new Error("Function not implemented.");
+        },
+        reload: function (): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        toJSON: function (): object {
+            throw new Error("Function not implemented.");
+        },
+        displayName: null,
+        email: null,
+        phoneNumber: null,
+        photoURL: null,
+        providerId: "",
+        uid: "",
+    }
+}
 
-export const AuthContext = createContext<{ user: User | null }>({
-    user: null
-});
+export const AuthContext = createContext<{ user: User }>(initialState);
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>(initialState.user);
     const [loading, setLoading] = useState<boolean>(true);
 
     console.log("curr user", user);
@@ -33,7 +65,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser(null);
+                setUser(initialState.user);
             }
             setLoading(false);
         });

@@ -32,13 +32,15 @@ const VideoLibrary = () => {
 
     const handleFetchTwitchVideos = useCallback(
         async () => {
-            await fetchTwitchVideos({
-                twitchUserId: twitch.user_id,
-                twitchAccessToken: twitch.access_token,
-                addConnection,
-                userId: user.uid,
-                refreshToken: twitch.refresh_token,
-            });
+            if (twitch.user_id && twitch.access_token && twitch.refresh_token) {
+                await fetchTwitchVideos({
+                    twitchUserId: twitch.user_id,
+                    twitchAccessToken: twitch.access_token,
+                    addConnection,
+                    userId: user.uid,
+                    refreshToken: twitch.refresh_token,
+                });
+            }
         },
         [
             addConnection,
@@ -62,7 +64,7 @@ const VideoLibrary = () => {
         videos,
     ]);
 
-    if (!twitch) {
+    if (!twitch.user_id) {
         return (
             <div className={styles.noConnection}>
                 <Link href="/connections">Connect</Link> your twitch account to
