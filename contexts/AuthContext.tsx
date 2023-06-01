@@ -9,43 +9,15 @@ import {
     User,
     onAuthStateChanged,
     getAuth,
-    IdTokenResult,
 } from "firebase/auth";
 import app from "@/firebase/config";
 import Loading from "@/components/Loading";
 
 const auth = getAuth(app);
 
-export const AuthContext = createContext<User>({
-    emailVerified: false,
-    isAnonymous: false,
-    metadata: {},
-    providerData: [],
-    refreshToken: "",
-    tenantId: null,
-    delete: function (): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    getIdToken: function (forceRefresh?: boolean | undefined): Promise<string> {
-        throw new Error("Function not implemented.");
-    },
-    getIdTokenResult: function (
-        forceRefresh?: boolean | undefined
-    ): Promise<IdTokenResult> {
-        throw new Error("Function not implemented.");
-    },
-    reload: function (): Promise<void> {
-        throw new Error("Function not implemented.");
-    },
-    toJSON: function (): object {
-        throw new Error("Function not implemented.");
-    },
-    displayName: null,
-    email: null,
-    phoneNumber: null,
-    photoURL: null,
-    providerId: "",
-    uid: "",
+
+export const AuthContext = createContext<{ user: User | null }>({
+    user: null
 });
 
 export const useAuth = () => useContext(AuthContext);

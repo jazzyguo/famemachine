@@ -46,6 +46,8 @@ export const ConnectionsContextProvider = ({
                 if (result?.connections) {
                     setConnections(result.connections);
                 }
+            } else {
+                setConnections({})
             }
         };
 
