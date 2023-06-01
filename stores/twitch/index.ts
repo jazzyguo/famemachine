@@ -43,7 +43,7 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
 
                         let url = `${TWITCH_API_URL}/videos?user_id=${
                             userId === "QnvqvScscUScEL38dpibUoAIjS03"
-                                ? "51496027" // dev test
+                                ? "22346597" // dev test
                                 : twitchUserId
                         }`;
 

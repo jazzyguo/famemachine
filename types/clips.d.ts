@@ -5,12 +5,11 @@ type Published = {
 type SavedClip = {
     url: string;
     key: string;
-    saved?: boolean;
     published: Published;
 };
 
 type TempClip = {
-    created_at?: string;
+    created_at: string;
     url: string;
     key: string;
 };

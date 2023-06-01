@@ -9,7 +9,7 @@ import { ATHENA_API_URL } from "@/lib/consts/api";
 import styles from "./FileUploadProcessor.module.scss";
 
 const FileUploadProcessorModule = () => {
-    const [clips, setClips] = useState<string[]>([]);
+    const [clips, setClips] = useState<TempClip[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { user } = useAuth();
@@ -26,9 +26,9 @@ const FileUploadProcessorModule = () => {
                 body: formData,
             });
 
-            const clips: { urls: string[] } = await response.json();
+            const { clips }: { clips: TempClip[] } = await response.json();
 
-            setClips(clips?.urls || []);
+            setClips(clips);
         } catch (e: any) {
             console.log(e);
             setError(e);

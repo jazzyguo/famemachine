@@ -98,14 +98,14 @@ const VideoIDModule = ({ videoId }: Props) => {
 
     return (
         <div className={styles.container}>
-            {error && !loading && (
-                <div className={styles.error}>
-                    {error?.message || "An error has occured"}
-                </div>
-            )}
             {video?.duration && (
                 <>
                     <div className={styles.videoContainer}>
+                        {error && !loading && (
+                            <div className={styles.error}>
+                                {error?.message || "An error has occured"}
+                            </div>
+                        )}
                         <TwitchPlayer video={video.id} autoplay={false} />
                         <VideoSlicerForm
                             onSubmit={handleProcess}
