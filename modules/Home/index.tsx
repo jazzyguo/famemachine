@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
+import { HOME_URL } from "@/lib/consts";
 
 import styles from "./Home.module.scss";
 
@@ -9,7 +10,7 @@ const HomeModule = () => {
     const { user } = useAuth();
 
     if (user.uid) {
-        router.push("/videos");
+        router.push(HOME_URL);
         return null;
     }
 
