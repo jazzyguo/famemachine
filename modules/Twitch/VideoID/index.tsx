@@ -28,8 +28,6 @@ const VideoIDModule = ({ videoId }: Props) => {
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const accessToken = twitch?.access_token;
-
     const videos = useTwitchStore((state) => state.videos);
     const fetchTwitchVideo = useTwitchStore((state) => state.fetchTwitchVideo);
 
@@ -70,7 +68,6 @@ const VideoIDModule = ({ videoId }: Props) => {
                 {
                     method: "POST",
                     headers: {
-                        Authorization: accessToken,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
