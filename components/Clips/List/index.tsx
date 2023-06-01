@@ -5,7 +5,7 @@ import VideoContainer from "@/components/Clips/VideoContainer";
 import styles from "./ClipsList.module.scss";
 
 type Props = {
-    clips: SavedClip[] & TempClip[] | null;
+    clips: (SavedClip | TempClip)[] | null;
     HeaderComponent?: ComponentType;
     EmptyComponent?: ComponentType;
 };
@@ -36,7 +36,9 @@ const ClipsList = ({
                                 key={`${clip}-${idx}`}
                                 url={clip.url}
                                 fileKey={clip.key}
-                                published={clip.published}
+                                published={
+                                    "published" in clip ? (clip as SavedClip).published : undefined
+                                }
                             />
                         ))}
                     </div>

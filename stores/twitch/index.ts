@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist, combine, devtools } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
+import { immer } from 'zustand/middleware/immer'
 import { TWITCH_API_URL } from "@/lib/consts/api";
 import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 
@@ -13,17 +14,19 @@ const initialState: TwitchState = {
         cursor: null,
         isLastPage: false,
     },
+    videosFetched: false,
 };
 
 type Middleware = [
     ["zustand/devtools", never],
-    ["zustand/persist", TwitchState]
+    ["zustand/persist", TwitchState],
+    ["zustand/immer", never],
 ];
 
 const useTwitchStore = create<TwitchState & Actions, Middleware>(
     devtools(
         persist(
-            (set, get) => ({
+            immer((set, get) => ({
                 ...initialState,
 
                 // both fetchTwitchVideos and fetchTwitchVideo contain token refresh logic on 401
@@ -34,18 +37,20 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                     userId,
                     refreshToken,
                 }) => {
-                    set({ loading: true, error: null });
+                    set(state => {
+                        state.loading = true
+                        state.error = null
+                    });
 
                     try {
                         const cursor = get().pagination.cursor;
 
                         let newData: TwitchVideo[] = [];
 
-                        let url = `${TWITCH_API_URL}/videos?user_id=${
-                            userId === "QnvqvScscUScEL38dpibUoAIjS03"
-                                ? "22346597" // dev test
-                                : twitchUserId
-                        }`;
+                        let url = `${TWITCH_API_URL}/videos?user_id=${userId === "QnvqvScscUScEL38dpibUoAIjS03"
+                            ? "22346597" // dev test
+                            : twitchUserId
+                            }`;
 
                         if (cursor) {
                             url += `&after=${cursor}`;
@@ -87,35 +92,32 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
 
                             newData = data;
 
-                            set((state) => ({
-                                videos: [
-                                    // in the case we go to a video id page,
-                                    // and append a video object to the main array from fetchTwitchVideo
-                                    // we potentially have dupes, so remove incoming dupes
-                                    ...(state.videos
-                                        ? state.videos.filter(
-                                              (video) =>
-                                                  !newData.find(
-                                                      (newVideo) =>
-                                                          newVideo.id ===
-                                                          video.id
-                                                  )
-                                          )
-                                        : []),
-                                    ...newData,
-                                ],
-                                pagination: {
-                                    cursor: pagination.cursor,
-                                    isLastPage: !pagination.cursor,
-                                },
-                                loading: false,
-                            }));
+                            set(state => {
+                                const updatedVideos = state.videos
+                                    ? state.videos.filter(
+                                        (video) =>
+                                            !newData.find(
+                                                (newVideo) =>
+                                                    newVideo.id ===
+                                                    video.id
+                                            )
+                                    )
+                                    : []
+
+                                state.videos = [...updatedVideos, ...newData]
+                                state.pagination.cursor = pagination.cursor
+                                state.pagination.isLastPage = !pagination.cursor
+                                state.loading = false
+                            })
                         } else {
                             throw new Error("Error fetching twitch videos");
                         }
                     } catch (e: any) {
                         console.log(e);
-                        set({ error: e, loading: false });
+                        set(state => {
+                            state.loading = false
+                            state.error = e
+                        });
                     }
                 },
                 fetchTwitchVideo: async ({
@@ -125,7 +127,10 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                     userId,
                     refreshToken,
                 }) => {
-                    set({ loading: true, error: null });
+                    set(state => {
+                        state.loading = true
+                        state.error = null
+                    });
 
                     try {
                         const headers = {
@@ -174,19 +179,20 @@ const useTwitchStore = create<TwitchState & Actions, Middleware>(
                                     }
                                 }
 
-                                return {
-                                    videos: updatedVideos,
-                                    loading: false,
-                                };
+                                state.videos = updatedVideos
+                                state.loading = false
                             });
                         }
                     } catch (e: any) {
                         console.log(e);
-                        set({ loading: false, error: e });
+                        set(state => {
+                            state.loading = false
+                            state.error = e
+                        });
                     }
                 },
                 reset: () => set(initialState),
-            }),
+            })),
             {
                 name: "twitch-videos-store",
             }

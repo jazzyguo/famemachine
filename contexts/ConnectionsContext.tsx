@@ -36,7 +36,7 @@ export const ConnectionsContextProvider = ({
     useEffect(() => {
         // fetch Connections from firestore
         const fetchUser = async () => {
-            if (user) {
+            if (user.uid) {
                 const { error, result } = await getData("users", user.uid);
 
                 if (error) {
@@ -46,6 +46,8 @@ export const ConnectionsContextProvider = ({
                 if (result?.connections) {
                     setConnections(result.connections);
                 }
+            } else {
+                setConnections({})
             }
         };
 
@@ -58,7 +60,7 @@ export const ConnectionsContextProvider = ({
 
     const addConnection = useCallback(
         (name: string, newConnection: Connection | null) =>
-            setConnections((prevState) => ({
+            newConnection && setConnections((prevState) => ({
                 ...prevState,
                 [name]: newConnection,
             })),

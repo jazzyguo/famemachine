@@ -47,7 +47,7 @@ const TwitchDisconnectButton = () => {
     // update firestore
     // refresh current connections
     const removeTwitchConnection = async () => {
-        if (user) {
+        if (user.uid) {
             const userRef = doc(db, "users", user.uid);
 
             try {

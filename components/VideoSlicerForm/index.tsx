@@ -67,6 +67,7 @@ const VideoSlicerForm = ({
     return (
         <div className={styles.container}>
             <div className={styles.slider}>
+                {/* @ts-ignore */}
                 <Nouislider
                     disabled={loading}
                     range={{ min: 0, max: totalSeconds }}
@@ -77,9 +78,11 @@ const VideoSlicerForm = ({
                     step={1}
                     tooltips={[
                         {
+                            from: secondsToStringFormat,
                             to: secondsToStringFormat,
                         },
                         {
+                            from: secondsToStringFormat,
                             to: secondsToStringFormat,
                         },
                     ]}

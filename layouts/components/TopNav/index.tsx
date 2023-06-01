@@ -19,7 +19,7 @@ const TopNav = () => {
             <h1 onClick={() => router.push(user ? "/videos" : "/")}>
                 Famemachine.ai
             </h1>
-            {!user ? (
+            {!user.uid ? (
                 !isSignupPage && (
                     <div className={styles.loginButtons}>
                         <LoginButton />

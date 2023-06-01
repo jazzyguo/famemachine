@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import signUp from "@/firebase/auth/signup";
+import { UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import addData from "@/firebase/firestore/addData";
 
@@ -8,7 +9,9 @@ import LoginForm from "./components/LoginForm";
 
 import styles from "./Signin.module.scss";
 
-const errorMessages = {
+const errorMessages: {
+    [key: string]: string
+} = {
     "Firebase: Password should be at least 6 characters (auth/weak-password).":
         "Password should be at least 6 characters",
     "Firebase: Error (auth/email-already-in-use).": "Account already in use",
@@ -24,7 +27,7 @@ const SignupPage = () => {
     const onSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
 
-        const { result, error } = await signUp(email, password);
+        const { result, error }: { result: UserCredential | null, error: any } = await signUp(email, password);
 
         if (error) {
             const errorMessage = errorMessages[error?.message];
@@ -32,11 +35,13 @@ const SignupPage = () => {
             return console.log(error);
         }
 
-        const { user } = result;
+        const { user } = result || {};
 
-        await addData("users", user.uid, {
-            email: user.email,
-        });
+        if (user) {
+            await addData("users", user.uid, {
+                email: user.email,
+            });
+        }
 
         return router.push("/");
     };

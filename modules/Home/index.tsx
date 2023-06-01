@@ -8,7 +8,7 @@ const HomeModule = () => {
     const router = useRouter();
     const { user } = useAuth();
 
-    if (user) {
+    if (user.uid) {
         router.push("/videos");
         return null;
     }

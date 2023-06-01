@@ -15,6 +15,7 @@ interface TwitchState {
         cursor: string | null;
         isLastPage: boolean;
     };
+    videosFetched: boolean;
 }
 
 type RefreshTokenActionProps = {
