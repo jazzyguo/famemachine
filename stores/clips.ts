@@ -13,7 +13,7 @@ interface ClipsState {
 
 type Actions = {
     getSavedClips: (userId: string) => void;
-    getTemporaryClips: (userId: string) => void;
+    getTemporaryClips: ({ userId, reset }: { userId: string, reset: boolean }) => void;
     saveClip: ({ userId, s3Key }: { userId: string; s3Key: string }) => void;
     unsaveClip: ({ userId, s3Key }: { userId: string; s3Key: string }) => void;
     processTwitchVod: ({ userId, timestamp, videoId }: { userId: string, timestamp: [number, number], videoId: string }) => Promise<TempClip[]>
@@ -65,7 +65,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         });
                     }
                 },
-                getTemporaryClips: async (userId: string) => {
+                getTemporaryClips: async ({ userId, reset }: { userId: string, reset: boolean }) => {
                     set(state => {
                         state.loading = true
                         state.error = null
@@ -79,7 +79,11 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         const data = await response.json();
 
                         set(state => {
-                            state.temporaryClips = data
+                            if (reset) {
+                                state.temporaryClips = data
+                            } else {
+                                (state.temporaryClips || []).push(data)
+                            }
                             state.loading = false
                             state.lastTimeFetchedTemp = new Date().toISOString()
                         });
