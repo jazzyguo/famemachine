@@ -1,11 +1,13 @@
 
-export const getTimeDiffInHours = (dateString: string): number => {
-    const givenDate = new Date(dateString);
+export const getTimeDiffInSeconds = (dateString: string): number => {
+    const date = new Date(dateString)
     const currentDate = new Date();
 
-    const timeDiff = Number(currentDate) - Number(givenDate);
+    // Calculate the time difference in milliseconds
+    const timeDiff = currentDate.getTime() - date.getTime();
 
-    const timeDiffInHours = timeDiff / (1000 * 60 * 60);
+    // Convert time difference to seconds
+    const timeDiffInSeconds = timeDiff / 1000;
 
-    return timeDiffInHours
+    return timeDiffInSeconds
 }

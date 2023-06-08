@@ -14,6 +14,7 @@ import {
 import app from "@/firebase/config";
 import useClipsStore from "@/stores/clips";
 import Loading from "@/components/Loading";
+import { getTimeDiffInSeconds } from "@/lib/utils/date";
 
 const auth = getAuth(app);
 
@@ -61,18 +62,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     console.log("curr user", user);
 
-    const savedClips = useClipsStore((state) => state.savedClips);
-    const temporaryClips = useClipsStore((state) => state.temporaryClips)
+    const lastTimeFetchedTemp = useClipsStore((state) => state.lastTimeFetchedTemp)
 
     const getTemporaryClips = useClipsStore((state) => state.getTemporaryClips);
     const getSavedClips = useClipsStore((state) => state.getSavedClips);
 
     const postLoginActions = (userId: string) => {
         // fetch user clips - saved/temporary
-        // we fetch them here since these arrays are needed in both clips and video id pages
-        // and to catch if one is somehow accessed before the other
-        getTemporaryClips(userId);
-        getSavedClips(userId);
+        // we fetch them here because this will run on every page refresh / login
+        // which allows us to bust the cache on potentially expired temp
+        const timeDiffBetweenLastFetched = getTimeDiffInSeconds(lastTimeFetchedTemp)
+
+        if (timeDiffBetweenLastFetched >= 86400 || !lastTimeFetchedTemp) {
+            getTemporaryClips(userId);
+            getSavedClips(userId);
+        }
     }
 
     useEffect(() => {

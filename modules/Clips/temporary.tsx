@@ -8,7 +8,6 @@ import useClipsStore from "@/stores/clips";
 
 import Loading from "@/components/Loading";
 import ClipsList from "@/components/Clips/List";
-import { getTimeDiffInHours } from "@/lib/utils/date";
 
 import styles from "./Clips.module.scss";
 
@@ -23,14 +22,6 @@ const TemporaryClipsModule = () => {
             router.push("/clips/saved");
         }
     };
-
-    const filteredClips = useMemo(() => (clips || []).filter(clip => {
-        const timeDiff = getTimeDiffInHours(clip.created_at)
-        if (timeDiff >= 24) {
-            return false
-        }
-        return true
-    }), [clips])
 
     if (loading) {
         return <Loading />;
@@ -48,7 +39,7 @@ const TemporaryClipsModule = () => {
                 </Tabs>
             </div>
             <ClipsList
-                clips={filteredClips}
+                clips={clips}
                 HeaderComponent={() => (
                     <>
                         <h3 className={styles.title}>
