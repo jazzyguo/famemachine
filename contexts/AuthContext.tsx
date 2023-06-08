@@ -71,13 +71,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         // fetch user clips - saved/temporary
         // we fetch them here since these arrays are needed in both clips and video id pages
         // and to catch if one is somehow accessed before the other
-        if (!temporaryClips) {
-            getTemporaryClips(userId);
-        }
-
-        if (!savedClips) {
-            getSavedClips(userId);
-        }
+        getTemporaryClips(userId);
+        getSavedClips(userId);
     }
 
     useEffect(() => {

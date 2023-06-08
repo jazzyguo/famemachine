@@ -14,8 +14,6 @@ const nextConfig = {
     FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_ID: process.env.FIREBASE_MESSAGING_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-
-    MEDIA_URL: process.env.MEDIA_URL,
   },
 }
 
