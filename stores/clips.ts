@@ -7,6 +7,7 @@ interface ClipsState {
     savedClips: SavedClip[] | null;
     temporaryClips: TempClip[] | null;
     loading: boolean;
+    lastTimeFetchedTemp: string;
     error: any;
 }
 
@@ -29,6 +30,7 @@ const initialState: ClipsState = {
     savedClips: null,
     temporaryClips: null,
     loading: false,
+    lastTimeFetchedTemp: "",
     error: null,
 };
 
@@ -79,6 +81,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         set(state => {
                             state.temporaryClips = data
                             state.loading = false
+                            state.lastTimeFetchedTemp = new Date().toISOString()
                         });
                     } catch (e) {
                         console.error(e);
