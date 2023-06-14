@@ -1,15 +1,20 @@
 import React from "react";
 import cx from "classnames";
 import { ATHENA_API_URL } from "@/lib/consts/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 import styles from "../../../Connections.module.scss";
 
 const TwitterConnectButton = () => {
+    const { user } = useAuth()
+
     const handleTwitterAuth = async () => {
         try {
-            const response = await fetch(
-                `${ATHENA_API_URL}connect/twitter/auth`
-            );
+            const response = await fetch(`${ATHENA_API_URL}connect/twitter/auth`, {
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`,
+                }
+            });
 
             if (response.ok) {
                 const data = await response.json()

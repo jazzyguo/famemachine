@@ -17,7 +17,7 @@ type Actions = {
     openPublishModalWithClip: (clip: SavedClip | null) => void;
     closePublishModal: () => void;
     setCurrent: (setTo: Socials) => void;
-    publishClipToTwitter: (formData: any) => void;
+    publishClipToTwitter: (formData: any, accessToken: string) => void;
     reset: () => void;
 };
 
@@ -55,7 +55,7 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                         state.current = setTo
                     })
                 },
-                publishClipToTwitter: async (formData: any) => {
+                publishClipToTwitter: async (formData: any, accessToken: string) => {
                     set(state => {
                         state.loading = true
                         state.error = null
@@ -66,6 +66,9 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                             `${ATHENA_API_URL}/clips/publish/twitter`,
                             {
                                 method: 'POST',
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`,
+                                },
                                 body: formData,
                             }
                         );
