@@ -106,7 +106,7 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                         });
                     }
                 },
-                reset: () => set(initialState),
+                reset: () => set(() => ({ ...initialState })),
             })), {
             name: "publish-store",
         })
