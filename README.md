@@ -17,11 +17,8 @@ ATHENA_API_URL=http://127.0.0.1:5000/
 - security
 Need to move twitch oauth connect/disconnect logic into API endpoints
 
-Need to add bearer token logic into the API so we can pull the user_id instead of passing it in for every endpoint
 
 Need to add an email verification system before a user can attach any social connections
-
-Set up public media provider for saved/published clips instead of using s3 bucket (right now we move files between a temp/saved folder within s3.) this new media provider will be used to publish clips too if we choose to save a video before publishing.
  
 - optimize
 paginate clips for temporary/saved instead of pulling all at once
