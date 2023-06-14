@@ -14,7 +14,7 @@ type Connection = {
 };
 
 type Connections = {
-    [key: string]: Connection | null;
+    [key: string]: Connection;
 };
 
 export const ConnectionsContext = createContext<Connections>({});
