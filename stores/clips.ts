@@ -119,6 +119,8 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         set(state => {
                             if (state.savedClips) {
                                 state.savedClips.push(data)
+                            } else {
+                                state.savedClips = [data]
                             }
                         })
                     } catch (e: any) {
