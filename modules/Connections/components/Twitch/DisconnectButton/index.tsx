@@ -20,7 +20,7 @@ const TwitchDisconnectButton = () => {
     const connections = useConnections();
     const { addConnection } = useConnectionsAPI();
 
-    const { access_token: accessToken } = connections.twitch;
+    const { access_token: accessToken } = connections.twitch || {};
 
     const revokeAccessToken = async () => {
         try {

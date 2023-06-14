@@ -20,6 +20,7 @@ const auth = getAuth(app);
 
 const initialState = {
     user: {
+        accessToken: "",
         emailVerified: false,
         isAnonymous: false,
         metadata: {},
@@ -52,7 +53,7 @@ const initialState = {
     }
 }
 
-export const AuthContext = createContext<{ user: User }>(initialState);
+export const AuthContext = createContext<{ user: User & { accessToken?: string } }>(initialState);
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -67,15 +68,16 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const getTemporaryClips = useClipsStore((state) => state.getTemporaryClips);
     const getSavedClips = useClipsStore((state) => state.getSavedClips);
 
-    const postLoginActions = (userId: string) => {
+    const postLoginActions = (accessToken = "") => {
+        console.log({lastTimeFetchedTemp})
         // fetch user clips - saved/temporary
         // we fetch them here because this will run on every page refresh / login
         // which allows us to bust the cache on potentially expired temp
         const timeDiffBetweenLastFetched = getTimeDiffInSeconds(lastTimeFetchedTemp)
 
         if (timeDiffBetweenLastFetched >= 86400 || !lastTimeFetchedTemp) {
-            getTemporaryClips({ userId, reset: true });
-            getSavedClips(userId);
+            getTemporaryClips({ accessToken, reset: true });
+            getSavedClips(accessToken);
         }
     }
 
@@ -83,7 +85,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         const unsubscribe = onAuthStateChanged(auth, (_user) => {
             if (_user?.uid) {
                 setUser(_user);
-                postLoginActions(_user.uid);
+                //@ts-ignore 
+                postLoginActions(_user.accessToken);
             } else {
                 setUser(initialState.user);
             }

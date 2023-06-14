@@ -23,7 +23,11 @@ const TwitterConnectPage = () => {
             try {
                 const url = `${ATHENA_API_URL}connect/twitter/callback`
 
-                const response = await fetch(`${url}?oauth_token=${oauth_token}&oauth_verifier=${oauth_verifier}&user_id=${user.uid}`);
+                const response = await fetch(`${url}?oauth_token=${oauth_token}&oauth_verifier=${oauth_verifier}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.accessToken}`,
+                    }
+                });
 
                 if (
                     response.status !== 200

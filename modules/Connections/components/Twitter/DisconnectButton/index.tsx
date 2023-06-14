@@ -18,10 +18,13 @@ const TwitterDisconnectButton = () => {
         if (user.uid) {
             try {
                 setError('')
-                
-                const response = await fetch(`${ATHENA_API_URL}connect/twitter/auth?user_id=${user.uid}`
+
+                const response = await fetch(`${ATHENA_API_URL}connect/twitter/auth`
                     , {
                         method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${user.accessToken}`,
+                        }
                     });
 
                 if (response.status === 200) {

@@ -12,11 +12,11 @@ interface ClipsState {
 }
 
 type Actions = {
-    getSavedClips: (userId: string) => void;
-    getTemporaryClips: ({ userId, reset }: { userId: string, reset: boolean }) => void;
-    saveClip: ({ userId, s3Key }: { userId: string; s3Key: string }) => void;
-    unsaveClip: ({ userId, s3Key }: { userId: string; s3Key: string }) => void;
-    processTwitchVod: ({ userId, timestamp, videoId }: { userId: string, timestamp: [number, number], videoId: string }) => Promise<TempClip[]>
+    getSavedClips: (accessToken: string) => void;
+    getTemporaryClips: ({ accessToken, reset }: { accessToken: string, reset: boolean }) => void;
+    saveClip: ({ accessToken, s3Key }: { accessToken: string; s3Key: string }) => void;
+    unsaveClip: ({ accessToken, s3Key }: { accessToken: string; s3Key: string }) => void;
+    processTwitchVod: ({ accessToken, timestamp, videoId }: { accessToken: string, timestamp: [number, number], videoId: string }) => Promise<TempClip[]>
     reset: () => void;
 };
 
@@ -40,16 +40,18 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
             immer((set) => ({
                 ...initialState,
 
-                getSavedClips: async (userId: string) => {
+                getSavedClips: async (accessToken: string) => {
                     set(state => {
                         state.loading = true
                         state.error = null
                     });
 
                     try {
-                        const response = await fetch(
-                            `${ATHENA_API_URL}/clips/saved?user_id=${userId}`
-                        );
+                        const response = await fetch(`${ATHENA_API_URL}/clips/saved`, {
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`,
+                            }
+                        });
 
                         const data = await response.json();
 
@@ -65,16 +67,18 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         });
                     }
                 },
-                getTemporaryClips: async ({ userId, reset }: { userId: string, reset: boolean }) => {
+                getTemporaryClips: async ({ accessToken, reset }: { accessToken: string, reset: boolean }) => {
                     set(state => {
                         state.loading = true
                         state.error = null
                     });
 
                     try {
-                        const response = await fetch(
-                            `${ATHENA_API_URL}/clips/temporary?user_id=${userId}`
-                        );
+                        const response = await fetch(`${ATHENA_API_URL}/clips/temporary`, {
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`,
+                            }
+                        })
 
                         const data = await response.json();
 
@@ -96,10 +100,10 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                     }
                 },
                 saveClip: async ({
-                    userId,
+                    accessToken,
                     s3Key,
                 }: {
-                    userId: string;
+                    accessToken: string;
                     s3Key: string;
                 }) => {
                     try {
@@ -107,10 +111,10 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
+                                Authorization: `Bearer ${accessToken}`,
                             },
                             body: JSON.stringify({
                                 s3_key: s3Key,
-                                user_id: userId,
                             }),
                         });
 
@@ -128,10 +132,10 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                     }
                 },
                 unsaveClip: async ({
-                    userId,
+                    accessToken,
                     s3Key,
                 }: {
-                    userId: string;
+                    accessToken: string;
                     s3Key: string;
                 }) => {
                     try {
@@ -139,10 +143,10 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                             method: "DELETE",
                             headers: {
                                 "Content-Type": "application/json",
+                                Authorization: `Bearer ${accessToken}`,
                             },
                             body: JSON.stringify({
                                 s3_key: s3Key,
-                                user_id: userId,
                             }),
                         });
 
@@ -177,11 +181,11 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                 },
                 processTwitchVod: async ({
                     timestamp,
-                    userId,
+                    accessToken,
                     videoId,
                 }: {
                     timestamp: [number, number]
-                    userId: string
+                    accessToken: string
                     videoId: string
                 }) => {
                     set(state => {
@@ -196,9 +200,9 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
+                                    Authorization: `Bearer ${accessToken}`,
                                 },
                                 body: JSON.stringify({
-                                    user_id: userId,
                                     start: timestamp[0],
                                     end: timestamp[1],
                                 }),

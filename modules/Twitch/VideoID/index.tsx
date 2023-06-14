@@ -62,7 +62,7 @@ const VideoIDModule = ({ videoId }: Props) => {
         setClips([])
         const generatedClips = await processTwitchVod({
             timestamp,
-            userId: user.uid,
+            accessToken: user.accessToken || "",
             videoId,
         })
         setClips(generatedClips)
