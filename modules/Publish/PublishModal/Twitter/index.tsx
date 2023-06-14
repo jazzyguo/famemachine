@@ -22,16 +22,15 @@ const TwitterPublish = () => {
             try {
                 const formData = new FormData();
 
-                formData.append("user_id", user.uid)
                 formData.append("clip_url", clip.url)
 
-                await publishClipToTwitter(formData)
+                await publishClipToTwitter(formData, user.accessToken || "")
             } catch (e: any) {
                 setError(e.message)
             }
         }
     }
-    
+
     return (
         <form className={styles.container} onSubmit={handleSubmit}>
             <textarea rows={15} name="text" disabled={loading} />

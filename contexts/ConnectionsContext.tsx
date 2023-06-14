@@ -14,7 +14,7 @@ type Connection = {
 };
 
 type Connections = {
-    [key: string]: Connection;
+    [key: string]: Connection | null;
 };
 
 export const ConnectionsContext = createContext<Connections>({});
@@ -60,7 +60,7 @@ export const ConnectionsContextProvider = ({
 
     const addConnection = useCallback(
         (name: string, newConnection: Connection | null) =>
-            newConnection && setConnections((prevState) => ({
+            setConnections((prevState) => ({
                 ...prevState,
                 [name]: newConnection,
             })),

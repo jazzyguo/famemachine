@@ -18,11 +18,12 @@ const FileUploadProcessorModule = () => {
         setLoading(true);
         setError(null);
 
-        formData.append("user_id", user.uid);
-
         try {
             const response = await fetch(`${ATHENA_API_URL}/process_file`, {
                 method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`,
+                },
                 body: formData,
             });
 

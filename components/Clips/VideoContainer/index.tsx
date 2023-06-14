@@ -55,13 +55,19 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
 
     const handleSave = async () => {
         setSaveLoading(true);
-        await saveClip({ userId: user.uid, s3Key: fileKey });
+        await saveClip({
+            accessToken: user.accessToken || "",
+            s3Key: fileKey,
+        });
         setSaveLoading(false);
     };
 
     const handleUnsave = async () => {
         setSaveLoading(true);
-        await unsaveClip({ userId: user.uid, s3Key: fileKey });
+        await unsaveClip({
+            accessToken: user.accessToken || "",
+            s3Key: fileKey,
+        });
         setSaveLoading(false);
     };
 
