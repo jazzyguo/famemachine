@@ -234,7 +234,7 @@ const useClipsStore = create<ClipsState & Actions, Middleware>(
                         return []
                     }
                 },
-                reset: () => set(initialState),
+                reset: () => set(() => ({ ...initialState })),
             })),
             {
                 name: "clips-store",
