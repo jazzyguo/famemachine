@@ -62,7 +62,7 @@ export const ConnectionsContextProvider = ({
         (name: string, newConnection: Connection | null) =>
             setConnections((prevState) => ({
                 ...prevState,
-                [name]: newConnection,
+                [name]: newConnection ? newConnection : {},
             })),
         []
     );
