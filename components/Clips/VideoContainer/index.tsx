@@ -38,10 +38,9 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
         if (isSavedRoute) {
             return true;
         } else {
-            const existsInSaved = (savedClips || []).find((savedClip) => {
-                const getFileName = (clipKey: string) => clipKey.split("/")[2];
-                return getFileName(savedClip.key) === getFileName(fileKey);
-            });
+            const existsInSaved = (savedClips || []).find(({ key }) =>
+                key === fileKey
+            )
             return !!existsInSaved;
         }
     }, [fileKey, isSavedRoute, savedClips]);
@@ -62,10 +61,7 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
 
     const handleUnsave = async () => {
         setSaveLoading(true);
-        const savedFileKey = isSavedRoute
-            ? fileKey
-            : `${fileKey}`.replace("temp_clips", "saved_clips");
-        await unsaveClip({ userId: user.uid, s3Key: savedFileKey });
+        await unsaveClip({ userId: user.uid, s3Key: fileKey });
         setSaveLoading(false);
     };
 

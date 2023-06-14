@@ -74,7 +74,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         const timeDiffBetweenLastFetched = getTimeDiffInSeconds(lastTimeFetchedTemp)
 
         if (timeDiffBetweenLastFetched >= 86400 || !lastTimeFetchedTemp) {
-            getTemporaryClips(userId);
+            getTemporaryClips({ userId, reset: true });
             getSavedClips(userId);
         }
     }
