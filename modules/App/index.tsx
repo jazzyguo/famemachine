@@ -1,20 +1,14 @@
 import { ReactNode } from "react";
-import { AuthContextProvider } from "@/contexts/AuthContext";
-import { ConnectionsContextProvider } from "@/contexts/ConnectionsContext";
-import StyleProvider from "./components/StyleProvider";
+import AppProvider from "./Providers/AppProvider";
 import AppLayout from "@/layouts/App";
 
 /**
  * HOC for the global app
  */
 const AppModule = ({ children }: { children: ReactNode }) => (
-    <StyleProvider>
-        <AuthContextProvider>
-            <ConnectionsContextProvider>
-                <AppLayout>{children}</AppLayout>
-            </ConnectionsContextProvider>
-        </AuthContextProvider>
-    </StyleProvider>
+    <AppProvider>
+        <AppLayout>{children}</AppLayout>
+    </AppProvider>
 );
 
 export default AppModule;

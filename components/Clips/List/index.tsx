@@ -5,7 +5,7 @@ import VideoContainer from "@/components/Clips/VideoContainer";
 import styles from "./ClipsList.module.scss";
 
 type Props = {
-    clips: (SavedClip | TempClip)[] | null;
+    clips: (SavedClip | TempClip)[] | undefined;
     HeaderComponent?: ComponentType;
     EmptyComponent?: ComponentType;
 };

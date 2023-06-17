@@ -12,9 +12,7 @@ import {
     IdTokenResult,
 } from "firebase/auth";
 import app from "@/firebase/config";
-import useClipsStore from "@/stores/clips";
 import Loading from "@/components/Loading";
-import { getTimeDiffInSeconds } from "@/lib/utils/date";
 
 const auth = getAuth(app);
 
@@ -63,30 +61,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     console.log("curr user", user);
 
-    const lastTimeFetchedTemp = useClipsStore((state) => state.lastTimeFetchedTemp)
-
-    const getTemporaryClips = useClipsStore((state) => state.getTemporaryClips);
-    const getSavedClips = useClipsStore((state) => state.getSavedClips);
-
-    const postLoginActions = (accessToken = "") => {
-        console.log({lastTimeFetchedTemp})
-        // fetch user clips - saved/temporary
-        // we fetch them here because this will run on every page refresh / login
-        // which allows us to bust the cache on potentially expired temp
-        const timeDiffBetweenLastFetched = getTimeDiffInSeconds(lastTimeFetchedTemp)
-
-        if (timeDiffBetweenLastFetched >= 86400 || !lastTimeFetchedTemp) {
-            getTemporaryClips({ accessToken, reset: true });
-            getSavedClips(accessToken);
-        }
-    }
-
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (_user) => {
             if (_user?.uid) {
                 setUser(_user);
-                //@ts-ignore 
-                postLoginActions(_user.accessToken);
             } else {
                 setUser(initialState.user);
             }
