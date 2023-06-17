@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import useClipsStore from "@/stores/clips";
+import useTemporaryClips from "@/api/clips/getTemporaryClips";
 
 import Loading from "@/components/Loading";
 import ClipsList from "@/components/Clips/List";
@@ -15,8 +15,7 @@ import styles from "./Clips.module.scss";
 const TemporaryClipsModule = () => {
     const router = useRouter();
 
-    const clips = useClipsStore((state) => state.temporaryClips);
-    const loading = useClipsStore((state) => state.loading);
+    const { data: clips, isLoading } = useTemporaryClips()
 
     const handleTabSwitch = (event: SyntheticEvent, tab: number) => {
         if (tab === 1) {
@@ -32,7 +31,7 @@ const TemporaryClipsModule = () => {
         return true
     }), [clips])
 
-    if (loading) {
+    if (isLoading) {
         return <Loading />;
     }
 
