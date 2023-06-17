@@ -5,7 +5,7 @@ import { ExtractFnReturnType, QueryConfig } from '@/lib/react-query';
 
 
 const getSavedClips = (): Promise<SavedClip[]> => {
-    return axios.get(`/clips/saved`);
+    return axios.get('/clips/saved');
 };
 
 type QueryFnType = typeof getSavedClips;
@@ -18,7 +18,7 @@ const useSavedClips = ({ config }: useSavedClipsOptions = {}) => {
     return useQuery<ExtractFnReturnType<QueryFnType>>({
         ...config,
         queryKey: ['savedClips'],
-        queryFn: () => getSavedClips(),
+        queryFn: getSavedClips,
     });
 };
 

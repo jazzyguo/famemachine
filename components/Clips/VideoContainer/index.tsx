@@ -3,9 +3,10 @@ import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/router";
 
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import useClipsStore from "@/stores/clips";
-import { useAuth } from "@/contexts/AuthContext";
 import usePublishStore from "@/stores/publish";
+import useSavedClips from "@/api/clips/getSavedClips";
+import useSaveClip from "@/api/clips/saveClip";
+import useUnsaveClip from "@/api/clips/unsaveClip"
 
 import Loading from "@/components/Loading";
 
@@ -18,18 +19,15 @@ type Props = {
 };
 
 const VideoContainer = ({ url, fileKey, published }: Props) => {
-    const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>(false);
 
     const router = useRouter();
 
-    const { user } = useAuth();
-
     const isSavedRoute = router.pathname === "/clips/saved";
 
-    const savedClips = useClipsStore((state) => state.savedClips);
-    const saveClip = useClipsStore((state) => state.saveClip);
-    const unsaveClip = useClipsStore((state) => state.unsaveClip);
+    const { data: savedClips } = useSavedClips()
+    const { mutate: saveClip, isLoading: saveLoading } = useSaveClip()
+    const { mutate: unsaveClip, isLoading: unsaveLoading } = useUnsaveClip()
 
     const openPublishModalWithClip = usePublishStore(state => state.openPublishModalWithClip)
 
@@ -54,21 +52,15 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
     };
 
     const handleSave = async () => {
-        setSaveLoading(true);
         await saveClip({
-            accessToken: user.accessToken || "",
             s3Key: fileKey,
         });
-        setSaveLoading(false);
     };
 
     const handleUnsave = async () => {
-        setSaveLoading(true);
         await unsaveClip({
-            accessToken: user.accessToken || "",
             s3Key: fileKey,
         });
-        setSaveLoading(false);
     };
 
     const handlePublish = () => {
@@ -83,7 +75,7 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
         <div className={styles.container} ref={ref}>
             <div className={styles.videoMenu}>
                 <div className={styles.save}>
-                    {saveLoading ? (
+                    {(saveLoading || unsaveLoading) ? (
                         <Loading className={styles.loading} />
                     ) : isSaved ? (
                         <div className={styles.saved} onClick={handleUnsave}>
