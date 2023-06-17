@@ -9,11 +9,11 @@ type ProcessTwitchVodDTO = {
 };
 
 const processTwitchVod = async ({ timestamp, videoId }: ProcessTwitchVodDTO): Promise<TempClip[]> => {
-    const response = await axios.post(`/twitch/process_vod/${videoId}`, {
+    const response: { clips: TempClip[] } = await axios.post(`/twitch/process_vod/${videoId}`, {
         start: timestamp[0],
         end: timestamp[1],
     });
-    return response.data.clips
+    return response.clips
 };
 
 type useProcessTwitchVodOptions = {
