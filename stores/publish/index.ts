@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from 'zustand/middleware/immer'
-import { ATHENA_API_URL } from "@/lib/consts/api";
+import axios from '@/lib/axios'
 
 type Socials = 'twitter' | 'history' | null
 
@@ -17,7 +17,7 @@ type Actions = {
     openPublishModalWithClip: (clip: SavedClip | null) => void;
     closePublishModal: () => void;
     setCurrent: (setTo: Socials) => void;
-    publishClipToTwitter: (formData: any, accessToken: string) => void;
+    publishClipToTwitter: (formData: any) => void;
     reset: () => void;
 };
 
@@ -55,29 +55,22 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                         state.current = setTo
                     })
                 },
-                publishClipToTwitter: async (formData: any, accessToken: string) => {
+                publishClipToTwitter: async (formData: any) => {
                     set(state => {
                         state.loading = true
                         state.error = null
                     })
 
                     try {
-                        const response = await fetch(
-                            `${ATHENA_API_URL}/clips/publish/twitter`,
-                            {
-                                method: 'POST',
-                                headers: {
-                                    Authorization: `Bearer ${accessToken}`,
-                                },
-                                body: formData,
-                            }
+                        const response: {
+                            url: string,
+                            published_at: string
+                        } = await axios.post(
+                            `/clips/publish/twitter`,
+                            formData,
                         );
 
-                        if (response.status !== 200) {
-                            throw new Error('Error publlishing twitter video')
-                        }
-
-                        const { url, published_at } = await response.json();
+                        const { url, published_at } = response;
 
                         set(state => {
                             state.loading = false
