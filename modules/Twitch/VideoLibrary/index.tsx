@@ -1,14 +1,13 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import {
     useConnections,
-    useConnectionsAPI,
 } from "@/contexts/ConnectionsContext";
-import useTwitchStore from "@/stores/twitch";
-import { useAuth } from "@/contexts/AuthContext";
+import useTwitchVideos from "@/api/twitch/getTwitchVideos";
+
 import InfiniteScroller from "@/components/InfiniteScroller";
 import Loading from "@/components/Loading";
 
@@ -16,53 +15,10 @@ import styles from "./VideoLibrary.module.scss";
 
 const VideoLibrary = () => {
     const { twitch = {} } = useConnections();
-    const { addConnection } = useConnectionsAPI();
 
-    const { user } = useAuth();
     const router = useRouter();
 
-    const videos = useTwitchStore((state) => state.videos);
-    const error = useTwitchStore((state) => state.error);
-    const loading = useTwitchStore((state) => state.loading);
-    const cursor = useTwitchStore(state => state.pagination.cursor)
-
-    const fetchTwitchVideos = useTwitchStore(
-        (state) => state.fetchTwitchVideos
-    );
-
-    const handleFetchTwitchVideos = useCallback(
-        async () => {
-            if (twitch.user_id && twitch.access_token && twitch.refresh_token) {
-                await fetchTwitchVideos({
-                    twitchUserId: twitch.user_id,
-                    twitchAccessToken: twitch.access_token,
-                    addConnection,
-                    userId: user.uid,
-                    refreshToken: twitch.refresh_token,
-                });
-            }
-        },
-        [
-            addConnection,
-            fetchTwitchVideos,
-            twitch.access_token,
-            twitch.refresh_token,
-            twitch.user_id,
-            user.uid,
-        ]
-    );
-
-    useEffect(() => {
-        if (!videos && twitch.user_id && user.uid) {
-            handleFetchTwitchVideos();
-        }
-    }, [
-        twitch.user_id,
-        fetchTwitchVideos,
-        handleFetchTwitchVideos,
-        user.uid,
-        videos,
-    ]);
+    const { data, error, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useTwitchVideos()
 
     if (!twitch.user_id) {
         return (
@@ -76,17 +32,20 @@ const VideoLibrary = () => {
     return (
         <div className={styles.container}>
             <h2>Twitch Videos</h2>
-            {error && <div>{error.message}</div>}
-            {!videos
+            {!!error &&
+                // @ts-ignore
+                <div>{error?.message}</div>
+            }
+            {isLoading
                 ? <Loading className={styles.loading} />
                 : (
                     <InfiniteScroller
                         className={styles.videosContainer}
-                        fetchData={handleFetchTwitchVideos}
-                        loading={loading}
-                        hasNext={!!cursor}
+                        fetchData={fetchNextPage}
+                        loading={isFetchingNextPage}
+                        hasNext={!!hasNextPage}
                     >
-                        {videos &&
+                        {data?.pages.map(({ videos }) => videos &&
                             !!videos.length &&
                             videos.map((video, idx) => {
                                 if (!video.id) return null;
@@ -121,7 +80,8 @@ const VideoLibrary = () => {
                                         />
                                     </div>
                                 );
-                            })}
+                            }))
+                        }
                     </InfiniteScroller>
                 )}
         </div>
