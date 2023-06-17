@@ -7,17 +7,6 @@ type TwitchVideo = {
     duration?: string;
 };
 
-interface TwitchState {
-    videos: TwitchVideo[] | null;
-    loading: boolean;
-    error: any;
-    pagination: {
-        cursor: string | null;
-        isLastPage: boolean;
-    };
-    videosFetched: boolean;
-}
-
 type RefreshTokenActionProps = {
     userId: string;
     refreshToken: string;

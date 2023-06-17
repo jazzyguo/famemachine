@@ -1,10 +1,9 @@
 import { AxiosError } from 'axios';
-import { QueryClient, UseQueryOptions, UseMutationOptions, DefaultOptions } from '@tanstack/react-query';
+import { QueryClient, UseQueryOptions, UseMutationOptions, DefaultOptions, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import { PromiseValue } from 'type-fest';
 
 const queryConfig: DefaultOptions = {
   queries: {
-    useErrorBoundary: true,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: false,
@@ -19,6 +18,11 @@ export type ExtractFnReturnType<FnType extends (...args: any) => any> = PromiseV
 
 export type QueryConfig<QueryFnType extends (...args: any) => any> = Omit<
   UseQueryOptions<ExtractFnReturnType<QueryFnType>>,
+  'queryKey' | 'queryFn'
+>;
+
+export type InfiniteQueryConfig<QueryFnType extends (...args: any) => any> = Omit<
+  UseInfiniteQueryOptions<ExtractFnReturnType<QueryFnType>>,
   'queryKey' | 'queryFn'
 >;
 

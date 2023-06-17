@@ -8,6 +8,7 @@ import {
 } from "react";
 import getData from "@/firebase/firestore/getData";
 import { useAuth } from "@/contexts/AuthContext";
+import Loading from "@/components/Loading";
 
 type Connection = {
     [key: string]: string;
@@ -17,9 +18,11 @@ type Connections = {
     [key: string]: Connection;
 };
 
+export type AddConnectionAction = (name: string, newConnection: Connection | null) => void;
+
 export const ConnectionsContext = createContext<Connections>({});
 export const ConnectionsAPIContext = createContext<{
-    addConnection: (name: string, newConnection: Connection | null) => void;
+    addConnection: AddConnectionAction
 }>({ addConnection: () => undefined });
 
 export const useConnections = () => useContext(ConnectionsContext);
@@ -31,7 +34,7 @@ export const ConnectionsContextProvider = ({
     children: ReactNode;
 }) => {
     const { user } = useAuth();
-    const [connections, setConnections] = useState<Connections>({});
+    const [connections, setConnections] = useState<Connections | null>(null);
 
     useEffect(() => {
         // fetch Connections from firestore
@@ -68,6 +71,12 @@ export const ConnectionsContextProvider = ({
     );
 
     console.log("current Connections", connections);
+
+    if (!connections) {
+        return <div style={{ padding: "8rem" }}>
+            <Loading />
+        </div>
+    }
 
     return (
         <ConnectionsContext.Provider value={connections}>
