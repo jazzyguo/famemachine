@@ -5,7 +5,16 @@ import { TWITCH_API_URL } from "@/lib/consts/api";
 import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
 
 import refreshAccessToken from "./actions/refreshAccessToken";
-
+interface TwitchState {
+    videos: TwitchVideo[] | null;
+    loading: boolean;
+    error: any;
+    pagination: {
+        cursor: string | null;
+        isLastPage: boolean;
+    };
+    videosFetched: boolean;
+}
 const initialState: TwitchState = {
     videos: null,
     loading: false,
