@@ -15,8 +15,8 @@ type Props = {
 }
 
 const VideoIDModule = ({ videoId }: Props) => {
-    const { mutate: processTwitchVod, data: clips, error, isLoading } = useProcessTwitchVod()
-    const { data: video } = useTwitchVideo({ videoId })
+    const { mutate: processTwitchVod, data: clips, error, isLoading: isVideoProcessing } = useProcessTwitchVod()
+    const { data: video, isLoading } = useTwitchVideo({ videoId })
 
     const handleProcess = async (timestamp: [number, number]) => {
         processTwitchVod({
@@ -34,7 +34,7 @@ const VideoIDModule = ({ videoId }: Props) => {
             {video?.duration && (
                 <>
                     <div className={styles.videoContainer}>
-                        {error && !isLoading && (
+                        {error && !isVideoProcessing && (
                             <div className={styles.error}>
                                 {error?.message || "An error has occured"}
                             </div>
@@ -43,10 +43,10 @@ const VideoIDModule = ({ videoId }: Props) => {
                         <VideoSlicerForm
                             onSubmit={handleProcess}
                             duration={video.duration}
-                            loading={isLoading}
+                            loading={isVideoProcessing}
                         />
                     </div>
-                    {!isLoading && !!clips?.length && !error && (
+                    {!isVideoProcessing && !!clips?.length && !error && (
                         <div className={styles.clips}>
                             <ClipsList clips={clips} />
                         </div>

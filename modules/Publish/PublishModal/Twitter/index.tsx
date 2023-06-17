@@ -1,7 +1,6 @@
 import React, { useState, FormEvent } from 'react'
 
 import usePublishStore from "@/stores/publish";
-import { useAuth } from '@/contexts/AuthContext';
 
 import Loading from '@/components/Loading';
 
@@ -9,7 +8,6 @@ import styles from './TwitterPublish.module.scss'
 
 const TwitterPublish = () => {
     const [error, setError] = useState<string>('')
-    const { user } = useAuth()
 
     const clip = usePublishStore(state => state.selectedClip)
     const publishClipToTwitter = usePublishStore(state => state.publishClipToTwitter)
@@ -24,7 +22,7 @@ const TwitterPublish = () => {
 
                 formData.append("clip_url", clip.url)
 
-                await publishClipToTwitter(formData, user.accessToken || "")
+                await publishClipToTwitter(formData)
             } catch (e: any) {
                 setError(e.message)
             }
