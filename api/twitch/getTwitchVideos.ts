@@ -11,8 +11,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import refreshAccessToken from "./utils/refreshAccessToken";
 
-import { TWITCH_API_URL } from "@/lib/consts/api";
-import { TWITCH_CLIENT_ID } from "@/lib/consts/config";
+import axios from '@/lib/axios/twitch'
 
 const auth = getAuth(app);
 
@@ -39,7 +38,7 @@ const getTwitchVideos = async ({
         ? "51496027" // dev test
         : twitchUserId
 
-    let url = `${TWITCH_API_URL}/videos?user_id=${twitchUserIdToUse}`;
+    let url = `/videos?user_id=${twitchUserIdToUse}`;
 
     if (cursor) {
         url += `&after=${cursor}`;
@@ -47,11 +46,18 @@ const getTwitchVideos = async ({
 
     const headers = {
         Authorization: `Bearer ${twitchAccessToken}`,
-        "Client-Id": TWITCH_CLIENT_ID,
     };
 
 
-    let response = await fetch(url, {
+    let response: {
+        data: {
+            data: TwitchVideo[],
+            pagination: {
+                cursor: string | null
+            }
+        }
+        status: number,
+    } = await axios.get(url, {
         headers,
     });
 
@@ -67,7 +73,7 @@ const getTwitchVideos = async ({
         headers.Authorization = `Bearer ${refreshedAccessToken}`;
 
         if (refreshedAccessToken) {
-            response = await fetch(url, {
+            response = await axios.get(url, {
                 headers,
             });
         } else {
@@ -77,7 +83,7 @@ const getTwitchVideos = async ({
         }
     }
 
-    const { data, pagination } = await response.json();
+    const { data: { data, pagination } } = await response;
 
     return {
         videos: data,

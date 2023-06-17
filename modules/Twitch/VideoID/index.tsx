@@ -1,16 +1,12 @@
-import React, { useState, useMemo, useEffect, memo } from "react";
+import React, { memo } from "react";
 import { TwitchPlayer } from "react-twitch-embed";
 
 import ClipsList from "@/components/Clips/List";
 import VideoSlicerForm from "@/components/VideoSlicerForm";
+import Loading from "@/components/Loading";
 
-import {
-    useConnections,
-    useConnectionsAPI,
-} from "@/contexts/ConnectionsContext";
-import { useAuth } from "@/contexts/AuthContext";
-import useTwitchStore from "@/stores/twitch";
 import useProcessTwitchVod from "@/api/clips/processTwitchVod";
+import useTwitchVideo from "@/api/twitch/getTwitchVideo";
 
 import styles from "./VideoID.module.scss";
 
@@ -19,48 +15,18 @@ type Props = {
 }
 
 const VideoIDModule = ({ videoId }: Props) => {
-    const { user } = useAuth();
-    const { twitch = {} } = useConnections();
-    const { addConnection } = useConnectionsAPI();
-
-
     const { mutate: processTwitchVod, data: clips, error, isLoading } = useProcessTwitchVod()
-
-    const videos = useTwitchStore((state) => state.videos);
-    const fetchTwitchVideo = useTwitchStore((state) => state.fetchTwitchVideo);
-
-    const video = useMemo(
-        () =>
-            videos &&
-            videos.find(({ id, duration }) => duration && id === videoId),
-        [videos, videoId]
-    );
-
-    useEffect(() => {
-        if (!video && twitch.access_token && twitch.refresh_token && user.uid && videoId) {
-            fetchTwitchVideo({
-                twitchAccessToken: twitch.access_token,
-                videoId,
-                addConnection,
-                userId: user.uid,
-                refreshToken: twitch.refresh_token,
-            });
-        }
-    }, [
-        video,
-        twitch.access_token,
-        user.uid,
-        twitch.refresh_token,
-        fetchTwitchVideo,
-        videoId,
-        addConnection,
-    ]);
+    const { data: video } = useTwitchVideo({ videoId })
 
     const handleProcess = async (timestamp: [number, number]) => {
         processTwitchVod({
             timestamp,
             videoId,
         })
+    }
+
+    if (isLoading) {
+        return <Loading />
     }
 
     return (

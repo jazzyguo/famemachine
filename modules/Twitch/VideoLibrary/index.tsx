@@ -32,8 +32,10 @@ const VideoLibrary = () => {
     return (
         <div className={styles.container}>
             <h2>Twitch Videos</h2>
-            {/* @ts-ignore */}
-            {error && <div>{error?.message}</div>}
+            {!!error &&
+                // @ts-ignore
+                <div>{error?.message}</div>
+            }
             {isLoading
                 ? <Loading className={styles.loading} />
                 : (
