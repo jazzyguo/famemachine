@@ -17,11 +17,6 @@ type useSaveClipsOptions = {
 
 const useSaveClip = ({ config }: useSaveClipsOptions = {}) => {
     return useMutation({
-        onError: (_, __, context: any) => {
-            if (context?.previousClips) {
-                queryClient.setQueryData(['savedClips'], context.previousClips);
-            }
-        },
         onSuccess: (newSavedClip) => {
             const previousClips = queryClient.getQueryData<SavedClip[]>(['savedClips']) || [];
 

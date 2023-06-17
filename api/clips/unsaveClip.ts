@@ -17,11 +17,6 @@ type useUnsaveClipsOptions = {
 
 const useUnsaveClip = ({ config }: useUnsaveClipsOptions = {}) => {
     return useMutation({
-        onError: (_, __, context: any) => {
-            if (context?.previousClips) {
-                queryClient.setQueryData(['savedClips'], context.previousClips);
-            }
-        },
         onSuccess: (tempClip) => {
             // Update temporary clips data by pushing the deleted clip if not existing
             queryClient.setQueryData<TempClip[] | null>(['temporaryClips'], (data) => {

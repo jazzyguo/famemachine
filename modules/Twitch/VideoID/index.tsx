@@ -10,7 +10,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import useTwitchStore from "@/stores/twitch";
-import useClipsStore from "@/stores/clips";
+import useProcessTwitchVod from "@/api/clips/processTwitchVod";
 
 import styles from "./VideoID.module.scss";
 
@@ -19,14 +19,12 @@ type Props = {
 }
 
 const VideoIDModule = ({ videoId }: Props) => {
-    const [clips, setClips] = useState<TempClip[]>([])
     const { user } = useAuth();
     const { twitch = {} } = useConnections();
     const { addConnection } = useConnectionsAPI();
 
-    const loading = useClipsStore(state => state.loading)
-    const error = useClipsStore(state => state.error)
-    const processTwitchVod = useClipsStore(state => state.processTwitchVod)
+
+    const { mutate: processTwitchVod, data: clips, error, isLoading } = useProcessTwitchVod()
 
     const videos = useTwitchStore((state) => state.videos);
     const fetchTwitchVideo = useTwitchStore((state) => state.fetchTwitchVideo);
@@ -59,13 +57,10 @@ const VideoIDModule = ({ videoId }: Props) => {
     ]);
 
     const handleProcess = async (timestamp: [number, number]) => {
-        setClips([])
-        const generatedClips = await processTwitchVod({
+        processTwitchVod({
             timestamp,
-            accessToken: user.accessToken || "",
             videoId,
         })
-        setClips(generatedClips)
     }
 
     return (
@@ -73,7 +68,7 @@ const VideoIDModule = ({ videoId }: Props) => {
             {video?.duration && (
                 <>
                     <div className={styles.videoContainer}>
-                        {error && !loading && (
+                        {error && !isLoading && (
                             <div className={styles.error}>
                                 {error?.message || "An error has occured"}
                             </div>
@@ -82,10 +77,10 @@ const VideoIDModule = ({ videoId }: Props) => {
                         <VideoSlicerForm
                             onSubmit={handleProcess}
                             duration={video.duration}
-                            loading={loading}
+                            loading={isLoading}
                         />
                     </div>
-                    {!loading && !!clips?.length && !error && (
+                    {!isLoading && !!clips?.length && !error && (
                         <div className={styles.clips}>
                             <ClipsList clips={clips} />
                         </div>
