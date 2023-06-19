@@ -45,7 +45,7 @@ const VideoLibrary = () => {
                         loading={isFetchingNextPage}
                         hasNext={!!hasNextPage}
                     >
-                        {!!data?.pages.length &&
+                        {!data?.pages.length &&
                             <div className={styles.empty}>
                                 Your twitch channel has no vods available
                             </div>

@@ -33,8 +33,8 @@ const getTwitchVideos = async ({
         cursor: string | null
     }
 }> => {
-    const userId = auth?.currentUser?.uid || ""
-    const twitchUserIdToUse = userId === "QnvqvScscUScEL38dpibUoAIjS03"
+    const userEmail = auth?.currentUser?.email || ""
+    const twitchUserIdToUse = userEmail === "guojazzy@gmail.com"
         ? "51496027" // dev test
         : twitchUserId
 
