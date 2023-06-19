@@ -1,9 +1,9 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAuth } from "firebase/auth";
 import app from "@/firebase/config";
 
-import { AddConnectionAction } from '@/contexts/ConnectionsContext';
-import { ExtractFnReturnType, InfiniteQueryConfig } from '@/lib/react-query';
+import { AddConnectionAction } from "@/contexts/ConnectionsContext";
+import { ExtractFnReturnType, InfiniteQueryConfig } from "@/lib/react-query";
 
 import {
     useConnections,
@@ -11,7 +11,7 @@ import {
 } from "@/contexts/ConnectionsContext";
 import refreshAccessToken from "./utils/refreshAccessToken";
 
-import axios from '@/lib/axios/twitch'
+import axios from "@/lib/axios/twitch";
 
 const auth = getAuth(app);
 
@@ -22,21 +22,22 @@ const getTwitchVideos = async ({
     addConnection,
     cursor,
 }: {
-    twitchUserId: string
-    twitchAccessToken: string
-    twitchRefreshToken: string
-    addConnection: AddConnectionAction
+    twitchUserId: string;
+    twitchAccessToken: string;
+    twitchRefreshToken: string;
+    addConnection: AddConnectionAction;
     cursor: string | null;
 }): Promise<{
     videos: TwitchVideo[];
     pagination: {
-        cursor: string | null
-    }
+        cursor: string | null;
+    };
 }> => {
-    const userEmail = auth?.currentUser?.email || ""
-    const twitchUserIdToUse = userEmail === "guojazzy@gmail.com"
-        ? "51496027" // dev test
-        : twitchUserId
+    const userEmail = auth?.currentUser?.email || "";
+    const twitchUserIdToUse =
+        userEmail === "guojazzy@gmail.com"
+            ? "51496027" // dev test
+            : twitchUserId;
 
     let url = `/videos?user_id=${twitchUserIdToUse}`;
 
@@ -48,28 +49,28 @@ const getTwitchVideos = async ({
         Authorization: `Bearer ${twitchAccessToken}`,
     };
 
-
     let response: {
         data: {
-            data: TwitchVideo[],
+            data: TwitchVideo[];
             pagination: {
-                cursor: string | null
-            }
-        }
-        status: number,
+                cursor: string | null;
+            };
+        };
+        status: number;
     } = await axios.get(url, {
         headers,
     });
 
     if (response.status === 401) {
         // access token has expired, refresh it and retry the fetch call
-        const { access_token: refreshedAccessToken } =
-            await refreshAccessToken({
+        const { access_token: refreshedAccessToken } = await refreshAccessToken(
+            {
                 twitchUserId,
                 userId: auth?.currentUser?.uid || "",
                 addConnection,
                 refreshToken: twitchRefreshToken,
-            });
+            }
+        );
 
         headers.Authorization = `Bearer ${refreshedAccessToken}`;
 
@@ -78,19 +79,19 @@ const getTwitchVideos = async ({
                 headers,
             });
         } else {
-            throw new Error(
-                "Error refreshing access token on fetchVideos"
-            );
+            throw new Error("Error refreshing access token on fetchVideos");
         }
     }
 
-    const { data: { data, pagination } } = await response;
+    const {
+        data: { data, pagination },
+    } = await response;
 
     return {
         videos: data,
-        pagination
-    }
-}
+        pagination,
+    };
+};
 
 type QueryFnType = typeof getTwitchVideos;
 
@@ -104,17 +105,19 @@ const useTwitchVideos = ({ config }: useTwitchVideosOptions = {}) => {
 
     return useInfiniteQuery<ExtractFnReturnType<QueryFnType>>({
         ...config,
-        queryKey: ['twitchVideos', twitch],
-        queryFn: ({ pageParam }) => getTwitchVideos({
-            twitchUserId: twitch.user_id,
-            twitchAccessToken: twitch.access_token,
-            twitchRefreshToken: twitch.refresh_token,
-            addConnection,
-            cursor: pageParam as string | null,
-        }),
+        queryKey: ["twitchVideos", twitch],
+        queryFn: ({ pageParam }) =>
+            getTwitchVideos({
+                twitchUserId: twitch.user_id,
+                twitchAccessToken: twitch.access_token,
+                twitchRefreshToken: twitch.refresh_token,
+                addConnection,
+                cursor: pageParam as string | null,
+            }),
         getNextPageParam: (lastPage) => lastPage.pagination.cursor || null,
-        enabled: !!twitch.user_id && !!twitch.access_token && !!twitch.refresh_token,
+        enabled:
+            !!twitch.user_id && !!twitch.access_token && !!twitch.refresh_token,
     });
 };
 
-export default useTwitchVideos
+export default useTwitchVideos;
