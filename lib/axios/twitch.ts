@@ -19,7 +19,11 @@ axios.interceptors.response.use(
         return response;
     },
     (error) => {
-        return Promise.reject(error);
+        if (error.response && error.response.status === 401) {
+            return { status: 401 }
+        } else {
+            return Promise.reject(error);
+        }
     }
 );
 

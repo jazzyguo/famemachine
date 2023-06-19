@@ -21,10 +21,12 @@ export type GetTwitchVideoDTO = {
 
 const getTwitchVideo = async ({
     videoId,
+    twitchUserId,
     twitchAccessToken,
     twitchRefreshToken,
     addConnection,
 }: {
+    twitchUserId: string,
     twitchAccessToken: string
     twitchRefreshToken: string
     addConnection: AddConnectionAction
@@ -54,6 +56,7 @@ const getTwitchVideo = async ({
         // access token has expired, refresh it and retry the fetch call
         const { access_token: refreshedAccessToken } =
             await refreshAccessToken({
+                twitchUserId,
                 userId,
                 addConnection,
                 refreshToken: twitchRefreshToken,
@@ -93,6 +96,7 @@ const useTwitchVideo = ({ config, videoId }: useTwitchVideosOptions = {}) => {
         queryKey: ['twitchVideo', videoId],
         queryFn: () => getTwitchVideo({
             videoId,
+            twitchUserId: twitch.user_id,
             twitchAccessToken: twitch.access_token,
             twitchRefreshToken: twitch.refresh_token,
             addConnection,

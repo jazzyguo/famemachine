@@ -65,6 +65,7 @@ const getTwitchVideos = async ({
         // access token has expired, refresh it and retry the fetch call
         const { access_token: refreshedAccessToken } =
             await refreshAccessToken({
+                twitchUserId,
                 userId,
                 addConnection,
                 refreshToken: twitchRefreshToken,

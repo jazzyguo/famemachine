@@ -71,3 +71,13 @@
 .loading {
     top: 6rem;
 }
+
+.empty {
+    grid-column: -1/1;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.error {
+    color: red;
+}

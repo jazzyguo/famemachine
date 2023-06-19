@@ -8,6 +8,7 @@ type TwitchVideo = {
 };
 
 type RefreshTokenActionProps = {
+    twitchUserId: string;
     userId: string;
     refreshToken: string;
     addConnection: (connection: string, obj: { [key: string]: string }) => void;
