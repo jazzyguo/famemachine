@@ -66,7 +66,7 @@ const getTwitchVideos = async ({
         const { access_token: refreshedAccessToken } =
             await refreshAccessToken({
                 twitchUserId,
-                userId: auth?.currentUser?.uid,
+                userId: auth?.currentUser?.uid || "",
                 addConnection,
                 refreshToken: twitchRefreshToken,
             });
