@@ -4,6 +4,7 @@ import { TWITCH_API_AUTH_URL } from "@/lib/consts/api";
 import addData from "@/firebase/firestore/addData";
 
 const refreshAccessToken = async ({
+    twitchUserId,
     userId,
     refreshToken,
     addConnection,
@@ -34,6 +35,7 @@ const refreshAccessToken = async ({
             // update the access_token and refresh_token in the connections context,
             // as well as firestore
             const twitchConnection = {
+                user_id: twitchUserId,
                 access_token: data.access_token,
                 refresh_token: data.refresh_token,
             };

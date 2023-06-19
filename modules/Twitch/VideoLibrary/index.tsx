@@ -34,7 +34,7 @@ const VideoLibrary = () => {
             <h2>Twitch Videos</h2>
             {!!error &&
                 // @ts-ignore
-                <div>{error?.message}</div>
+                <div className={styles.error}>{error?.message}</div>
             }
             {isLoading
                 ? <Loading className={styles.loading} />
@@ -45,6 +45,11 @@ const VideoLibrary = () => {
                         loading={isFetchingNextPage}
                         hasNext={!!hasNextPage}
                     >
+                        {!!data?.pages.length &&
+                            <div className={styles.empty}>
+                                Your twitch channel has no vods available
+                            </div>
+                        }
                         {data?.pages.map(({ videos }) => videos &&
                             !!videos.length &&
                             videos.map((video, idx) => {

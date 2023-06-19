@@ -8,6 +8,11 @@
     margin-bottom: rem;
     background-color: $secondary-color;
     padding: 1rem 2rem;
+    flex-direction: column;
+
+    @include breakpoint-min($md) {
+        flex-direction: row;
+    }
 
     h1 {
         cursor: pointer;
