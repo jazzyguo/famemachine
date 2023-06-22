@@ -34,6 +34,7 @@ export const ConnectionsContextProvider = ({
     children: ReactNode;
 }) => {
     const { user } = useAuth();
+    const [loaded, setLoaded] = useState(false)
     const [connections, setConnections] = useState<Connections | null>(null);
 
     useEffect(() => {
@@ -61,6 +62,12 @@ export const ConnectionsContextProvider = ({
         }
     }, [user]);
 
+    useEffect(() => {
+        if (connections) {
+            setLoaded(true)
+        }
+    }, [connections])
+
     const addConnection = useCallback(
         (name: string, newConnection: Connection | null) =>
             setConnections((prevState) => ({
@@ -72,13 +79,14 @@ export const ConnectionsContextProvider = ({
 
     console.log("current Connections", connections);
 
-    if (!connections) {
+    if (!loaded) {
         return <div style={{ padding: "8rem" }}>
             <Loading />
         </div>
     }
 
     return (
+        // @ts-ignore
         <ConnectionsContext.Provider value={connections}>
             <ConnectionsAPIContext.Provider value={{ addConnection }}>
                 {children}
