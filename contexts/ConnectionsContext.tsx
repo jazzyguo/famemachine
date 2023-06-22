@@ -34,12 +34,13 @@ export const ConnectionsContextProvider = ({
     children: ReactNode;
 }) => {
     const { user } = useAuth();
-    const [loaded, setLoaded] = useState(false)
     const [connections, setConnections] = useState<Connections | null>(null);
 
     useEffect(() => {
         // fetch Connections from firestore
         const fetchUser = async () => {
+            let fetchedConnections = {}
+
             if (user.uid) {
                 const { error, result } = await getData("users", user.uid);
 
@@ -48,11 +49,11 @@ export const ConnectionsContextProvider = ({
                 }
 
                 if (result?.connections) {
-                    setConnections(result.connections);
+                    fetchedConnections = result.connections
                 }
-            } else {
-                setConnections({})
             }
+
+            setConnections(fetchedConnections)
         };
 
         try {
@@ -61,12 +62,6 @@ export const ConnectionsContextProvider = ({
             console.log(e);
         }
     }, [user]);
-
-    useEffect(() => {
-        if (connections) {
-            setLoaded(true)
-        }
-    }, [connections])
 
     const addConnection = useCallback(
         (name: string, newConnection: Connection | null) =>
@@ -79,14 +74,13 @@ export const ConnectionsContextProvider = ({
 
     console.log("current Connections", connections);
 
-    if (!loaded) {
+    if (!connections) {
         return <div style={{ padding: "8rem" }}>
             <Loading />
         </div>
     }
 
     return (
-        // @ts-ignore
         <ConnectionsContext.Provider value={connections}>
             <ConnectionsAPIContext.Provider value={{ addConnection }}>
                 {children}
