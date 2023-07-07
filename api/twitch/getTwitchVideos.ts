@@ -36,7 +36,7 @@ const getTwitchVideos = async ({
     const userEmail = auth?.currentUser?.email || "";
     const twitchUserIdToUse =
         userEmail === "guojazzy@gmail.com"
-            ? "51496027" // dev test
+            ? "513604308" // dev test
             : twitchUserId;
 
     let url = `/videos?user_id=${twitchUserIdToUse}`;
