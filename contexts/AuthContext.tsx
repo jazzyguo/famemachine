@@ -59,10 +59,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User>(initialState.user);
     const [loading, setLoading] = useState<boolean>(true);
 
-    console.log("curr user", user);
-
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (_user) => {
+            console.log("curr user", user);
+
             if (_user?.uid) {
                 setUser(_user);
             } else {
