@@ -1,6 +1,6 @@
 App that allows users to connect their twitch and twitter accounts.
 
-These connections allow the user to pull their twitch vods and be able to process them into highlights from an algorithm that uses average decibel levels. These clips can then be saved and published to Twitter.
+These connections allow the user to pull their twitch vods and be able to process them into highlights from an algorithm that uses average decibel levels (private repo). These clips can then be saved and published to Twitter.
 
 Google firebase auth is used to manage profiles. Firestore is used to manage user connections as well as user clips that are saved/published.
 
