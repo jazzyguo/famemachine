@@ -6,6 +6,8 @@ Google firebase auth is used to manage profiles. Firestore is used to manage use
 
 S3 is used to store clips that are generated - these clips are pruned after a day if they are not saved. Saved clips are stored permenantely in S3 unless they are unsaved. 
 
+Built using typescript / nextjs / react-query / zustand 
+
 Live app at https://famemachineai-git-main-jazzy.vercel.app/
 
 # .env.local setup
