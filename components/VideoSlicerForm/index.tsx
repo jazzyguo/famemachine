@@ -94,7 +94,7 @@ const VideoSlicerForm = ({
 
             {loading ? (
                 <div className={styles.loading}>
-                    <p>Analyzing video and generating clips, please wait...</p>
+                    <p>Analyzing video and generating clips, please do not refresh the page...</p>
                     <Loading />
                 </div>
             ) : (
