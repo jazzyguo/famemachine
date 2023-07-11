@@ -14,15 +14,16 @@ type ProcessTwitchVodDTO = {
 const processTwitchVod = async ({
     timestamp,
     videoId,
-}: ProcessTwitchVodDTO): Promise<TempClip[]> => {
-    const response: { clips: TempClip[] } = await axios.post(
+}: ProcessTwitchVodDTO): Promise<string> => {
+    const response: { message: string } = await axios.post(
         `/twitch/process_vod/${videoId}`,
         {
             start: timestamp[0],
             end: timestamp[1],
         }
     );
-    return response.clips;
+
+    return response.message;
 };
 
 type useProcessTwitchVodOptions = {
@@ -32,6 +33,7 @@ type useProcessTwitchVodOptions = {
 const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
     const { user } = useAuth();
 
+    const [clips, setClips] = useState<TempClip[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -50,7 +52,7 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
                     }
                 }
             );
-
+            setClips(newTempClips);
             setIsLoading(false);
         };
 
@@ -63,7 +65,8 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
 
     return {
         isLoading,
-        mutation: useMutation<TempClip[], any, ProcessTwitchVodDTO>({
+        data: clips,
+        mutation: useMutation<string, any, ProcessTwitchVodDTO>({
             onSuccess: () => {
                 setIsLoading(true);
             },

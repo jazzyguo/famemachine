@@ -18,13 +18,12 @@ const VideoIDModule = ({ videoId }: Props) => {
     const {
         mutation: {
             mutate: processTwitchVod,
-            data: clips,
             error,
         },
+        data: clips,
         isLoading: isVideoProcessing
-
     } = useProcessTwitchVod()
-    
+
     const { data: video, isLoading } = useTwitchVideo({ videoId })
 
     const handleProcess = async (timestamp: [number, number]) => {
