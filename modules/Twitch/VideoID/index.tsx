@@ -15,7 +15,16 @@ type Props = {
 }
 
 const VideoIDModule = ({ videoId }: Props) => {
-    const { mutate: processTwitchVod, data: clips, error, isLoading: isVideoProcessing } = useProcessTwitchVod()
+    const {
+        mutation: {
+            mutate: processTwitchVod,
+            data: clips,
+            error,
+        },
+        isLoading: isVideoProcessing
+
+    } = useProcessTwitchVod()
+    
     const { data: video, isLoading } = useTwitchVideo({ videoId })
 
     const handleProcess = async (timestamp: [number, number]) => {

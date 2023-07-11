@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import io from "socket.io-client";
 import axios from "@/lib/axios";
 import { MutationConfig, queryClient } from "@/lib/react-query";
 import { ATHENA_API_URL } from "@/lib/consts/api";
-
-const socket = io(ATHENA_API_URL);
+import { useAuth } from "@/contexts/AuthContext";
 
 type ProcessTwitchVodDTO = {
     timestamp: [number, number];
@@ -31,23 +30,18 @@ type useProcessTwitchVodOptions = {
 };
 
 const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
+    const { user } = useAuth();
+
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
-        // Listen for the 'twitch_vod_processed' event from the WebSocket server
-        socket.on("twitch_vod_processed", (response_data) => {
-            // Handle the received data
-            // You can update the state or perform any necessary actions based on the data
-            console.log("Received processed Twitch VOD:", response_data);
-        });
+        const userId = user.uid;
+        const socket = io(ATHENA_API_URL);
 
-        return () => {
-            // Clean up the WebSocket connection when the component unmounts
-            socket.off("twitch_vod_processed");
-        };
-    }, []);
+        const socketId = `twitch_vod_processed_${userId}`;
 
-    return useMutation<TempClip[], any, ProcessTwitchVodDTO>({
-        onSuccess: (newTempClips) => {
-            // Update temporary clips data by pushing the new generated clips if not existing
+        const handleTwitchVodProcessed = (newTempClips: TempClip[]) => {
+            console.log("Received processed Twitch VOD:", newTempClips);
             queryClient.setQueryData<TempClip[] | null>(
                 ["temporaryClips"],
                 (data) => {
@@ -56,10 +50,27 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
                     }
                 }
             );
-        },
-        ...config,
-        mutationFn: processTwitchVod,
-    });
+
+            setIsLoading(false);
+        };
+
+        socket.on(socketId, handleTwitchVodProcessed);
+
+        return () => {
+            socket.off(socketId);
+        };
+    }, [user]);
+
+    return {
+        isLoading,
+        mutation: useMutation<TempClip[], any, ProcessTwitchVodDTO>({
+            onSuccess: () => {
+                setIsLoading(true);
+            },
+            ...config,
+            mutationFn: processTwitchVod,
+        }),
+    };
 };
 
 export default useProcessTwitchVod;
