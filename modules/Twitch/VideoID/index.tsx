@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { useQuery } from '@tanstack/react-query';
 import { TwitchPlayer } from "react-twitch-embed";
 
 import ClipsList from "@/components/Clips/List";
@@ -20,9 +21,10 @@ const VideoIDModule = ({ videoId }: Props) => {
             mutate: processTwitchVod,
             error,
         },
-        data: clips,
         isLoading: isVideoProcessing
-    } = useProcessTwitchVod()
+    } = useProcessTwitchVod(({ videoId }))
+
+    const { data: clips } = useQuery<TempClip[]>([`generatedClips-${videoId}`]);
 
     const { data: video, isLoading } = useTwitchVideo({ videoId })
 
@@ -54,7 +56,7 @@ const VideoIDModule = ({ videoId }: Props) => {
                             loading={isVideoProcessing}
                         />
                     </div>
-                    {!isVideoProcessing && !!clips?.length && !error && (
+                    {!!clips?.length && !error && (
                         <div className={styles.clips}>
                             <ClipsList clips={clips} />
                         </div>

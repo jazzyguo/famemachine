@@ -37,3 +37,6 @@ Need to add an email verification system before a user can attach any social con
 paginate clips for temporary/saved instead of pulling all at once
 
 Split vid processing logic to either use sockets or cloud functions / webhooks instead of an open HTTP request (think this is a must since http requests are taking minutes). 
+
+- features
+create a generatedClips endpoint that will request clips generated from each videos/twitch/:video_id route based off of the video_id. this will probably filter from s3 temp bucket / firestore for saved clips

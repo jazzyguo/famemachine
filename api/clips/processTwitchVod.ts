@@ -27,17 +27,25 @@ const processTwitchVod = async ({
 };
 
 type useProcessTwitchVodOptions = {
+    videoId?: string;
     config?: MutationConfig<typeof processTwitchVod>;
 };
 
-const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
+/*
+ * Will handle generation of clips that are pushed to generatedClips-videoId query key as they come in from the websocket
+ * Generated clips are also pushed to the temporaryClips query key
+ */
+const useProcessTwitchVod = ({
+    videoId,
+    config,
+}: useProcessTwitchVodOptions = {}) => {
     const { user } = useAuth();
 
-    const [clips, setClips] = useState<TempClip[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [socket, setSocket] = useState<Socket | null>(null);
 
     const userId = user.uid;
+    const generatedClipsQueryKey = `generatedClips-${videoId}`;
 
     /*
      * Socket is open on processing vod start
@@ -47,19 +55,30 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
         () => `twitch_vod_processed_${userId}`,
         [userId]
     );
-    
-    const clipSocketId = useMemo(
-        () => `twitch_vod_clip_generated_${userId}`,
-        [userId]
-    );
+
+    const clipSocketId = useMemo(() => `clip_generated_${userId}`, [userId]);
 
     const disconnectSocket = useCallback(() => {
         if (socket) {
-            socket.disconnect();
             socket.off(jobSocketId);
             socket.off(clipSocketId);
+            socket.disconnect();
         }
     }, [socket, jobSocketId, clipSocketId]);
+
+    // generated clips should reinit on every process start, remount, unmount
+    // should potentially change in future when we have an endpoint to fetch generatedClips on twitch vod id
+    const setGeneratedClipsToEmpty = () => {
+        queryClient.setQueryData<TempClip[] | null>(
+            [generatedClipsQueryKey],
+            () => []
+        );
+    };
+
+    useEffect(() => {
+        setGeneratedClipsToEmpty();
+        return () => setGeneratedClipsToEmpty();
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -69,6 +88,8 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
 
     const handleClipGenerated = (clip: TempClip) => {
         console.log("Received generated clip:", clip);
+
+        // add to temporaryClips as well
         queryClient.setQueryData<TempClip[] | null>(
             ["temporaryClips"],
             (data) => {
@@ -77,12 +98,21 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
                 }
             }
         );
-        setClips([...clips, clip]);
+        queryClient.setQueryData<TempClip[] | null>(
+            [generatedClipsQueryKey],
+            (data) => {
+                if (data) {
+                    return [...data, clip];
+                } else {
+                    return [clip];
+                }
+            }
+        );
     };
 
     const handleTwitchVodProcessed = useCallback(
         (newSocket: Socket) => {
-            console.log("Twitch vod finished processing:");
+            console.log("Twitch vod finished processing");
             setIsLoading(false);
             if (newSocket) {
                 newSocket.off(jobSocketId);
@@ -94,29 +124,32 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
         [jobSocketId, clipSocketId]
     );
 
+    const mutation = useMutation<string, any, ProcessTwitchVodDTO>({
+        ...config,
+        onError: () => {
+            setIsLoading(false);
+            disconnectSocket();
+        },
+        mutationFn: (payload) => {
+            const newSocket = io(ATHENA_API_URL);
+
+            newSocket.on(jobSocketId, () =>
+                handleTwitchVodProcessed(newSocket)
+            );
+
+            newSocket.on(clipSocketId, handleClipGenerated);
+
+            setGeneratedClipsToEmpty();
+
+            setSocket(newSocket);
+            setIsLoading(true);
+            return processTwitchVod(payload);
+        },
+    });
+
     return {
         isLoading,
-        data: clips,
-        mutation: useMutation<string, any, ProcessTwitchVodDTO>({
-            ...config,
-            onError: () => {
-                setIsLoading(false);
-                disconnectSocket();
-            },
-            mutationFn: (payload) => {
-                const newSocket = io(ATHENA_API_URL);
-
-                newSocket.on(jobSocketId, () =>
-                    handleTwitchVodProcessed(newSocket)
-                );
-
-                newSocket.on(clipSocketId, (clip) => handleClipGenerated(clip));
-
-                setSocket(newSocket);
-                setIsLoading(true);
-                return processTwitchVod(payload);
-            },
-        }),
+        mutation,
     };
 };
 
