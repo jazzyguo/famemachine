@@ -68,17 +68,17 @@ const useProcessTwitchVod = ({
 
     // generated clips should reinit on every process start, remount, unmount
     // should potentially change in future when we have an endpoint to fetch generatedClips on twitch vod id
-    const setGeneratedClipsToEmpty = () => {
+    const setGeneratedClipsToEmpty = useCallback(() => {
         queryClient.setQueryData<TempClip[] | null>(
             [generatedClipsQueryKey],
             () => []
         );
-    };
+    }, [generatedClipsQueryKey]);
 
     useEffect(() => {
         setGeneratedClipsToEmpty();
         return () => setGeneratedClipsToEmpty();
-    }, []);
+    }, [setGeneratedClipsToEmpty]);
 
     useEffect(() => {
         return () => {
