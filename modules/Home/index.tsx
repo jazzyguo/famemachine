@@ -18,7 +18,7 @@ const HomeModule = () => {
         <div className={styles.container}>
             <p>Sign up to get started!</p>
             <p>
-                You can then link your twitch video to process videos!
+                You can then link your twitch account to retrieve and process videos!
             </p>
             <p>
                 To publish a video, you must connect one of the following social
