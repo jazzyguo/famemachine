@@ -67,11 +67,11 @@ const useProcessTwitchVod = ({ config }: useProcessTwitchVodOptions = {}) => {
         isLoading,
         data: clips,
         mutation: useMutation<string, any, ProcessTwitchVodDTO>({
-            onSuccess: () => {
-                setIsLoading(true);
-            },
             ...config,
-            mutationFn: processTwitchVod,
+            mutationFn: (payload) => {
+                setIsLoading(true);
+                return processTwitchVod(payload);
+            },
         }),
     };
 };
