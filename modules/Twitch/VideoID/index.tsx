@@ -21,7 +21,7 @@ const VideoIDModule = ({ videoId }: Props) => {
             mutate: processTwitchVod,
             error,
         },
-        isLoading: isVideoProcessing
+        isProcessing,
     } = useProcessTwitchVod(({ videoId }))
 
     const { data: clips } = useQuery<TempClip[]>([`generatedClips-${videoId}`]);
@@ -44,7 +44,7 @@ const VideoIDModule = ({ videoId }: Props) => {
             {video?.duration && (
                 <>
                     <div className={styles.videoContainer}>
-                        {error && !isVideoProcessing && (
+                        {error && !isProcessing && (
                             <div className={styles.error}>
                                 {error?.message || "An error has occured"}
                             </div>
@@ -53,7 +53,7 @@ const VideoIDModule = ({ videoId }: Props) => {
                         <VideoSlicerForm
                             onSubmit={handleProcess}
                             duration={video.duration}
-                            loading={isVideoProcessing}
+                            loading={isProcessing}
                         />
                     </div>
                     {!!clips?.length && !error && (

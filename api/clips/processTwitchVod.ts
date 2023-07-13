@@ -11,7 +11,7 @@ type ProcessTwitchVodDTO = {
     videoId: string;
 };
 
-const processTwitchVod = async ({
+const startProcessTwitchVodTask = async ({
     timestamp,
     videoId,
 }: ProcessTwitchVodDTO): Promise<string> => {
@@ -28,7 +28,7 @@ const processTwitchVod = async ({
 
 type useProcessTwitchVodOptions = {
     videoId?: string;
-    config?: MutationConfig<typeof processTwitchVod>;
+    config?: MutationConfig<typeof startProcessTwitchVodTask>;
 };
 
 /*
@@ -41,7 +41,7 @@ const useProcessTwitchVod = ({
 }: useProcessTwitchVodOptions = {}) => {
     const { user } = useAuth();
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const userId = user.uid;
     const generatedClipsQueryKey = `generatedClips-${videoId}`;
@@ -100,16 +100,18 @@ const useProcessTwitchVod = ({
 
     const handleTwitchVodProcessed = useCallback(() => {
         console.log("Twitch vod finished processing");
-        setIsLoading(false);
+        setIsProcessing(false);
     }, []);
 
     useEffect(() => {
         const socket = io(ATHENA_API_URL, {
             transports: ["websocket"],
         });
+        
         socket.on(jobSocketId, handleTwitchVodProcessed);
 
         socket.on(clipSocketId, handleClipGenerated);
+
         return () => {
             if (socket) {
                 socket.off(jobSocketId);
@@ -127,17 +129,17 @@ const useProcessTwitchVod = ({
     const mutation = useMutation<string, any, ProcessTwitchVodDTO>({
         ...config,
         onError: () => {
-            setIsLoading(false);
+            setIsProcessing(false);
         },
         mutationFn: (payload) => {
             setGeneratedClipsToEmpty();
-            setIsLoading(true);
-            return processTwitchVod(payload);
+            setIsProcessing(true);
+            return startProcessTwitchVodTask(payload);
         },
     });
 
     return {
-        isLoading,
+        isProcessing,
         mutation,
     };
 };
