@@ -88,7 +88,6 @@ const VideoContainer = ({ url, fileKey, published }: Props) => {
                 </div>
                 {isSaved &&
                     <div className={styles.publish} onClick={handlePublish}>Publish</div>
-
                 }
             </div>
             <video
