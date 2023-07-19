@@ -22,8 +22,8 @@ const PublishHistory = () => {
                             return (
                                 <div className={styles.socialList} key={social}>
                                     <h3>{firstLetterToUppercase(social)}</h3>
-                                    {socialPublishInfo.map(({ url, published_at }) =>
-                                        <div className={styles.socialList_item}>
+                                    {socialPublishInfo.map(({ url, published_at }, idx) =>
+                                        <div key={`url-${idx}`} className={styles.socialList_item}>
                                             <span>{published_at}</span>
                                             <Link
                                                 target="_blank"
