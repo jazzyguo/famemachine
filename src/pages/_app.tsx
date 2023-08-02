@@ -1,7 +1,7 @@
+import "@/styles/globals.scss";
+
 import AppModule from "@/modules/App";
 import { AppProps } from "next/app";
-
-import "@/styles/globals.scss";
 
 const App = ({ Component, pageProps }: AppProps) => (
     <AppModule>

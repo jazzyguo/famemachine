@@ -13,11 +13,14 @@ import { useConnections } from "@/contexts/ConnectionsContext";
 import { PUBLISH_CONNECTIONS } from "@/lib/consts/publish";
 
 import TwitterLogo from "@/assets/svg/TwitterLogo";
+import YouTubeLogo from "@/assets/svg/YouTubeLogo";
 
 import styles from "./PublishModal.module.scss";
+import { Button } from "@mui/material";
 
 const PUBLISH_COMPONENTS = {
     'twitter': TwitterPublish,
+    'youtube': () => null,
     'history': PublishHistory,
 }
 
@@ -25,7 +28,7 @@ const PublishModal = () => {
     const router = useRouter();
     const connections = useConnections()
 
-    const { twitter } = connections
+    const { twitter, youtube } = connections
 
     const isOpen = usePublishStore(state => state.isOpen)
     const selectedClip = usePublishStore(state => state.selectedClip)
@@ -46,7 +49,11 @@ const PublishModal = () => {
         return () => {
             router.events.off('routeChangeComplete', closePublishModal);
         };
-    }, []);
+    }, [router.events, closePublishModal]);
+
+    const goToConnectionsPage = () => {
+        router.push('/connections')
+    }
 
     const PublishComponent = current && PUBLISH_COMPONENTS[current]
 
@@ -61,6 +68,8 @@ const PublishModal = () => {
             Back to Socials
         </div>
     )
+    const twitterConnected = !!twitter.screen_name
+    const youtubeConnected = false
 
     return (
         <Modal isOpen={loading || isOpen} closeModal={closePublishModal}>
@@ -87,15 +96,49 @@ const PublishModal = () => {
                                     <p className={styles.main_desc}>
                                         Choose one of the following socials to publish to:
                                     </p>
+                                    {canPublish &&
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => null}
+                                            sx={{
+                                                width: '200px',
+                                                margin: '1rem auto 0',
+                                            }}
+                                        >
+                                            Publish To All
+                                        </Button>
+                                    }
                                     <div className={styles.list}>
                                         <Card
                                             className={styles.list_item}
-                                            onClick={() => setCurrent('twitter')}
+                                            onClick={twitterConnected
+                                                ? () => setCurrent('twitter')
+                                                : goToConnectionsPage
+                                            }
                                         >
                                             <div>
                                                 <TwitterLogo /> Twitter
                                             </div>
-                                            <span>@{twitter.screen_name}</span>
+                                            {twitterConnected
+                                                ? <span>@{twitter.screen_name}</span>
+                                                : <span>Connect your twitter account</span>
+                                            }
+                                        </Card>
+                                        <Card
+                                            className={styles.list_item}
+                                            onClick={youtubeConnected
+                                                ? () => setCurrent('youtube')
+                                                : goToConnectionsPage
+                                            }
+
+                                        >
+                                            <div>
+                                                <YouTubeLogo /> YouTube
+                                            </div>
+                                            {youtubeConnected
+                                                ? <span></span>
+                                                : <span>Connect your YouTube account</span>
+                                            }
                                         </Card>
                                     </div>
                                 </>
@@ -104,7 +147,7 @@ const PublishModal = () => {
                     </div>
                 )
             }
-        </Modal>
+        </Modal >
     );
 };
 
