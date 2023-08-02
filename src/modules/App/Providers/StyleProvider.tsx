@@ -1,13 +1,9 @@
 import { ReactNode } from "react";
 import { StyledEngineProvider } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-const darkTheme = createTheme({
-    palette: {
-        mode: "dark",
-    },
-});
+import { darkTheme } from "@/theme";
 
 const StyleProvider = ({ children }: { children: ReactNode }) => (
     <StyledEngineProvider injectFirst>

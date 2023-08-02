@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { immer } from 'zustand/middleware/immer'
-import axios from '@/lib/axios'
+import { immer } from "zustand/middleware/immer";
+import axios from "@/lib/axios";
 
-type Socials = 'twitter' | 'history' | null
+type Socials = "twitter" | "history" | "youtube" | null;
 
 interface PublishState {
     selectedClip: SavedClip | null;
@@ -24,7 +24,7 @@ type Actions = {
 type Middleware = [
     ["zustand/devtools", never],
     ["zustand/persist", PublishState],
-    ["zustand/immer", never],
+    ["zustand/immer", never]
 ];
 
 const initialState: PublishState = {
@@ -42,67 +42,74 @@ const usePublishStore = create<PublishState & Actions, Middleware>(
                 ...initialState,
 
                 openPublishModalWithClip: (clip: SavedClip | null) => {
-                    set(state => {
-                        state.isOpen = true
-                        state.selectedClip = clip
-                    })
+                    set((state) => {
+                        state.isOpen = true;
+                        state.selectedClip = clip;
+                    });
                 },
                 closePublishModal: () => {
-                    set(initialState)
+                    set(initialState);
                 },
                 setCurrent: (setTo: Socials) => {
-                    set(state => {
-                        state.current = setTo
-                    })
+                    set((state) => {
+                        state.current = setTo;
+                    });
                 },
                 publishClipToTwitter: async (formData: any) => {
-                    set(state => {
-                        state.loading = true
-                        state.error = null
-                    })
+                    set((state) => {
+                        state.loading = true;
+                        state.error = null;
+                    });
 
                     try {
                         const response: {
-                            url: string,
-                            published_at: string
+                            url: string;
+                            published_at: string;
                         } = await axios.post(
                             `/clips/publish/twitter`,
-                            formData,
+                            formData
                         );
 
                         const { url, published_at } = response;
 
-                        set(state => {
-                            state.loading = false
-                            state.current = 'history'
+                        set((state) => {
+                            state.loading = false;
+                            state.current = "history";
 
                             if (state.selectedClip) {
-                                state.selectedClip.published = state.selectedClip.published || {}
+                                state.selectedClip.published =
+                                    state.selectedClip.published || {};
 
                                 const newPublish = {
                                     url,
                                     published_at,
-                                }
+                                };
 
                                 if (state.selectedClip.published.twitter) {
-                                    state.selectedClip.published.twitter.push(newPublish)
+                                    state.selectedClip.published.twitter.push(
+                                        newPublish
+                                    );
                                 } else {
-                                    state.selectedClip.published.twitter = [newPublish]
+                                    state.selectedClip.published.twitter = [
+                                        newPublish,
+                                    ];
                                 }
                             }
                         });
                     } catch (e) {
                         console.error(e);
-                        set(state => {
-                            state.loading = false
-                            state.error = e
+                        set((state) => {
+                            state.loading = false;
+                            state.error = e;
                         });
                     }
                 },
                 reset: () => set(() => ({ ...initialState })),
-            })), {
-            name: "publish-store",
-        })
+            })),
+            {
+                name: "publish-store",
+            }
+        )
     )
 );
 
