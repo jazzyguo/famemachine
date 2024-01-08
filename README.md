@@ -10,8 +10,8 @@ Built using typescript / nextjs / react-query / zustand
 
 Live app at https://famemachineai-git-main-jazzy.vercel.app/
 
-https://github.com/jazzyguo/famemachine/assets/25597803/a609a6f0-7223-430b-b4aa-756009791857
 
+https://github.com/jazzyguo/famemachine/assets/25597803/0d7492c7-7ae4-4a09-a0b8-0901d41670d2
 
 
 # .env.local setup
